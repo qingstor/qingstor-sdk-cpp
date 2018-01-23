@@ -266,9 +266,9 @@ void ShowHow2Do_DeleteObject(qs_context_handle context_hdl, char* objectkey)
 int main()
 {
     // Read necessary information from envirox  nment variables.
-    char *strConfigPath ="/etc/qingstor/config.yaml";// getenv("QINGSTOR_CONFIG_PATH");
-    char *strBucketName = "huang-stor";//getenv("QINGSTOR_BUCKET_NAME");
-    char *strZone = "zone";//getenv("QINGSTOR_ZONE_NAME");
+    char *strConfigPath = getenv("QINGSTOR_CONFIG_PATH");
+    char *strBucketName = getenv("QINGSTOR_BUCKET_NAME");
+    char *strZone = getenv("QINGSTOR_ZONE_NAME");
     if(!strConfigPath || !strBucketName || !strZone)
     {
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");

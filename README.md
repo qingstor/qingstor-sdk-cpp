@@ -50,7 +50,7 @@ Tests here is mplementated based on [Cucumber test framework][cucumber link].
 
 ## Contributing
 
-1. Fork it ( https://github.com/yunify/qingstor-sdk-c-and-cpp/fork )
+1. Fork it ( https://github.com/yunify/qingstor-sdk-cpp/fork )
 2. Create your feature branch (`git checkout -b new-feature`)
 3. Commit your changes (`git commit -asm 'Add some feature'`)
 4. Push to the branch (`git push origin new-feature`)
@@ -66,7 +66,7 @@ The Apache License (Version 2.0, January 2004).
 [c style usage]: docs/sdk_c_style_usage.md
 [cpp style usage]: docs/sdk_cpp_style_usage.md
 [config guide]: docs/configuration.md
-[release link]: https://github.com/yunify/qingstor-sdk-c-and-cpp/releases
+[release link]: https://github.com/yunify/qingstor-sdk-cpp/releases
 [change logs link]: https://github.com/yunify/qingstor-sdk-net/blob/master/CHANGELOGS
 [documentation link]: https://docs.qingcloud.com/qingstor/index.html
 [guide link]: https://docs.qingcloud.com/qingstor/index.html

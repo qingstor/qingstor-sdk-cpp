@@ -31,10 +31,10 @@ To compile on Windows, you must have you must provide the header files and libra
 Clone with Git:
 
 ``` bash
-$ git clone https://github.com/yunify/qingstor-sdk-c-and-cpp.git
+$ git clone https://github.com/yunify/qingstor-sdk-cpp.git
 ```
 
-You can also download a specified version of zipped source code in the repository [releases page](https://github.com/yunify/qingstor-sdk-c-and-cpp/releases). The zipped source code only contains source code without unit test files.
+You can also download a specified version of zipped source code in the repository [releases page](https://github.com/yunify/qingstor-sdk-cpp/releases). The zipped source code only contains source code without unit test files.
 
 
 ### Creating an Out-of-Source Build (Recommended):
