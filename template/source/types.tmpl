@@ -1,0 +1,208 @@
+// +-------------------------------------------------------------------------
+// | Copyright (C) 2017 Yunify, Inc.
+// +-------------------------------------------------------------------------
+// | Licensed under the Apache License, Version 2.0 (the "License");
+// | you may not use this work except in compliance with the License.
+// | You may obtain a copy of the License in the LICENSE file, or at:
+// |
+// | http://www.apache.org/licenses/LICENSE-2.0
+// |
+// | Unless required by applicable law or agreed to in writing, software
+// | distributed under the License is distributed on an "AS IS" BASIS,
+// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// | See the License for the specific language governing permissions and
+// | limitations under the License.
+// +-------------------------------------------------------------------------
+
+{{- $service := .Data.Service}}
+{{- $objectSubService := index .Data.SubServices "Object"}}
+{{- $customizedTypes := .Data.CustomizedTypes}}
+{{- $currentTypeID := .CurrentSubServiceID}}
+
+// Headers of CustomizedType.
+#include "Types.h"
+#include "external/json/json.h"
+#include <algorithm>
+#include <time.h>
+#include <string>
+#include <string.h>
+#include <memory>
+
+{{range $_, $customizedType := $customizedTypes -}}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+{{$customizedType.ID | camelCase}}Type::{{$customizedType.ID | camelCase}}Type(qs_{{$customizedType.ID}}_t {{$customizedType.ID}})
+{
+    {{range $_, $property := $customizedType.Properties -}}
+        {{- $isStringPorp := eq $property.Type "string" -}}
+        {{- $isTimeStampPorp := eq $property.Type "timestamp" -}}
+        {{- $isArrayPorp := eq $property.Type "array" -}}
+        {{- if or $isStringPorp $isTimeStampPorp $isArrayPorp}}
+    if({{$customizedType.ID}}.{{$property.ID | snakeCase}})
+        Set{{$property.ID | camelCase}}({{$customizedType.ID}}.{{$property.ID | snakeCase}});
+        {{- else}}
+    if({{$customizedType.ID}}.{{$property.ID | snakeCase}})
+        Set{{$property.ID | camelCase}}(*{{$customizedType.ID}}.{{$property.ID | snakeCase}});
+        {{- end}}
+    {{end}}
+}
+
+
+qs_{{$customizedType.ID}}_t * {{$customizedType.ID | camelCase}}Type::toCStyleObj()
+{
+    qs_{{$customizedType.ID}}_t * {{$customizedType.ID}} =  (qs_{{$customizedType.ID}}_t *)malloc(sizeof(qs_{{$customizedType.ID}}_t));
+
+    {{range $_, $property := $customizedType.Properties -}}
+    {{- $isStringPorp := eq $property.Type "string" -}}
+    {{- $isTimeStampPorp := eq $property.Type "timestamp" -}}
+    {{- $isIntgerProp := eq $property.Type "integer" -}}
+    {{- $isLongPorp := eq $property.Type "long" -}}
+    {{- $isBooleanPorp := eq $property.Type "boolean" -}}
+    
+    {{- if or $isStringPorp $isTimeStampPorp}}
+    int {{$property.ID | camelCase| lowerFirstWord}}Length = 0;
+    {{$property.ID | camelCase| lowerFirstWord}}Length = Get{{$property.ID | camelCase}}().length();
+    if({{$property.ID | camelCase| lowerFirstWord}}Length > 0){
+        {{$customizedType.ID}}->{{$property.ID | snakeCase}} = (char *)malloc({{$property.ID | camelCase| lowerFirstWord}}Length +1);
+        memset({{$customizedType.ID}}->{{$property.ID | snakeCase}}, 0, {{$property.ID | camelCase | lowerFirstWord}}Length +1);
+        strncpy({{$customizedType.ID}}->{{$property.ID | snakeCase}}, Get{{$property.ID | camelCase}}().c_str(), {{$property.ID | camelCase| lowerFirstWord}}Length); 
+    }else{
+        {{$customizedType.ID}}->{{$property.ID | snakeCase}} = NULL;
+    }
+    {{else if or $isIntgerProp $isLongPorp}}
+    {{$customizedType.ID}}->{{$property.ID | snakeCase}} = ({{template "TypeWithCStyle" passThrough $property.Type false}} *)malloc(sizeof({{template "TypeWithCStyle" passThrough $property.Type false}}));
+    *{{$customizedType.ID}}->{{$property.ID | snakeCase}} = Get{{$property.ID | camelCase}}();
+    {{else if $isBooleanPorp}}
+    {{$customizedType.ID}}->{{$property.ID | snakeCase}} = ({{template "TypeWithCStyle" passThrough $property.Type false}} *)malloc(sizeof({{template "TypeWithCStyle" passThrough $property.Type false}})); 
+    *{{$customizedType.ID}}->{{$property.ID | snakeCase}} = (int)Get{{$property.ID | camelCase}}();
+    {{else if eq $property.Type "array"}}
+
+    qs_list_t * list_{{$property.ID | snakeCase}} = (qs_list_t *)malloc(sizeof(qs_list_t));
+
+    qs_list_init(list_{{$property.ID | snakeCase}});
+        
+    std::vector<{{template "Type" passThrough $property.ExtraType false}}>  {{$property.ID | camelCase | lowerFirstWord}} = Get{{$property.ID | camelCase}}();
+
+    for(std::vector<{{- template "Type" passThrough $property.ExtraType true}}>::iterator it = {{$property.ID | camelCase| lowerFirstWord}}.begin();  it != {{$property.ID | camelCase| lowerFirstWord}}.end(); it++)
+    {
+        qs_{{$customizedType.ID | snakeCase}}_{{$property.ID | snakeCase}}_item_t * item = (qs_{{$customizedType.ID | snakeCase}}_{{$property.ID | snakeCase}}_item_t *)malloc(sizeof(qs_{{$customizedType.ID | snakeCase}}_{{$property.ID | snakeCase}}_item_t));
+
+        {{- if eq $property.ExtraType "string"}}
+        int {{$property.ID | camelCase | lowerFirstWord}}Length = it->length();
+        if({{$property.ID | camelCase | lowerFirstWord }}Length > 0){
+        item->content = (char *)malloc({{$property.ID | camelCase | lowerFirstWord}}Length +1);
+            memset(item->content, 0, {{$property.ID | camelCase | lowerFirstWord}}Length +1);
+            strncpy(item->content, it->c_str(), {{$property.ID | camelCase | lowerFirstWord}}Length); 
+        }else{
+            item->content = NULL;
+        }
+        {{- else if eq $property.ExtraType "integer"}}
+        *item = *it;
+        {{- else}}
+        item = it->toCStyleObj();
+        {{end}}
+        qs_list_append(&item->node, list_{{$property.ID | snakeCase}});
+    }
+    
+    {{$customizedType.ID}}->{{$property.Name | snakeCase}} = list_{{$property.ID | snakeCase}};
+
+    {{else}}
+    {{$customizedType.ID}}->{{$property.ID | snakeCase}} = Get{{$property.ID | camelCase}}().toCStyleObj();
+    {{- end -}}
+    {{end}}
+    
+    return {{$customizedType.ID}};
+}
+
+#endif // BUILD_C_STYLE_INTERFACE
+
+{{$customizedType.ID | camelCase}}Type::{{$customizedType.ID | camelCase}}Type(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+
+    jsonReader.parse(serializedString, jsonContent);
+        
+    {{range $_, $property := $customizedType.Properties -}} 
+    {{- $ElementName := $property.ID | camelCase}}
+    if(jsonContent.isMember("{{$property.ID}}"))
+    {
+        {{if eq $property.Type  "array"}}
+        {{- $isArryExtraType := eq $property.ExtraType  "array" -}}
+        {{- $isObjectExtraType := eq $property.ExtraType  "object" -}}
+
+            {{if $isObjectExtraType}}
+        {{template "RequestPropertyType" passThrough $property false}} vec{{$ElementName}};
+            {{else}}
+        {{template "RequestPropertyType" passThrough $property false}} vec{{$ElementName}};
+            {{end}}
+
+        for (unsigned i = 0; i < jsonContent["{{$property.ID}}"].size(); ++i)
+        {
+            vec{{$ElementName}}.push_back(jsonContent["{{$property.ID}}"][i].asString());
+        }
+
+        Set{{$ElementName}}(vec{{$ElementName}});
+        {{else if eq $property.Type  "boolean"}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].asBool());
+        {{else if eq $property.Type  "long"}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].asInt64());
+        {{else if eq $property.Type  "integer"}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].asInt());
+        {{else if eq $property.Type  "timestamp"}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].asString());
+        {{else if eq $property.Type  "string"}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].asString());
+        {{else}}
+        Set{{$ElementName}}(jsonContent["{{$property.ID}}"].toStyledString());
+        {{- end}} 
+    }       
+    {{end}}
+
+}
+
+std::string {{$customizedType.ID | camelCase}}Type::Serialize()
+{
+	Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+
+	{{range $_, $property := $customizedType.Properties -}}	
+    if(m_settingFlag & SETTING_{{$customizedType.ID|snakeCase |upper }}_{{$property.ID|snakeCase |upper }}_FLAG) 
+    {  	
+    	{{if eq $property.Type "array"}}
+    	Json::Value array{{$property.ID | camelCase}};
+
+        std::vector<{{- template "Type" passThrough $property.ExtraType true}}> {{$property.ID | camelCase| lowerFirstWord}} = m_{{$property.ID | camelCase}};
+        for(std::vector<{{- template "Type" passThrough $property.ExtraType true}}>::iterator it = {{$property.ID | camelCase| lowerFirstWord}}.begin();  it != {{$property.ID | camelCase| lowerFirstWord}}.end(); it++)
+    	{
+    		{{if isCustomizedType $property $customizedTypes}}
+            Json::Reader jsonReader;
+            Json::Value itemJsonValue;
+            jsonReader.parse(it->Serialize(), itemJsonValue);
+    		array{{$property.ID | camelCase}}.append(itemJsonValue);
+    		{{- else -}}
+	    	array{{$property.ID | camelCase}}.append(*it);
+	    	{{end}}
+    	}
+    	jsonContent["{{$property.ID}}"] = array{{$property.ID | camelCase}};
+    	{{- else -}}
+    		{{- if eq $property.Type "object"}}
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_{{$property.ID | camelCase}}.Serialize(), itemJsonValue);
+    	jsonContent["{{$property.ID}}"] = itemJsonValue;
+    		{{- else if eq $property.Type "timestamp"}}
+        jsonContent["{{$property.ID}}"] = m_{{$property.ID | camelCase}};
+            {{- else if eq $property.Type "long"}}
+        jsonContent["{{$property.ID}}"] = (Json::Int64)m_{{$property.ID | camelCase}};
+            {{- else}}
+    	jsonContent["{{$property.ID}}"] = m_{{$property.ID | camelCase}};
+    		{{- end}} 
+    	{{end}} 	
+    }	
+
+    {{end}} 
+    return jsonWriter.write(jsonContent);
+}
+{{end}}

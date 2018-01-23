@@ -1,0 +1,683 @@
+{{define "RenderPropertiesFlags"}}
+{{- $operation := index . 0 -}}
+{{- $propertys := index . 1 -}}
+
+	{{range $idx, $property := $propertys -}}		
+		{{- if $property.Description}}
+// {{$property.Description}}'flag
+		{{- end}}
+		{{- if $property.Enum}}
+// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+#define SETTING_{{$operation.ID | snakeCase | upper}}_{{$property.ID | snakeCase | upper}}_FLAG 0x{{hexCodePowerOf2 $idx}}
+	{{end}}
+{{end}}
+
+{{define "RenderInputPropertiesFlags"}}
+{{- $operation := index . 0 -}}
+{{- $propertys := index . 1 -}}
+
+	{{range $idx, $property := $propertys -}}		
+		{{- if $property.Description}}
+	// {{$property.Description}}'flag
+		{{- end}}
+		{{- if $property.Enum}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+#define SETTING_INPUT_{{$operation.ID | snakeCase | upper}}_{{$property.ID | snakeCase | upper}}_FLAG 0x{{hexCodePowerOf2 $idx}}
+	{{end}}
+{{end}}
+
+
+{{define "RenderOutputPropertiesFlags"}}
+{{- $operation := index . 0 -}}
+{{- $propertys := index . 1 -}}
+
+	{{range $idx, $property := $propertys -}}		
+		{{- if $property.Description}}
+	// {{$property.Description}}'flag
+		{{- end}}
+		{{- if $property.Enum}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+#define SETTING_OUTPUT_{{$operation.ID | snakeCase | upper}}_{{$property.ID | snakeCase | upper}}_FLAG 0x{{hexCodePowerOf2 $idx}}
+	{{end}}
+{{end}}
+
+
+{{define "RequestDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+			class{{" " -}}{{- $opID -}}Request;
+{{end}}
+
+{{define "ResultDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+			class{{" " -}}{{- $opID -}}Result;
+{{end}}
+
+{{define "OperationDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1 -}}
+	{{- $isBucket := eq $service.Name "Bucket" -}}
+	{{- $isObject := eq $service.Name "Object" -}}
+	{{- $operationName := $opID}}
+
+	{{if $operation.Description -}}
+		{{if eq $belongs "Bucket" -}}
+			// {{replace $opID "Bucket" "" -1}} does {{$operation.Description -}}
+		{{else -}}
+			// {{$opID}} does {{$operation.Description -}}
+		{{end -}}
+	{{- end}}
+	{{if $operation.DocumentationURL -}}
+		    // Documentation URL: {{$operation.DocumentationURL}}
+	{{- end}}
+	QsError {{$operationName}}({{- if $isObject}}std::string objectKey, {{end -}}{{$operation.ID}}Input& input, {{$operation.ID}}Output& output);
+{{end}}
+
+{{define "RenderRequestEnumPramasID"}}
+	{{- $operation := index . 0 -}}
+	
+	enum class {{$operation.ID | upper}}_REQUSET_PARAMS_ID
+	 {	
+		 {{- if $operation.Request.Query.Properties | len}}
+			{{range $_, $propertyParams := $operation.Request.Query.Properties -}}	
+	 {{$propertyParams.ID | camelCase | upper}}_ID;
+			{{end}}
+		{{end}}
+		{{- if $operation.Request.Headers.Properties | len}}
+			{{range $_, $propertyHeaders := $operation.Request.Headers.Properties -}}
+	{{$propertyHeaders.ID | camelCase | upper}}_ID;
+			{{end}}
+		{{end}}
+		{{- if $operation.Request.Elements.Properties | len}}
+			{{range $_, $propertyElements := $operation.Request.Elements.Properties -}}
+	{{$propertyElements.ID | camelCase | upper}}_ID;
+			{{end}}
+		{{end -}} 	
+	 };
+{{end}}
+
+
+{{define "InputCStyleHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $uri := $operation.Request.Path}}
+	{{- $uri := replace $uri "{" "<" -1}}
+	{{- $uri := replace $uri "}" ">" -1}}
+	{{- $uri := dashConnected $uri}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasHeaders $hasElements $hasParams $hasStringBody $hasBinaryBody}}
+
+{{- if $hasInput}}
+// {{$opID}}Input presents input for {{$opID}}.
+typedef struct {
+
+	{{- if $hasParams}}
+		{{$data := $operation.Request.Query -}}
+		{{template "RenderCStyleProperties" passThrough $data `location:"params"` $operation.Name}}
+	{{end -}}
+	{{- if $hasHeaders}}
+		{{- $data := $operation.Request.Headers -}}
+		{{template "RenderCStyleProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{end -}}
+	{{- if $hasElements}}
+		{{- $data := $operation.Request.Elements -}}
+		{{template "RenderProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{end -}}
+	{{- if $hasStringBody -}}
+		{{- if $operation.Request.Body.Description -}}
+			// {{$operation.Request.Body.Description}}
+		{{- end}}
+		std::stringstream body;
+	{{- else if $hasBinaryBody -}}
+		{{- if $operation.Request.Body.Description -}}
+			// {{$operation.Request.Body.Description}}
+		{{- end}}
+		std::iostream body;
+	{{- end}}
+
+
+} {{$opID}}Input;
+
+
+class QS_SDK_API {{$opID}}Input:public QsBaseInput
+{	
+public:
+	{{- if $hasParams}}
+		{{$data := $operation.Request.Query -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"params"` $operation.ID}}
+	{{end}}
+
+	{{- if $hasHeaders}}
+		{{$data := $operation.Request.Headers -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"headers"` $operation.ID}}
+	{{end}}
+
+	{{- if $hasElements}}
+		{{$data := $operation.Request.Elements -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"elements"` $operation.ID}}
+	{{end}}
+
+private:
+
+	{{- if $hasParams}}
+		{{$data := $operation.Request.Query -}}
+		{{template "RenderProperties" passThrough $data `location:"params"` $operation.Name}}
+	{{end -}}
+	{{- if $hasHeaders}}
+		{{- $data := $operation.Request.Headers -}}
+		{{template "RenderProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{end -}}
+	{{- if $hasElements}}
+		{{- $data := $operation.Request.Elements -}}
+		{{template "RenderProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{end -}}
+	{{- if $hasStringBody -}}
+		{{- if $operation.Request.Body.Description -}}
+			// {{$operation.Request.Body.Description}}
+		{{- end}}
+		std::stringstream body;
+	{{- else if $hasBinaryBody -}}
+		{{- if $operation.Request.Body.Description -}}
+			// {{$operation.Request.Body.Description}}
+		{{- end}}
+		std::iostream body;
+	{{- end}}
+
+};
+{{- else -}}
+typedef QsBaseInput {{$opID}}Input;
+{{- end -}}
+{{- end -}}
+
+
+{{define "InputClassHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $uri := $operation.Request.Path}}
+	{{- $uri := replace $uri "{" "<" -1}}
+	{{- $uri := replace $uri "}" ">" -1}}
+	{{- $uri := dashConnected $uri}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasHeaders $hasElements $hasParams $hasStringBody $hasBinaryBody -}}
+
+// {{$opID}}Input presents input for {{$opID}}.
+{{- if $hasInput}}
+class QS_SDK_API {{$opID}}Input:public QsInput
+{	  
+public:
+    {{$opID}}Input(){{- if $hasBinaryBody -}}:m_streambody(NULL){{- end -}}{};
+
+	inline bool CheckIfInputIsVaild()
+	{
+		int tmpFlag = BASIC_FLAG {{- if $hasParams}}
+				{{- range $_, $paramsProperty := $operation.Request.Query.Properties -}}
+					{{- if $paramsProperty.IsRequired}}|SETTING_INPUT_{{$operation.ID |snakeCase |upper}}_{{$paramsProperty.ID |snakeCase |upper}}_FLAG{{end}}		
+				{{- end -}}
+			{{- end -}}
+			{{- if $hasHeaders}}
+				{{- range $_, $headersProperty := $operation.Request.Headers.Properties -}}
+				{{- if $headersProperty.IsRequired}}| SETTING_INPUT_{{$operation.ID |snakeCase |upper}}_{{$headersProperty.ID|snakeCase |upper }}_FLAG {{end}}	
+				{{- end -}}
+			{{- end -}}
+				{{- if $hasElements}}
+				{{- range $_, $elementsProperty := $operation.Request.Elements.Properties -}}
+				{{- if $elementsProperty.IsRequired}}| SETTING_INPUT_{{$operation.ID |snakeCase |upper}}_{{$elementsProperty.ID |snakeCase |upper}}_FLAG {{end -}}
+				{{- end -}}		
+				{{- end -}};
+		return (tmpFlag == (tmpFlag & m_settingFlag));
+	}; 
+	{{- if $hasParams}}
+		{{$data := $operation.Request.Query -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"params"` $operation.ID}}
+	{{end}}
+
+	{{- if $hasHeaders}}
+		{{$data := $operation.Request.Headers -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"headers"` $operation.ID}}
+	{{end}}
+
+	{{- if $hasElements}}
+		{{$data := $operation.Request.Elements -}}
+		{{template "RenderInputInlineFuncs" passThrough $data `location:"elements"` $operation.ID}}
+	{{end}}
+
+	{{- if $hasBinaryBody}}
+		std::iostream* GetBody(){ return m_streambody;};
+		void SetBody(std::iostream * streambody){ m_streambody = streambody;};
+	{{end -}}
+
+private:
+
+	{{- if $hasParams}}
+		{{$data := $operation.Request.Query -}}
+		{{template "RenderProperties" passThrough $data `location:"params"` $operation.Name}}
+	{{end -}}
+	{{- if $hasHeaders}}
+		{{- $data := $operation.Request.Headers -}}
+		{{template "RenderProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{end -}}
+	{{- if $hasElements}}
+		{{- $data := $operation.Request.Elements -}}
+		{{template "RenderProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{end -}}
+	{{- if $hasBinaryBody}}
+		std::iostream* m_streambody;
+	{{end -}}
+
+};
+{{- else}}
+typedef QsInput {{$opID}}Input;
+{{- end -}}
+{{- end -}}
+
+{{define "OutputClassHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $hasRespHeaders := gt (len (allRespnoseHeaders $operation.Responses)) 0 -}}
+	{{- $hasRespElements := gt (len (allRespnoseElements $operation.Responses)) 0 -}}
+	{{- $responseBody := getRespnosesBody $operation.Responses -}}
+	{{- $hasRespStringBody := eq $responseBody.Type "string" -}}
+	{{- $hasRespBinaryBody := eq $responseBody.Type "binary" -}}
+	{{- $hasOutput := or $hasRespHeaders $hasRespElements $hasRespStringBody $hasRespBinaryBody}}
+
+{{- if $hasOutput}}
+// {{$opID}}Output presents input for {{$opID}}.
+class QS_SDK_API {{$opID}}Output: public QsOutput
+{	
+
+public:
+	{{$opID}}Output(QsError err, Http::HttpResponseCode responseCode):QsOutput(err, responseCode){};
+	{{$opID}}Output(){};
+{{- range $_, $Response := $operation.Responses}}
+
+	{{- if $Response.Headers.Properties | len}}
+		{{$data := $Response.Headers -}}
+		{{template "RenderOutputInlineFuncs" passThrough $data `location:"headers"` $operation.ID}}
+	{{end}}
+
+	{{- if $Response.Elements.Properties | len}}
+		{{$data := $Response.Elements -}}
+		{{template "RenderOutputInlineFuncs" passThrough $data `location:"elements"` $operation.ID}}
+	{{end}}
+	{{- if eq $Response.Body.Type "binary"}}
+		std::iostream* GetBody(){ return m_streambody;};
+		void SetBody(std::iostream* streambody){ m_streambody = streambody;};
+	{{end -}}
+
+{{end}}
+
+private:
+
+{{- range $_, $Response := $operation.Responses}}
+
+	{{- if $Response.Headers.Properties | len}}
+		{{- $data := $Response.Headers -}}
+		{{template "RenderProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{end -}}
+	{{- if $Response.Elements.Properties | len}}
+		{{- $data := $Response.Elements -}}
+		{{template "RenderProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{end -}}
+	{{- if eq $Response.Body.Type "binary"}}
+		std::iostream* m_streambody;
+	{{end}}
+
+{{end}}
+};
+{{- else}}
+typedef QsOutput {{$opID}}Output;
+{{- end -}}
+{{- end -}}
+
+
+{{define "RenderInputInlineFuncs"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}		
+	{{if $property.Description -}}
+	// {{$property.Description}}
+	{{- end -}}
+	{{if $property.Enum -}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+	{{- end}}
+
+	{{- $isNotString := ne $property.Type "string" -}}
+	{{- $isNotInteger := ne $property.Type "integer" -}}
+	{{- $isNotLong := ne $property.Type "long" -}}
+	{{- if and (and $isNotString $isNotInteger)  $isNotLong}}
+#ifdef BUILD_C_STYLE_INTERFACE
+	inline void Set{{$property.ID | camelCase}}({{template "CStylePropertyType" passThrough $property false}} {{" " -}} {{$property.ID | snakeCase}})
+	{
+		{{if eq $property.Type "array"}}
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item;
+
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, {{$property.ID | snakeCase}})
+		{
+			m_{{$property.ID | camelCase | upperFirst}}.push_back(*item->content);
+		}
+		{{else}}
+		m_{{$property.ID | camelCase | upperFirst}} = {{$property.ID | snakeCase}};
+		{{end}}
+	};
+#endif // BUILD_C_STYLE_INTERFACE	
+	{{- end}}
+
+	inline void Set{{$property.ID | camelCase}}({{template "RequestPropertyType" passThrough $property false}}{{" " -}} {{$property.ID | camelCase}})
+	{
+		m_settingFlag |= SETTING_INPUT_{{$operationName | snakeCase |upper}}_{{$property.ID | snakeCase | upper}}_FLAG; 
+		m_{{$property.ID | camelCase | upperFirst}} = {{$property.ID | camelCase}};
+	};
+
+	inline {{template "RequestPropertyType" passThrough $property false}} Get{{$property.ID | camelCase}}(){return m_{{$property.ID | camelCase | upperFirst}};};
+	{{end -}}
+{{end}}
+
+{{define "RenderOutputInlineFuncs"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}		
+	{{- if $property.Description}}
+	// {{$property.Description}}
+	{{- end -}}
+	{{if $property.Enum -}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+	{{- end}}
+	inline void Set{{$property.ID | camelCase}}({{template "RequestPropertyType" passThrough $property false}}{{" " -}} {{$property.ID | camelCase}})
+	{
+		m_settingFlag |= SETTING_OUTPUT_{{$operationName | snakeCase |upper}}_{{$property.ID | snakeCase | upper}}_FLAG; 	
+		m_{{$property.ID | camelCase | upperFirst}} = {{$property.ID | camelCase}};
+	};
+
+	inline {{template "RequestPropertyType" passThrough $property false}} Get{{$property.ID | camelCase}}(){return m_{{$property.ID | camelCase | upperFirst}};};
+	{{end -}}
+{{end}}
+
+{{define "RenderCStyleProperties"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}		
+		{{- if $property.Description}}
+	// {{$property.Description}}
+		{{- end}}
+		{{- if $property.Enum -}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+			{{template "RequestPropertyType" passThrough $property false}}{{" " -}}m_{{$property.ID | camelCase | upperFirst}}{{";" -}}
+		{{- if $property.IsRequired -}}
+	// Required
+		{{- end}}
+	{{end}}
+{{end}}
+
+
+{{define "RenderProperties"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}		
+		{{- if $property.Description}}
+	// {{$property.Description}}
+		{{- end}}
+		{{- if $property.Enum}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+	{{template "RequestPropertyType" passThrough $property false}}{{" " -}}m_{{$property.ID | camelCase | upperFirst}}{{";" -}}
+		{{- if $property.IsRequired -}}
+	// Required
+		{{- end}}
+	{{end}}
+{{end}}
+
+
+{{define "RequestCStylePropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object"}}
+	{{$property.ID | camelCase}}Type
+	{{- else if eq $property.Type "array"}}
+	std::vector<{{template "Type" passThrough $property.ExtraType $disablePointer}}>
+	{{- else if eq $property.Type "map"}}
+	Map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any"}}
+	{{- template "Type" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+	{{- template "Type" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "CStylePropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object"}}
+	{{template "TypeWithCStyle" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array"}}
+	qs_list_t *
+	{{- else if eq $property.Type "map"}}
+	// "C wit map??????????????????????"
+	{{- else if eq $property.Type "any"}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "TypeWithCStyle"}}
+	{{- $typeName := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $typeName "string" -}}
+	char* {{" " -}}
+	{{- else if eq $typeName "boolean" -}}
+	int * {{" " -}}
+	{{- else if eq $typeName "integer" -}}
+	int *{{" " -}}
+	{{- else if eq $typeName "long" -}}
+	int64_t *{{" " -}}
+	{{- else if eq $typeName "timestamp" -}}
+	char* {{" " -}}
+	{{- else if eq $typeName "binary" -}}
+	void *{" " -}}
+	{{- else if eq $typeName "array" -}}
+	qs_list_t *
+	{{- else if eq $typeName "object" -}}
+	interface{}
+	{{- else if eq $typeName "map" -}}
+	interface{}
+	{{- else if eq $typeName "any" -}}
+	interface{}
+	{{- else -}}
+	qs_{{$typeName}}_t *{{" " -}}
+	{{- end -}}
+{{end}}
+
+{{define "RequestPropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object"}}
+	{{$property.ID | camelCase}}Type
+	{{- else if eq $property.Type "array"}}
+	std::vector<{{template "Type" passThrough $property.ExtraType $disablePointer}}>
+	{{- else if eq $property.Type "map"}}
+	Map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any"}}
+	{{- template "Type" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+	{{- template "Type" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+
+{{define "RenderResultInlineFuncs"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}		
+		{{if $property.Description -}}
+	// {{$property.Description}}
+		{{- end}}
+		{{if $property.Enum -}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected}}
+		{{- end}}
+	inline const {{template "RequestPropertyType" passThrough $property false}} Get{{$property.ID | camelCase}}(){return m_{{$property.ID | camelCase}}};
+	{{end}}
+{{end}}
+
+{{define "ResultHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $hasHeaders := gt (len $operation.Response.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Response.Elements.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Response.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Response.Body.Type "binary" -}}
+	{{- $hasInput := or $hasHeaders $hasElements $hasStringBody $hasBinaryBody -}}
+
+	{{- if $hasInput}}
+// {{$opID}}Result presents output for {{$opID}}.
+class {{$opID}}Result : public QSRequest
+{	
+public:
+	{{- if $operation.Response.Headers.Properties | len}}
+		{{$data := $operation.Response.Headers -}}
+		{{template "RenderResultInlineFuncs" passThrough $data `location:"headers"` $operation.Name}}
+	{{end}}
+
+	{{- if $operation.Response.Elements.Properties | len}}
+		{{$data := $operation.Response.Elements -}}
+		{{template "RenderResultInlineFuncs" passThrough $data `location:"elements"` $operation.Name}}
+	{{end}}
+
+private:
+	{{- if $operation.Response.Headers.Properties | len}}
+		{{- $data := $operation.Response.Headers -}}
+		{{template "RenderProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{end}}
+	{{- if $operation.Response.Elements.Properties | len}}
+		{{- $data := $operation.Response.Elements -}}
+		{{template "RenderProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{end -}}
+	{{- if eq $operation.Response.Body.Type "string" -}}
+		{{- if $operation.Response.Body.Description -}}
+			// {{$operation.Response.Body.Description}}
+		{{- end}}
+		std::stringstream body;
+	{{- else if eq $operation.Response.Body.Type "binary" -}}
+		{{- if $operation.Response.Body.Description -}}
+			// {{$operation.Response.Body.Description}}
+		{{- end}}
+		std::iostream body;
+	{{- end -}}
+}
+	{{- else -}}
+typedef class QSRequest {{$opID}}Result;
+	{{- end -}}
+{{end}}
+
+
+{{define "Type"}}
+	{{- $typeName := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $typeName "string" -}}
+	std::string{{" " -}}
+	{{- else if eq $typeName "boolean" -}}
+	bool{{" " -}}
+	{{- else if eq $typeName "long" -}}
+	int64_t{{" " -}}
+	{{- else if eq $typeName "integer" -}}
+	int{{" " -}}
+	{{- else if eq $typeName "timestamp" -}}
+	std::string{{" " -}}
+	{{- else if eq $typeName "binary" -}}
+	char{" " -}}*
+	{{- else if eq $typeName "array" -}}
+	std::vector<>
+	{{- else if eq $typeName "object" -}}
+	{{$typeName | camelCase}}Type{{" " -}}
+	{{- else if eq $typeName "map" -}}
+	interface{}
+	{{- else if eq $typeName "any" -}}
+	interface{}
+	{{- else -}}
+	{{$typeName | camelCase}}Type{{" " -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object" -}}
+		{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array" -}}
+		[]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "map" -}}
+		map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any" -}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyTags"}}
+	{{- $property := . -}}
+	{{- if $property.IsRequired -}}
+		{{- printf `json:"%s"` ($property.Name | normalized) -}}
+	{{- else -}}
+		{{- printf `json:"%s,omitempty"` ($property.Name | normalized) -}}
+	{{- end -}}
+	{{- printf ` name:"%s"` ($property.Name | normalized) -}}
+	{{- if $property.Format}}
+		{{- printf ` format:"%s"` $property.Format -}}
+	{{- end -}}
+	{{- if $property.Default -}}
+		{{- printf ` default:"%s"` $property.Default -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyExtraTags"}}
+	{{- $propertyExtraTags := . -}}
+	{{- if $propertyExtraTags -}}
+		{{- printf " %s" $propertyExtraTags -}}
+	{{- end -}}
+{{end}}

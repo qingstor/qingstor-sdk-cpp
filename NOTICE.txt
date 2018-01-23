@@ -1,0 +1,19 @@
+QingStor SDK for C and C++
+Copyright (C) 2017 Yunify, Inc. or its affiliates. All Rights Reserved.
+
+    This product includes software developed by
+    Yunify, Inc (http://qingcloud.com//).
+
+// +---------------------------------------------------------------------------------------------------
+// | THIRD PARTY COMPONENTS
+// +---------------------------------------------------------------------------------------------------
+// |
+// |    This software includes third party software subject to the following copyrights:
+// |
+// |    - YAML parsing and utility functions from LibYAML - Lee Thomason.
+// |
+// |    - JSON parsing and utility functions from JsonCpp - Copyright (c) 2007-2010 Baptiste Lepilleur.
+// |
+// |    The licenses for these third party components are included in LICENSE.txt
+// |
+// +----------------------------------------------------------------------------------------------------

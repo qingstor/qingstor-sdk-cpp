@@ -1,0 +1,32 @@
+# - Find OPENSSL
+# Find the native OPENSSL includes and library
+#
+#  OPENSSL_INCLUDE_DIR  - where to find ssl.h, etc.
+#  CURL_LIBRARIES    - List of libraries when using OPENSSL.
+#  CURL_FOUND        - True if OPENSSL found.
+
+IF (OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES)
+  # Already in cache, be silent
+  SET(OPENSSL_FIND_QUIETLY TRUE)
+ENDIF (OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES)
+
+IF (WIN32)  
+	GET_FILENAME_COMPONENT(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
+	GET_FILENAME_COMPONENT(VC_DIR ${COMPILER_DIR} DIRECTORY)
+	FIND_PATH(OPENSSL_INCLUDE_DIR ssl.h ${VC_DIR}/include/openssl)  
+    FIND_LIBRARY(OPENSSL_CRYPTO_LIBRARIES  "libeay32.lib" ${VC_DIR}/lib)
+    FIND_LIBRARY(OPENSSL_SSL_LIBRARIES  "ssleay32.lib" ${VC_DIR}/lib)
+ELSEIF (APPLE)  
+	FIND_PATH(OPENSSL_INCLUDE_DIR ssl.h  /usr/local/include/openssl)  
+    FIND_LIBRARY(OPENSSL_CRYPTO_LIBRARIES  "libcrypto.dylib" /usr/local/lib)
+    FIND_LIBRARY(OPENSSL_SSL_LIBRARIES  "libssl.dylib" /usr/local/lib)
+ELSE ()
+	FIND_PATH(OPENSSL_INCLUDE_DIR ssl.h  /usr/local/include/openssl /usr/include/openssl)  
+    FIND_LIBRARY(OPENSSL_CRYPTO_LIBRARIES  "libcrypto.so" /usr/local/lib)
+    FIND_LIBRARY(OPENSSL_SSL_LIBRARIES  "libssl.so" /usr/local/lib)
+ENDIF ()  
+
+INCLUDE(FindPackageHandleStandardArgs)
+FIND_PACKAGE_HANDLE_STANDARD_ARGS(openssl DEFAULT_MSG OPENSSL_CRYPTO_LIBRARIES OPENSSL_INCLUDE_DIR)
+
+MARK_AS_ADVANCED(OPENSSL_CRYPTO_LIBRARIES OPENSSL_INCLUDE_DIR)

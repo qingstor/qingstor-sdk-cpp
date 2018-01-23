@@ -1,0 +1,8 @@
+#include "CppTestService.cpp"
+#include "CppTestBucket.cpp"
+#include "CppTestBucketACL.cpp"
+#include "CppTestBucketCORS.cpp"
+#include "CppTestBucketExternalMirror.cpp"
+#include "CppTestBucketPolicy.cpp"
+#include "CppTestObject.cpp"
+#include "CppTestObjectMultipart.cpp"

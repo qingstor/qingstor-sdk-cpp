@@ -1,0 +1,265 @@
+
+
+{{define "OperationDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1 -}}
+	{{- $isBucket := eq $service.Name "Bucket" -}}
+	{{- $isObject := eq $service.Name "Object" -}}
+
+	{{if $operation.Description -}}
+		{{if eq $belongs "Bucket" -}}
+// {{replace $opID "Bucket" "" -1}} does {{$operation.Description -}}
+		{{else -}}
+// {{$opID}} does {{$operation.Description -}}
+		{{end -}}
+	{{- end}}
+	{{- if $operation.DocumentationURL }}
+// Documentation URL: {{$operation.DocumentationURL}}
+	{{- end}}
+QsError QS_SDK_API qs_{{$opID}}({{- if $isObject}}char* objectKey, {{end -}}qs_{{$opID}}_input_t* input, qs_{{$opID}}_output_t* output, qs_context_handle context_hdl);
+{{end}}
+
+
+{{define "InputCStyleInitDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+// {{$opID}}Input init function.
+void init_{{$opID}}_input(qs_{{$opID}}_input_t * input);
+{{- end -}}
+
+
+{{define "InputCStyleHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $uri := $operation.Request.Path}}
+	{{- $uri := replace $uri "{" "<" -1}}
+	{{- $uri := replace $uri "}" ">" -1}}
+	{{- $uri := dashConnected $uri}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasHeaders $hasElements $hasParams $hasStringBody $hasBinaryBody -}}
+
+{{- if $hasInput}}
+// {{$opID}}Input presents input for {{$opID}}.
+typedef struct {
+	{{- if $hasParams}}
+		{{- $data := $operation.Request.Query.Properties -}}
+		{{template "RenderCStyleProperties" passThrough $data `location:"params"` $operation.Name}}
+	{{- end -}}
+	{{- if $hasHeaders}}
+		{{- $data := $operation.Request.Headers.Properties -}}
+		{{template "RenderCStyleProperties" passThrough $data `location:"headers"` $operation.Name}}
+	{{- end -}}
+	{{- if $hasElements}}
+		{{- $data := $operation.Request.Elements.Properties -}}
+		{{template "RenderCStyleProperties" passThrough $data `location:"elements"` $operation.Name}}
+	{{- end -}}
+	{{- if $hasBinaryBody}}
+	int64_t * bufLength;
+
+	void* bodybuf;
+	{{end}}
+} qs_{{$opID}}_input_t;
+{{else}}
+typedef qs_default_input_s qs_{{$opID}}_input_t;
+{{- end -}}
+{{- end -}}
+
+{{define "OutputCStyleReleaseDeclaration"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase}}
+// {{$opID}}Input init function.
+void release_{{$opID}}_output(qs_{{$opID}}_output_t * output);
+{{- end -}}
+
+{{define "OutputCStyleHeader"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $hasRespHeaders := gt (len (allRespnoseHeaders $operation.Responses)) 0 -}}
+	{{- $hasRespElements := gt (len (allRespnoseElements $operation.Responses)) 0 -}}
+	{{- $responseBody := getRespnosesBody $operation.Responses -}}
+	{{- $hasRespStringBody := eq $responseBody.Type "string" -}}
+	{{- $hasRespBinaryBody := eq $responseBody.Type "binary" -}}
+	{{- $hasOutput := or $hasRespHeaders $hasRespElements $hasRespStringBody $hasRespBinaryBody}}
+
+{{- if $hasOutput}}
+typedef struct {
+
+	{{- $data := allRespnoseHeaders $operation.Responses -}}
+	{{template "RenderCStyleProperties" passThrough $data `location:"headers"` $operation.Name}}
+
+	{{- $data := allRespnoseElements $operation.Responses -}}
+	{{template "RenderCStyleProperties" passThrough $data `location:"elements"` $operation.Name}}
+
+	{{- range $keyStatus, $valueStatus := $operation.Responses -}}
+	{{- if eq $valueStatus.Body.Type "binary"}}
+		{{- if $valueStatus.Body.Description -}}
+		// {{$valueStatus.Body.Description}}
+		{{- end}}
+
+    	int64_t * bufLength;
+
+    	void* bodybuf;
+	{{- end}}
+	{{- end}}
+
+    int response_code;
+
+    qs_error_info_t error_info;
+
+} qs_{{$opID}}_output_t;
+{{else}}
+typedef qs_default_output_s qs_{{$opID}}_output_t;
+{{- end -}}
+{{- end -}}
+
+{{define "RenderCStyleListItemStruct"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+typedef struct {
+
+	qs_list_t node;
+
+	qs_{{$customizedType.ID}}_t * content;
+
+}qs_{{$customizedType.ID | snakeCase}}_item_t;
+
+	{{range $_, $property := $customizedType.Properties -}}
+	{{- $isTypeArray := eq $property.Type "array" -}}
+	{{- $isExtraTypeString := eq $property.ExtraType "string" -}}		
+{{- if $isTypeArray -}}	
+typedef struct{
+	qs_list_t node;
+
+	{{template "TypeWithCStyle" passThrough $property.ExtraType ""}}{{" " -}}content;
+
+} qs_{{$customizedType.ID | snakeCase}}_{{$property.ID | snakeCase}}_item_t;
+{{- end}}
+	{{end}}
+
+{{end}}
+
+{{define "RenderCStyleProperties"}}
+	{{- $properties := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationName := index . 2 -}}
+
+	{{- range $_, $property := $properties -}}
+		{{- if $property.Description}}
+	// {{- $property.Description -}}
+		{{- end}}
+		{{- if $property.Enum -}}
+	// {{- $property.ID | snakeCase}}'s available values: {{$property.Enum | commaConnected -}}
+		{{- end}}
+	{{- if eq $property.Type "binary" -}}
+
+	{{- else}}
+	{{template "CStylePropertyType" passThrough $property false}}{{" " -}}{{$property.ID | snakeCase}};
+	{{- end}}
+		{{- if $property.IsRequired -}}
+	// Required
+		{{- end -}}
+	{{- end -}}
+{{end}}
+
+
+{{define "CStylePropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object"}}
+	{{template "TypeWithCStyle" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array"}}
+	qs_list_t *
+	{{- else if eq $property.Type "map"}}
+	// "C wit map??????????????????????"
+	{{- else if eq $property.Type "any"}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "TypeWithCStyle"}}
+	{{- $typeName := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $typeName "string" -}}
+	char * {{" " -}}
+	{{- else if eq $typeName "boolean" -}}
+	int * {{" " -}}
+	{{- else if eq $typeName "integer" -}}
+	int *{{" " -}}
+	{{- else if eq $typeName "long" -}}
+	long *{{" " -}}
+	{{- else if eq $typeName "timestamp" -}}
+	char * {{" " -}}
+	{{- else if eq $typeName "binary" -}}
+	void *{" " -}}
+	{{- else if eq $typeName "array" -}}
+	qs_list_t * 
+	{{- else if eq $typeName "object" -}}
+	interface{}
+	{{- else if eq $typeName "map" -}}
+	interface{}
+	{{- else if eq $typeName "any" -}}
+	interface{}
+	{{- else -}}
+	qs_{{$typeName}}_t *{{" " -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object" -}}
+		{{template "TypeWithCStyle" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array" -}}
+		[]{{template "TypeWithCStyle" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "map" -}}
+		map[string]{{template "TypeWithCStyle" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any" -}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "TypeWithCStyle" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyTags"}}
+	{{- $property := . -}}
+	{{- if $property.IsRequired -}}
+		{{- printf `json:"%s"` ($property.Name | normalized) -}}
+	{{- else -}}
+		{{- printf `json:"%s,omitempty"` ($property.Name | normalized) -}}
+	{{- end -}}
+	{{- printf ` name:"%s"` ($property.Name | normalized) -}}
+	{{- if $property.Format}}
+		{{- printf ` format:"%s"` $property.Format -}}
+	{{- end -}}
+	{{- if $property.Default -}}
+		{{- printf ` default:"%s"` $property.Default -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyExtraTags"}}
+	{{- $propertyExtraTags := . -}}
+	{{- if $propertyExtraTags -}}
+		{{- printf " %s" $propertyExtraTags -}}
+	{{- end -}}
+{{end}}

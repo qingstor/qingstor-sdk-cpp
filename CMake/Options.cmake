@@ -1,0 +1,1 @@
+#OPTION(ENABLE_CURL_WIN_CLIENT "using curl on windows" ON)

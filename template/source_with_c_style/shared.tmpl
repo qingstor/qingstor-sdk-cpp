@@ -1,0 +1,915 @@
+{{define "CustomTypeReleaseFun"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $properties := $customizedType.Properties -}}	
+// {{$customizedType.ID}} release function.
+void release_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * content)
+{
+	{{- range $_, $property := $properties -}}
+
+	{{- $isTypeArray := eq $property.Type "array" -}}
+	{{- $isTypeString := eq $property.Type "string" -}}
+	{{- $isTypeTimestamp := eq $property.Type "timestamp" -}}
+	{{- $isTypeInteger := eq $property.Type "integer" -}}
+	{{- $isTypeLong := eq $property.Type "long" -}}
+    {{- $isTypeBoolean := eq $property.Type "boolean" -}}
+	{{- $isTypeBinary := eq $property.Type "binary" -}}
+    
+	{{- if or $isTypeString $isTypeTimestamp $isTypeInteger $isTypeLong $isTypeBoolean $isTypeBinary}}
+	if(content->{{$property.ID | snakeCase}}){
+		free(content->{{$property.ID | snakeCase}});
+	}
+	{{- else if $isTypeArray}}
+	if(content->{{$property.ID | snakeCase}}){
+
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item = NULL;
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item_to_delete = NULL;
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, content->{{$property.ID | snakeCase}})
+		{	
+			{{- $isExtraTypeArray := eq $property.ExtraType "array" -}}
+			{{- $isExtraTypeString := eq $property.ExtraType "string" -}}
+			{{- $isExtraTypeTimestamp := eq $property.ExtraType "timestamp" -}}
+			{{- $isExtraTypeInteger := eq $property.ExtraType "integer" -}}
+			{{- $isExtraTypeLong := eq $property.ExtraType "long" -}}
+            {{- $isExtraTypeBoolean := eq $property.ExtraType "boolean" -}}
+			{{- $isExtraTypeBinary := eq $property.ExtraType "binary" -}}
+
+			if(item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+
+			{{- if or $isExtraTypeString $isExtraTypeTimestamp  $isExtraTypeInteger $isExtraTypeLong $isExtraTypeBoolean $isExtraTypeBinary -}}
+				free(item->content);				
+			{{- else -}}
+				release_{{$property.ExtraType.ID}}(item->content);
+                free(item->content);
+			{{- end}}
+		}
+
+		if(item_to_delete)
+        {
+            free(item_to_delete);
+        }
+
+		free(content->{{$property.ID | snakeCase}});
+	}  
+	{{- else -}}
+	if(content->{{$property.ID| snakeCase}}){
+		release_{{$property.ID}}(content->{{$property.ID| snakeCase}});
+        free(content->{{$property.ID| snakeCase}});
+	}
+	{{end}}
+
+	{{- end -}}
+}
+{{- end -}}
+
+{{define "CustomTypeInitFun"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $properties := $customizedType.Properties -}}	
+// {{$customizedType.ID}} init function.
+void init_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * content)
+{
+	{{- range $_, $property := $properties -}}
+	content->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+}
+{{- end -}}
+
+{{define "InputCStyleInitFun"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasHeaders $hasElements $hasParams $hasStringBody $hasBinaryBody}}
+// {{$opID}}Input init function.
+void init_{{$opID}}_input(qs_{{$opID}}_input_t * input)
+{
+{{if $hasInput}}
+	{{- if $hasParams}}
+	{{- range $property := $operation.Request.Query.Properties}}
+	input->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+	{{- end -}}
+	{{- if $hasHeaders}}
+	{{- range $property := $operation.Request.Headers.Properties}}
+	input->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+	{{- end -}}
+	{{- if $hasElements}}
+	{{- range $property := $operation.Request.Elements.Properties}}
+	input->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+	{{- end -}}
+	{{- if $hasBinaryBody}}
+	input->bufLength = NULL;
+
+	input->bodybuf = NULL;
+	{{- end -}}
+{{- else}}
+    // nothing to do;
+{{- end}}
+	return;
+}
+{{- end -}}
+
+{{define "OutputCStyleInitFun"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+// {{$opID}}output init function.
+void init_{{$opID}}_output(qs_{{$opID}}_output_t * output)
+{
+{{- range $keyStatus, $valueStatus := $operation.Responses -}}
+    {{- $hasBinaryBody := eq $valueStatus.Body.Type "binary" -}}
+	{{- range $property := $valueStatus.Headers.Properties}}  	
+    output->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+    {{- range $property := $valueStatus.Elements.Properties}}
+    output->{{$property.ID | snakeCase}} = NULL;
+	{{- end -}}
+    {{- if $hasBinaryBody}}
+	output->bufLength = NULL;
+
+	output->bodybuf = NULL;
+	{{- end -}}
+    qs_init_error_info(&output->error_info);
+{{- end}}
+	return;
+}
+{{- end -}}
+
+
+{{define "OutputCStyleReleaseFun"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | snakeCase -}}
+// {{$opID}} Output release function.
+void release_{{$opID}}_output(qs_{{$opID}}_output_t * output)
+{
+{{- range $keyStatus, $valueStatus := $operation.Responses -}}
+
+	{{- range $property := $valueStatus.Headers.Properties}}
+	{{- $isTypeArray :=  eq $property.Type "array" -}}
+	{{- $isTypeString :=  eq $property.Type "string" -}}
+	{{- $isTypeTimestamp :=  eq $property.Type "timestamp" -}}
+	{{- $isTypeInteger :=  eq $property.Type "integer" -}}
+	{{- $isTypeLong :=  eq $property.Type "long" -}}
+	{{- $isTypeBinary :=  eq $property.Type "binary" -}}
+
+		{{- if or $isTypeString $isTypeTimestamp $isTypeInteger $isTypeLong $isTypeBinary}}
+	if(output->{{$property.ID | snakeCase}}){
+		free(output->{{$property.ID | snakeCase}});
+	}
+		{{- else if $isTypeArray}}
+	if(output->{{$property.ID | snakeCase}}){
+
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item = NULL;
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item_to_delete = NULL;
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, output->{{$property.ID | snakeCase}})
+		{	
+			{{- $isExtraTypeArray := eq $property.ExtraType "array" -}}
+			{{- $isExtraTypeString := eq $property.ExtraType "string" -}}
+			{{- $isExtraTypeTimestamp := eq $property.ExtraType "timestamp" -}}
+			{{- $isExtraTypeInteger := eq $property.ExtraType "integer" -}}
+			{{- $isExtraTypeLong := eq $property.ExtraType "long" -}}
+			{{- $isExtraTypeBinary := eq $property.ExtraType "binary" -}}
+
+			if(item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+			{{- if or $isExtraTypeString $isExtraTypeTimestamp  $isExtraTypeInteger $isExtraTypeLong $isExtraTypeBinary -}}
+				free(item->content);				
+			{{- else -}}
+				release_{{$property.ExtraType | snakeCase}}(item->content);
+                free(item->content);
+			{{- end}}
+		}
+
+		if(item_to_delete)
+	    {
+	        free(item_to_delete);
+	    }
+
+		free(output->{{$property.ID | snakeCase}});
+	}  
+		{{- else -}}
+	if(output->{{$property.ID | snakeCase}}){
+        release_{{$property.ID | snakeCase}}(output->{{$property.ID | snakeCase}});
+		free(output->{{$property.ID | snakeCase}});
+	}
+		{{end}}
+	{{- end -}}
+
+	{{- range $property := $valueStatus.Elements.Properties}}
+	{{- $isTypeArray := eq $property.Type "array" -}}
+	{{- $isTypeString := eq $property.Type "string" -}}
+	{{- $isTypeTimestamp := eq $property.Type "timestamp" -}}
+	{{- $isTypeInteger := eq $property.Type "integer" -}}
+	{{- $isTypeLong := eq $property.Type "long" -}}
+	{{- $isTypeBinary := eq $property.Type "binary" -}}
+
+		{{- if or $isTypeString $isTypeTimestamp $isTypeInteger $isTypeLong $isTypeBinary}}
+	if(output->{{$property.ID | snakeCase}}){
+
+		free(output->{{$property.ID | snakeCase}});
+	}
+		{{- else if $isTypeArray}}
+	if(output->{{$property.ID | snakeCase}}){
+
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item = NULL;
+		qs_{{$property.ExtraType | snakeCase}}_item_t * item_to_delete = NULL;
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, output->{{$property.ID | snakeCase}})
+		{	
+			{{- $isExtraTypeArray := eq $property.ExtraType "array" -}}
+			{{- $isExtraTypeString := eq $property.ExtraType "string" -}}
+			{{- $isExtraTypeTimestamp := eq $property.ExtraType "timestamp" -}}
+			{{- $isExtraTypeInteger := eq $property.ExtraType "integer" -}}
+			{{- $isExtraTypeLong := eq $property.ExtraType "long" -}}
+			{{- $isExtraTypeBinary := eq $property.ExtraType "binary" -}}
+
+			if(item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+
+			{{- if or $isExtraTypeString $isExtraTypeTimestamp  $isExtraTypeInteger $isExtraTypeLong $isExtraTypeBinary -}}
+				free(item->content);				
+			{{- else -}}
+				release_{{$property.ExtraType | snakeCase}}(item->content);
+                free(item->content);
+			{{- end}}
+		}
+
+		if(item_to_delete)
+	    {
+	        free(item_to_delete);
+	    }
+
+		free(output->{{$property.ID | snakeCase}});
+	}  
+		{{- else -}}
+	if(output->{{$property.ID | snakeCase}}){
+        release_{{$property.ID | snakeCase}}(output->{{$property.ID | snakeCase}});
+		free(output->{{$property.ID | snakeCase}});
+	}
+		{{end}}
+	{{- end -}}
+
+	{{- if eq $valueStatus.Body.Type "binary"}}
+	// release binary body content
+	if(output->bodybuf)
+	{
+		free(output->bodybuf);
+	}
+	if(output->bufLength)
+	{
+		free(output->bufLength);
+	}
+	{{- end -}}
+{{- end}}
+
+    qs_release_error_info(&output->error_info);
+
+	return;
+}
+{{- end -}}
+
+{{define "OperationSourceWithCStyle"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1}}
+	{{- $isBucket := eq $service.Name "Bucket"}}
+	{{- $isObject := eq $service.Name "Object"}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string"}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary"}}
+	{{- $hasRespHeaders := gt (len (allRespnoseHeaders $operation.Responses)) 0 -}}
+	{{- $hasRespElements := gt (len (allRespnoseElements $operation.Responses)) 0 -}}
+	{{- $responseBody := getRespnosesBody $operation.Responses -}}
+	{{- $hasRespStringBody := eq $responseBody.Type "string" -}}
+	{{- $hasRespBinaryBody := eq $responseBody.Type "binary" -}}
+	{{- $hasOutput := or $hasRespHeaders $hasRespElements $hasRespStringBody $hasRespBinaryBody}}
+QsError  qs_{{$opID | snakeCase}}({{- if $isObject}}char* objectKey, {{end -}}qs_{{$opID | snakeCase}}_input_t* input, qs_{{$opID | snakeCase}}_output_t* output, qs_context_handle context_hdl)
+{
+	//init class {{$operation.ID}}inputCpp
+	{{$operation.ID}}Input inputCpp;
+	{{$operation.ID}}Output outputCpp;
+    {{- if $hasBinaryBody}}
+    std::iostream* reqStreamBody = NULL;
+	{{- end}}
+
+	// packer cpp input 
+	{{if $hasParams}}
+		{{- $data := $operation.Request.Query -}}
+		{{template "ParkProperties" passThrough $data `location:"params"` $operation.ID}}
+	{{- end -}}
+	{{if $hasHeaders}}
+		{{- $data := $operation.Request.Headers -}}
+		{{template "ParkProperties" passThrough $data `location:"headers"` $operation.ID}}
+	{{- end -}}
+	{{if $hasElements}}
+		{{- $data := $operation.Request.Elements -}}
+		{{template "ParkProperties" passThrough $data `location:"elements"` $operation.ID}}
+	{{- end -}}
+
+    {{- if $hasBinaryBody}}
+    if(input->bodybuf)
+    {
+        reqStreamBody = new QsStream();
+        reqStreamBody->write(static_cast < char *>(input->bodybuf),
+                          (size_t) * input->bufLength);
+        inputCpp.SetBody(reqStreamBody);
+    }
+	{{- end}}
+
+    // init output
+    init_{{$operation.ID | snakeCase}}_output(output);
+
+	// call cpp op
+	{{if or $isBucket $isObject}}
+	Bucket * qsBucket = (Bucket *)(context_hdl.pQsBucket);
+	{{else}}
+	QingStorService * qsService = (QingStorService *)(context_hdl.pQsService);
+	{{end}}
+	QsError err ={{- " " -}} 
+	{{- if or $isBucket $isObject -}}
+	qsBucket->
+	{{- else -}}
+	qsService->
+	{{- end -}}
+	{{$opID}}({{- if $isObject}}objectKey, {{end -}}inputCpp, outputCpp);
+	if(QS_ERR_NO_ERROR == err)
+	{
+		// uppacker cpp output
+		{{- if $hasRespHeaders}}
+		{{- $data := allRespnoseHeaders $operation.Responses -}}
+		{{template "UnParkProperties" passThrough $data `location:"headers"` $operation.ID}}
+		{{- end}}
+
+		{{- if $hasRespElements}}
+		{{- $data := allRespnoseElements $operation.Responses -}}
+		{{template "UnParkProperties" passThrough $data `location:"elements"` $operation.ID}}
+		{{- end}}
+
+		{{- range $keyStatus, $valueStatus := $operation.Responses -}}
+		{{- if eq $valueStatus.Body.Type "binary"}}
+        std::iostream* respStreamBody = outputCpp.GetBody();
+        if(respStreamBody)
+        {
+            respStreamBody->seekg(0, outputCpp.GetBody()->end);
+            size_t streamSize = outputCpp.GetBody()->tellg();
+            respStreamBody->seekg(0, outputCpp.GetBody()->beg);
+
+            output->bodybuf = (void *)malloc(streamSize);
+            output->bufLength = (int64_t *)malloc(sizeof(int64_t));
+
+            //size_t readCount = (streamSize > *output->bufLength)? *output->bufLength : streamSize;
+            respStreamBody->read((char *)output->bodybuf, streamSize);
+            *output->bufLength = static_cast<int64_t>(respStreamBody->gcount());;
+
+            //clean up
+            delete respStreamBody;
+        }
+		{{- end -}}
+		{{- end}}
+
+		output->response_code = (int)outputCpp.GetResponseCode();
+	}
+    else if(QS_ERR_UNEXCEPTED_RESPONSE == err){
+        // if got unexcepted response
+        output->response_code = (int)outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW <<"Got unexcepted response with code:" << errorInfo.code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    
+
+    {{- if $hasBinaryBody}}
+    // clean up
+    if(reqStreamBody){
+        delete reqStreamBody;
+        reqStreamBody = NULL;
+    }
+    {{- end}}
+
+	return err;
+}
+{{end}}
+
+{{define "ParkProperties"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationID := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}	
+	if(input->{{$property.Name | snakeCase}})
+	{
+		{{- if eq $property.Type "array"}}
+		//qs_list_t list_{{$property.ID | snakeCase}};
+	    //qs_list_init(list_{{$property.ID | snakeCase}});
+	        
+	    std::vector<{{template "Type" passThrough $property.ExtraType false}}>  {{$property.ID | camelCase}};
+	    qs_{{$property.ExtraType | snakeCase}}_item_t * item;
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, input->{{$property.ID | snakeCase}})
+		{
+			{{- $isStringType := eq $property.ExtraType "string" -}}
+			{{- $isTimeStampType := eq $property.ExtraType "timestamp" -}}
+			{{- if or $isStringType $isTimeStampType -}}
+				{{$property.ID | camelCase}}.push_back(*item->content);
+			{{- else -}}
+			{{$property.ID | camelCase}}.push_back(*item->content);
+			{{- end}}
+		}
+
+		inputCpp.Set{{$property.ID | camelCase}}({{$property.ID | camelCase}});
+			{{- else if eq $property.Type "string"}}
+		inputCpp.Set{{$property.ID | camelCase}}(input->{{$property.Name | snakeCase}});
+			{{- else if eq $property.Type "timestamp"}}
+		inputCpp.Set{{$property.ID | camelCase}}(input->{{$property.Name | snakeCase}});
+			{{- else -}}
+		inputCpp.Set{{$property.ID | camelCase}}(*input->{{$property.Name | snakeCase}});
+			{{end}}
+	}
+	{{end}}
+{{end}}
+
+{{define "UnParkProperties"}}
+	{{- $properties := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationID := index . 2 -}}
+
+	{{range $_, $property := $properties -}}	
+		{{- $isStringType := eq $property.Type "string" -}}
+		{{- $isTimeStampType := eq $property.Type "timestamp" -}}
+		{{- $isIntegerType := eq $property.Type "integer" -}}
+		{{- $isLongType := eq $property.Type "long" -}}
+		{{- $isBoolType := eq $property.Type "boolean" -}}
+		{{- $isStringExtraType := eq $property.ExtraType "string" -}}
+		{{- $isTimeStampExtraType := eq $property.ExtraType "timestamp" -}}
+		{{- $isIntegerExtraType := eq $property.ExtraType "integer" -}}
+		
+		{{- if eq $property.Type "array"}}
+		output->{{$property.Name | snakeCase}} = (qs_list_t *)malloc(sizeof(qs_list_t));
+		qs_list_init(output->{{$property.Name | snakeCase}});
+		std::vector<{{template "Type" passThrough $property.ExtraType false}}>  {{$property.ID | camelCase| lowerFirstWord}} = outputCpp.Get{{$property.ID | camelCase}}();
+        for(std::vector<{{- template "Type" passThrough $property.ExtraType true}}>::iterator it = {{$property.ID | camelCase| lowerFirstWord}}.begin();  it != {{$property.ID | camelCase| lowerFirstWord}}.end(); it++)
+		{
+			qs_{{$property.ExtraType | snakeCase}}_item_t* item = (qs_{{$property.ExtraType | snakeCase}}_item_t*)malloc(sizeof(qs_{{$property.ExtraType | snakeCase}}_item_t));
+
+			{{- if or $isStringExtraType $isTimeStampExtraType}}
+			int {{$property.ID | camelCase}}Length = it->length();
+	        if({{$property.ID | camelCase}}Length > 0){
+	        item->content = (char *)malloc({{$property.ID | camelCase}}Length +1);
+	        memset(item->content, 0 ,{{$property.ID | camelCase}}Length +1);
+	        item->content = (char *)malloc({{$property.ID | camelCase}}Length +1);
+	            strncpy(item->content, it->c_str(), {{$property.ID | camelCase}}Length); 
+	        }else{
+	            item->content = NULL;
+	        }
+			{{else if $isIntegerExtraType}}	
+			//item->content = it;
+			{{else}}	
+			item->content = it->toCStyleObj();
+			{{end}}
+			qs_list_append(&item->node, output->{{$property.Name | snakeCase}});
+		}
+	
+		{{- else if or $isStringType $isTimeStampType}}
+		int {{$property.ID | camelCase}}Length = outputCpp.Get{{$property.ID | camelCase}}().length();
+        if({{$property.ID | camelCase}}Length > 0){
+        output->{{$property.Name | snakeCase}} = (char *)malloc({{$property.ID | camelCase}}Length +1);
+        memset(output->{{$property.Name | snakeCase}}, 0 ,{{$property.ID | camelCase}}Length +1);
+            strncpy(output->{{$property.Name | snakeCase}}, outputCpp.Get{{$property.ID | camelCase}}().c_str(), {{$property.ID | camelCase}}Length); 
+        }else{
+            output->{{$property.Name | snakeCase}} = NULL;
+        }
+		{{- else if or $isIntegerType $isLongType $isBoolType}}
+		output->{{$property.Name | snakeCase}} = ({{template "Type" passThrough $property.Type false}} *)malloc(sizeof({{template "Type" passThrough $property.Type false}}));
+        *output->{{$property.Name | snakeCase}} = outputCpp.Get{{$property.ID | camelCase}}();
+        {{- else -}}
+        output->{{$property.Name | snakeCase}} = outputCpp.Get{{$property.ID | camelCase}}().toCStyleObj();
+		{{end}}
+	{{end}}
+{{end}}
+
+{{define "AssignmentProperties"}}
+	{{- $customizedType := index . 0 -}}
+	{{- $propertyExtraTags := index . 1 -}}
+	{{- $operationID := index . 2 -}}
+
+	{{range $_, $property := $customizedType.Properties -}}	
+		{{- if eq $property.Type "array"}}
+		pInput->{{$property.Name | camelCase}}Count;
+		std::vector<>
+
+		input.Set{{$property.ID | camelCase}}(pInput->{{$property.Name | camelCase}});
+		{{- else }}
+		input.Set{{$property.ID | camelCase}}(pInput->{{$property.Name | camelCase}});
+		{{end}}
+	{{end}}
+{{end}}
+
+{{define "RequestSource"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1 -}}
+	{{- $uri := $operation.Request.URI -}}
+	{{- $uri := replace $uri "{" "<" -1 -}}
+	{{- $uri := replace $uri "}" ">" -1 -}}
+	{{- $uri := dashConnected $uri -}}
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasParams $hasHeaders $hasElements $hasStringBody $hasBinaryBody}}
+	{{- $hasRespHeaders := gt (len $operation.Response.Headers.Properties) 0 -}}
+	{{- $hasRespElements := gt (len $operation.Response.Elements.Properties) 0 -}}
+	{{- $hasRespStringBody := eq $operation.Response.Body.Type "string" -}}
+	{{- $hasRespBinaryBody := eq $operation.Response.Body.Type "binary" -}}
+	{{- $hasOutput := or $hasRespHeaders $hasRespElements $hasRespStringBody $hasRespBinaryBody}}
+
+class {{$opID | camelCase}}Request:public QsRequest
+{
+public:
+	{{$opID}}Request(const Operation& op, const {{$operation.ID}}Input& input);
+
+	virtual ~{{$opID}}Request(){};
+
+	{{$opID}}Output GetOutput();
+
+	{{- if $hasElements}}
+	std::string SerializePayload();
+	{{- end}}	
+	{{- if $hasParams}}
+	Http::QueryParamCollection GetQueryParameters();
+	{{- end}}	
+	{{- if $hasHeaders}}
+	Http::HeaderValueCollection GetRequestSpecificHeaders();
+	{{- end}}	
+	{{- if $hasRespHeaders}}
+	void ParseResponseHeaders(HttpResponse& response);
+	{{- end}}	
+	{{- if $hasRespElements}}
+	void ParseResponseElements(HttpResponse& response);
+	{{- end}}	
+	{{- if or $hasRespStringBody $hasRespBinaryBody}}
+	void ParseResponseBody(HttpResponse& response);
+	{{- end}}	
+
+private:	
+	{{$operation.ID}}Input m_input;
+	{{$operation.ID}}Output m_output;
+};
+
+// {{$opID}}Request Constructor.
+{{$opID}}Request::{{$opID}}Request(const Operation& op, const {{$opID}}Input& input):m_input(input),QsRequest(op)
+{	
+	//TO DO;
+}
+
+{{$opID}}Output {{$opID}}Request::GetOutput()
+{	 
+	m_output.SetErr(QsRequest::Send());
+	return m_output;
+}
+
+{{- if $hasElements}}
+// {{$opID}}Request SerializePayload.
+std::string {{$opID}}Request::SerializePayload()
+{	
+/*
+	{{- if eq (len $operation.Request.Elements.Properties) 0 }}
+	rerutn "";
+	{{- else -}}
+	//TO DO;
+	JsonValue payload;
+	
+	{{range $_, $BodyPropertie := $operation.Request.Elements.Properties -}} 
+	{{- $PpropertyName := $BodyPropertie.ID | camelCase -}}
+		{{- if eq $BodyPropertie.Type "array" -}}
+	Array<JsonValue>  {{$PpropertyName}}JsonList(m_{{$PpropertyName}}.size());
+	for(unsigned {{$PpropertyName}}Index = 0; {{$PpropertyName}}Index < {{$PpropertyName}}JsonList.GetLength();
+		++{{$PpropertyName}}Index)
+	{
+		{{$PpropertyName}}JsonList[{{$PpropertyName}}Index].AsString(m_{{$PpropertyName}}[{{$PpropertyName}}Index]);
+	}	
+	payload.WithArray("{{$BodyPropertie.ID}}", std::move(m_{{$PpropertyName}}List));		
+		{{- else -}}
+	it = find( PropsHasBeenSet.begin(), PropsHasBeenSet.end(), "{{$BodyPropertie.ID}}" );
+    if( it != PropsHasBeenSet.end() ) // finded
+    {
+		payload.WithString("{{$BodyPropertie.ID}}", m_{{$PpropertyName}});
+    }	
+		{{- end -}}
+   	{{end}}
+   	return payload.WriteReadble(); 
+   	{{end}}   
+   */	
+}
+{{- end -}}
+
+{{- if $hasParams}}
+// {{$opID}}Request AddQueryStringParameters.
+Http::QueryParamCollection {{$opID}}Request::GetQueryParameters()
+{
+	Http::QueryParamCollection queryParameters;
+
+    std::stringstream ss;
+    std::vector<std::string>::iterator it;
+
+    {{range $_, $QueryPropertie := $operation.Request.Query.Properties}}  
+   	if(m_input.IsPropHasBeenSet("{{$QueryPropertie.ID}}"))
+    {
+    	ss << m_input.Get{{$QueryPropertie.ID | camelCase}}();
+	   	queryParameters.insert(Http::HeaderValuePair("{{$QueryPropertie.ID}}", ss.str()));
+	   	ss.str("");
+    }
+    {{end -}}
+
+    return queryParameters;
+}
+{{- end -}}
+
+
+{{- if $hasHeaders}}
+// {{$opID}}Request GetRequestSpecificHeaders.
+Http::HeaderValueCollection {{$opID}}Request::GetRequestSpecificHeaders()
+{	
+	//TO DO;
+	Http::HeaderValueCollection headers;
+    std::stringstream ss;
+    std::vector<std::string>::iterator it;
+
+    {{range $_, $HeaderPropertie := $operation.Request.Headers.Properties}}  
+    if(m_input.IsPropHasBeenSet("{{$HeaderPropertie.ID}}"))
+    {
+    	ss << m_input.Get{{$HeaderPropertie.ID | camelCase}}();
+	   	headers.insert(Http::HeaderValuePair("{{$HeaderPropertie.ID}}", ss.str()));
+	   	ss.str("");
+    }
+    {{end -}}
+
+    return headers;
+}
+{{- end -}}
+
+{{- if $hasRespHeaders}}
+// {{$opID}}Request ParseResponseHeaders.
+void {{$opID}}Request::ParseResponseHeaders(HttpResponse& response)
+{
+	const auto& headers = response.GetHeaders();
+
+	{{range $_, $respHeaderPropertie := $operation.Response.Headers.Properties}} 
+  	const auto& {{$respHeaderPropertie.ID | camelCase}}Iter = headers.find("{{$respHeaderPropertie.ID}}");
+  	if({{$respHeaderPropertie.ID | camelCase}}Iter != headers.end())
+  	{
+  		{{if eq $respHeaderPropertie.Type "string" -}}
+  		m_output.Set{{$respHeaderPropertie.ID | camelCase}}({{$respHeaderPropertie.ID | camelCase}}Iter->second);
+  		{{else}}
+  		m_output.Set{{$respHeaderPropertie.ID | camelCase}}(
+  		{{- template "RenderTypeTransFuns" passThrough $respHeaderPropertie -}}
+  		({{$respHeaderPropertie.ID | camelCase}}Iter->second.c_str()));
+  		{{end}}
+  	}
+  	{{end}}
+}
+{{- end -}}
+
+{{- if $hasRespElements}}
+void {{$opID}}Request::ParseResponseElements(HttpResponse& response)
+{
+/*
+	// parse json content
+	const JsonValue& jsonValue(response.GetResponseBody());	
+		
+	{{range $_, $RespElementPropert := $operation.Response.Elements.Properties -}} 
+	{{- $ElementName := $RespElementPropert.ID | camelCase | lowerFirstWord}}
+	if(jsonValue.ValueExits("{{$ElementName}}"))
+	{
+		{{if eq $RespElementPropert.Type  "array"}}
+		Array<JsonValue>  {{$ElementName}}List = jsonValue.GetArray({{$ElementName}});
+
+		{{template "RequestPropertyType" passThrough $RespElementPropert false}}  tmp{{$ElementName}};
+
+		for(unsigned {{$ElementName}}Index = 0; {{$ElementName}}Index < {{$ElementName}}List.GetLength(); ++{{$ElementName}}Index)
+		{
+			tmp{{$ElementName}};.push_back({{$ElementName}}List.AsObject());
+		}
+		m_output.Set{{$ElementName}}(tmp{{$ElementName}});
+		{{- else -}}
+		m_output.Set{{$ElementName}}(jsonValue.GetString({{$ElementName}}));
+		{{- end}} 
+	}		
+	{{end}}
+	*/
+}
+{{- end -}}
+
+{{- if or $hasRespStringBody $hasRespBinaryBody}}
+void {{$opID}}Request::ParseResponseBody(HttpResponse& response)
+{
+	m_output.SetContentBody(response.GetResponseBody());
+}
+{{- end -}}
+{{- end -}}
+
+{{define "ResultSource"}}
+	{{- $service := index . 0 -}}
+	{{- $operation := index . 1 -}}
+	{{- $opID := $operation.ID | camelCase -}}
+	{{- $belongs := replace $service.Name "QingStor" "Service" -1 -}}
+	{{- $belongs := replace $belongs "Object" "Bucket" -1 -}}
+	{{- $uri := $operation.Request.URI -}}
+	{{- $uri := replace $uri "{" "<" -1 -}}
+	{{- $uri := replace $uri "}" ">" -1 -}}
+	{{- $uri := dashConnected $uri -}}
+
+	{{- $hasParams := gt (len $operation.Request.Query.Properties) 0 -}}
+	{{- $hasHeaders := gt (len $operation.Request.Headers.Properties) 0 -}}
+	{{- $hasElements := gt (len $operation.Request.Elements.Properties) 0 -}}
+	{{- $hasStringBody := eq $operation.Request.Body.Type "string" -}}
+	{{- $hasBinaryBody := eq $operation.Request.Body.Type "binary" -}}
+	{{- $hasInput := or $hasParams $hasHeaders $hasElements $hasStringBody $hasBinaryBody -}}
+
+// {{$opID}}Result Constructor.
+{{$opID}}Result::{{$opID}}Result()
+{	
+	//TO DO;
+}
+
+void {{$opID}}Result::BuildFromResp(const std::shared_ptr<HttpResponse>& httpResponse)
+{	
+	//TO DO;
+{{if $hasInput}}
+
+	// build body
+	m_body = httpResponse.GetResponseBody();
+	{{if $operation.Response.Elements.Properties | len}}
+	// parse json content
+	const JsonValue& jsonValue(httpResponse.GetResponseBody());	
+		
+		{{range $_, $RespElementPropert := $operation.Response.Elements.Properties -}} 
+			{{- $ElementName := $RespElementPropert.ID | camelCase | lowerFirstWord}}
+	if(jsonValue.ValueExits("{{$ElementName}}"))
+	{
+			{{if eq $RespElementPropert.Type  "array"}}
+		Array<JsonValue>  {{$ElementName}}List = jsonValue.GetArray({{$ElementName}});
+		for(unsigned {{$ElementName}}Index = 0; {{$ElementName}}Index < {{$ElementName}}List.GetLength(); ++{{$ElementName}}Index)
+		{
+			m_{{$ElementName}}.push_back({{$ElementName}}List.AsObject());
+		}
+			{{else}}
+		m_{{$ElementName}} = jsonValue.GetString({$ElementName}});
+			{{end}} 
+	}		
+		{{- end -}}
+	{{- end -}}
+	{{if $operation.Response.Headers.Properties | len}}
+	// build http header
+	const auto& headers = result.GetHeaderValueCollection();
+		{{range $_, $RespHeader := $operation.Response.Headers.Properties -}} 
+		{{- $HeaderName := $RespHeader.ID | camelCase}}	
+
+	const auto& {{$HeaderName}}Iter = headers.find({{$RespHeader.ID}});	
+	if({{$HeaderName}}Iter != headers.end())
+	{
+		{{if eq $RespHeader.Type "string" -}}
+		m_{{$HeaderName}} = {{$HeaderName}}Iter->second;
+		{{- else if eq $RespHeader.Type "timestamp" -}}
+		#elseif($memberEntry.value.shape.timeStamp)
+    	m_{{$HeaderName}} = DateTime(${varName}Iter->second.c_str(), DateFormat::RFC822);
+		{{- else if eq $RespHeader.Type "integer" -}}
+		m_{{$HeaderName}} = std::atoi({{$HeaderName}}Iter->second.c_str());
+		{{- else if eq $RespHeader.Type "boolean" -}}
+		std::istringstream({$HeaderName}}Iter->second) >> std::boolalpha >> b;
+		{{- else -}}
+		?????????????????????????????????????
+		{{end}}
+	}
+		{{- end -}}
+	{{- end -}}
+{{else}}
+	(void)httpResponse；
+{{end}}
+
+	return;
+}
+
+{{end}}
+
+{{define "RequestPropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object"}}
+	{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array"}}
+	std::vector<{{template "Type" passThrough $property.ExtraType $disablePointer}}>
+	{{- else if eq $property.Type "map"}}
+	Map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any"}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "RenderTypeTransFuns"}}
+	{{- $property := index . 0 -}}
+	{{- $typeName := $property.Type -}}
+
+	{{- if eq $typeName "boolean" -}}
+	StringUtils::ConvertToBool
+	{{- else if eq $typeName "integer" -}}
+	StringUtils::ConvertToInt32
+	{{- else if eq $typeName "timestamp" -}}
+	DateTime
+	{{- end -}}
+{{end}}
+
+{{define "Type"}}
+	{{- $typeName := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $typeName "string" -}}
+	std::string{{" " -}}
+	{{- else if eq $typeName "boolean" -}}
+	_Bool{{" " -}}
+	{{- else if eq $typeName "integer" -}}
+	int{{" " -}}
+	{{- else if eq $typeName "long" -}}
+	long {{" " -}}
+	{{- else if eq $typeName "timestamp" -}}
+	time_t{{" " -}}
+	{{- else if eq $typeName "binary" -}}
+	char{" " -}}*
+	{{- else if eq $typeName "array" -}}
+	std::vector<>
+	{{- else if eq $typeName "object" -}}
+	interface{}
+	{{- else if eq $typeName "map" -}}
+	interface{}
+	{{- else if eq $typeName "any" -}}
+	interface{}
+	{{- else -}}
+	{{$typeName | camelCase}}Type{{" " -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyType"}}
+	{{- $property := index . 0 -}}
+	{{- $disablePointer := index . 1 -}}
+
+	{{- if eq $property.Type "object" -}}
+		{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "array" -}}
+		[]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "map" -}}
+		map[string]{{template "Type" passThrough $property.ExtraType $disablePointer}}
+	{{- else if eq $property.Type "any" -}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- else -}}
+		{{template "Type" passThrough $property.Type $disablePointer}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyTags"}}
+	{{- $property := . -}}
+	{{- if $property.IsRequired -}}
+		{{- printf `json:"%s"` ($property.Name | normalized) -}}
+	{{- else -}}
+		{{- printf `json:"%s,omitempty"` ($property.Name | normalized) -}}
+	{{- end -}}
+	{{- printf ` name:"%s"` ($property.Name | normalized) -}}
+	{{- if $property.Format}}
+		{{- printf ` format:"%s"` $property.Format -}}
+	{{- end -}}
+	{{- if $property.Default -}}
+		{{- printf ` default:"%s"` $property.Default -}}
+	{{- end -}}
+{{end}}
+
+{{define "PropertyExtraTags"}}
+	{{- $propertyExtraTags := . -}}
+	{{- if $propertyExtraTags -}}
+		{{- printf " %s" $propertyExtraTags -}}
+	{{- end -}}
+{{end}}

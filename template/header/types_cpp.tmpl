@@ -1,0 +1,114 @@
+// +-------------------------------------------------------------------------
+// | Copyright (C) 2017 Yunify, Inc.
+// +-------------------------------------------------------------------------
+// | Licensed under the Apache License, Version 2.0 (the "License");
+// | you may not use this work except in compliance with the License.
+// | You may obtain a copy of the License in the LICENSE file, or at:
+// |
+// | http://www.apache.org/licenses/LICENSE-2.0
+// |
+// | Unless required by applicable law or agreed to in writing, software
+// | distributed under the License is distributed on an "AS IS" BASIS,
+// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// | See the License for the specific language governing permissions and
+// | limitations under the License.
+// +-------------------------------------------------------------------------
+{{- $service := .Data.Service -}}
+{{- $objectSubService := index .Data.SubServices "Object" -}}
+{{- $customizedTypes := .Data.CustomizedTypes -}}
+{{- $currentTypeID := .CurrentSubServiceID}}
+
+#pragma once
+
+#include "../QsBaseType.h"
+#include <string>
+
+// Headers of CustomizedType.
+{{- range $_, $customizedType := $customizedTypes}}
+{{- if eq $currentTypeID $customizedType.ID}}	
+	{{- range $_, $property := $customizedType.Properties -}}	
+		{{- range $_, $customizedType := $customizedTypes -}}	
+			{{- if eq $property.ID $customizedType.ID}}
+#include "{{$customizedType.ID | camelCase}}Type.h"
+			{{- end -}}
+		{{- end -}}
+	{{- end}}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+#include "../service_with_c_style/types/{{$customizedType.ID | camelCase}}Type.h"
+#endif // BUILD_C_STYLE_INTERFACE
+
+{{$arr :=converArray $customizedType.Properties}}
+{{- template "RenderPropertiesFlags" passThrough $customizedType $arr}}
+
+//{{$customizedType.ID | camelCase}}Type presents costom type：{{$customizedType.ID | camelCase}}.
+class QS_SDK_API {{$customizedType.ID | camelCase}}Type: QsBaseType
+{
+
+public:
+	{{$customizedType.ID | camelCase}}Type(){};
+	{{$customizedType.ID | camelCase}}Type(std::string serializedStr);
+
+#ifdef BUILD_C_STYLE_INTERFACE
+	{{$customizedType.ID | camelCase}}Type(qs_{{$customizedType.ID}}_t {{$customizedType.ID}});
+	qs_{{$customizedType.ID}}_t * toCStyleObj();
+#endif // BUILD_C_STYLE_INTERFACE
+	
+	{{- range $_, $property := $customizedType.Properties -}}		
+	{{- if $property.Description -}}
+	// {{$property.Description -}}
+	{{- end}}
+	{{- if $property.Enum}}
+	// {{$property.ID | camelCase}}'s available values: {{$property.Enum | commaConnected -}}
+	{{- end}}
+
+	{{- $isString := eq $property.Type "string" -}}
+	{{- $isTimeStamp := eq $property.Type "timestamp" -}}
+
+	{{- if eq $property.Type "integer"}}
+	{{else if eq $property.Type "array"}}
+#ifdef BUILD_C_STYLE_INTERFACE	
+	inline void Set{{$property.ID | camelCase}}({{template "CStylePropertyType" passThrough $property false}} {{" " -}} {{$property.ID | snakeCase}})
+	{
+		m_settingFlag |= SETTING_{{$customizedType.ID | snakeCase |upper}}_{{$property.ID | snakeCase |upper}}_FLAG;
+
+	    {{if eq $property.Type "array"}}
+	    qs_{{$property.ExtraType | snakeCase}}_item_t * item;
+
+		qs_list_for_each_entry(qs_{{$property.ExtraType | snakeCase}}_item_t, item, {{$property.ID | snakeCase}})
+		{
+			{{- if eq $property.ExtraType "string"}}
+			m_{{$property.ID | camelCase | upperFirst}}.push_back(item->content);
+			{{- else -}}
+			m_{{$property.ID | camelCase | upperFirst}}.push_back(*item->content);
+			{{- end}}
+		}
+		{{- else}}
+		m_{{$property.ID | camelCase | upperFirst}} = {{$property.ID | snakeCase}};
+		{{end}}
+
+	};
+#endif // BUILD_C_STYLE_INTERFACE
+	{{else}}
+	{{- end}}
+
+	inline void Set{{$property.ID | camelCase}}({{template "RequestPropertyType" passThrough $property false}}{{" " -}} {{$property.ID | camelCase}})
+	{
+		m_settingFlag |= SETTING_{{$customizedType.ID | snakeCase |upper}}_{{$property.ID | snakeCase |upper}}_FLAG; 
+		m_{{$property.ID | camelCase | upperFirst}} = {{$property.ID | camelCase}};
+	};
+
+	inline{{" "}}{{- template "RequestPropertyType" passThrough $property false}} Get{{$property.ID | camelCase}}(){return m_{{$property.ID | camelCase | upperFirst}};};
+
+	{{end -}}
+
+	std::string Serialize();
+
+private:		
+	{{template "RenderProperties" passThrough $customizedType "" ""}}
+
+	int setting_flag;
+};
+{{- end -}}
+{{end}}
+

@@ -1,0 +1,119 @@
+// +-------------------------------------------------------------------------
+// | Copyright (C) 2017 Yunify, Inc.
+// +-------------------------------------------------------------------------
+// | Licensed under the Apache License, Version 2.0 (the "License");
+// | you may not use this work except in compliance with the License.
+// | You may obtain a copy of the License in the LICENSE file, or at:
+// |
+// | http://www.apache.org/licenses/LICENSE-2.0
+// |
+// | Unless required by applicable law or agreed to in writing, software
+// | distributed under the License is distributed on an "AS IS" BASIS,
+// | WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// | See the License for the specific language governing permissions and
+// | limitations under the License.
+// +-------------------------------------------------------------------------
+
+{{$service := .Data.Service}}
+{{$subServices:= .Data.SubServices}}
+
+#pragma once
+
+#include <iostream>
+#include <sstream>
+#include <memory.h>
+#include "QsSdkOption.h"
+#include "Types.h" 
+#include "QsErrors.h" 
+#include "QsConfig.h" 
+
+#ifdef BUILD_C_STYLE_INTERFACE
+#include "service_with_c_style/QingStorCStyle.h"
+#endif // BUILD_C_STYLE_INTERFACE
+
+#define BASIC_FLAG 0x0
+
+{{- range $_, $operation := $service.Operations -}}
+    {{- $data := $operation.Request.Query -}}
+    {{- $arr1 :=converArray $data.Properties -}}
+    {{- $data := $operation.Request.Headers -}}
+    {{- $arr2 :=converArray $data.Properties -}}
+    {{- $data := $operation.Request.Elements -}}
+    {{- $arr3 :=converArray $data.Properties -}}
+    {{- $arr :=mergeArray $arr1 $arr2 -}}
+    {{- $arr :=mergeArray $arr $arr3 -}}
+    {{- template "RenderInputPropertiesFlags" passThrough $operation $arr -}}
+
+    {{- $data := allRespnoseHeaders $operation.Responses -}}
+    {{- $arr1 := converArray $data -}}
+    {{- $data := allRespnoseElements $operation.Responses -}}
+    {{- $arr2 := converArray $data -}}
+    {{- $arr :=mergeArray $arr1 $arr2 -}}
+    {{- template "RenderOutputPropertiesFlags" passThrough $operation $arr -}}
+
+{{- end -}}
+{{- range $_, $subService := $subServices -}}
+    {{- range $_, $operation := $subService.Operations}}
+        {{- $data := $operation.Request.Query -}}
+        {{- $arr1 :=converArray $data.Properties -}}
+        {{- $data := $operation.Request.Headers -}}
+        {{- $arr2 :=converArray $data.Properties -}}
+        {{- $data := $operation.Request.Elements -}}
+        {{- $arr3 :=converArray $data.Properties -}}
+        {{- $arr :=mergeArray $arr1 $arr2 -}}
+        {{- $arr :=mergeArray $arr $arr3 -}}
+        {{- template "RenderInputPropertiesFlags" passThrough $operation $arr -}}
+        
+        {{- $data := allRespnoseHeaders $operation.Responses -}}
+        {{- $arr1 := converArray $data -}}
+        {{- $data := allRespnoseElements $operation.Responses -}}
+        {{- $arr2 := converArray $data -}}
+        {{- $arr := mergeArray $arr1 $arr2 -}}
+        {{- template "RenderOutputPropertiesFlags" passThrough $operation $arr -}}
+        {{- end -}}
+{{- end -}}
+
+namespace QingStor
+{
+{{- range $_, $subService := $subServices}}
+// +--------------------------------------------------------------------
+// |                     InputClassHeader                              
+// +--------------------------------------------------------------------
+    {{- range $_, $operation := $subService.Operations}}
+        {{template "InputClassHeader" passThrough $subService $operation}}
+    {{- end -}}
+{{- end}}
+
+{{- range $_, $subService := $subServices}}
+// +--------------------------------------------------------------------
+// |                     OutputClassHeader                              
+// +--------------------------------------------------------------------
+    {{- range $_, $operation := $subService.Operations}}
+        {{template "OutputClassHeader" passThrough $subService $operation}}
+    {{- end -}}
+{{- end}} 
+
+// +--------------------------------------------------------------------
+// |                           Bucket                              
+// +-------------------------------------------------------------------- 
+class QS_SDK_API Bucket
+{
+    public:
+    Bucket(const QsConfig &qsConfig, const std::string &strBucketName,
+           const std::string &strZone);
+
+    virtual ~Bucket(){};
+    {{- range $_, $subService := $subServices}}
+        {{- range $_, $operation := $subService.Operations -}}
+        {{template "OperationDeclaration" passThrough $subService $operation}}
+        {{- end -}}
+    {{end}}
+    private:
+        QsConfig m_qsConfig;
+        Properties m_properties;
+
+};
+
+
+}// namespace QingStor
+

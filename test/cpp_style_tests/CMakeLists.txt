@@ -1,0 +1,15 @@
+CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+
+INCLUDE_DIRECTORIES(${Boost_INCLUDE_DIRS})
+SET(CUKE_EXTRA_LIBRARIES ${CUKE_EXTRA_LIBRARIES} ${Boost_THREAD_LIBRARY} ${Boost_SYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} ${Boost_DATE_TIME_LIBRARY} ${Boost_PROGRAM_OPTIONS_LIBRARY} ${Boost_FILESYSTEM_LIBRARY})
+SET(SRC_LIST RunTestCppStyleAPI.cpp)
+SET(LIBRARYS_MY  /usr/local/lib/libqingstor.so)
+SET(LIBRARYS
+    /usr/local/lib/libgtest.a
+    /usr/local/lib/libgmock.a
+    /usr/local/lib/libcucumber-cpp.a
+    )
+
+ADD_EXECUTABLE(RunTestCppStyleAPI ${SRC_LIST})
+
+TARGET_LINK_LIBRARIES(RunTestCppStyleAPI ${LIBRARYS} ${LIBRARYS_MY}  ${Boost_LIBRARIES})
