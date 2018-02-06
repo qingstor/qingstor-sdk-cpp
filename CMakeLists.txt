@@ -14,6 +14,7 @@ IF (WIN32)
 ELSE ()
 	FIND_PACKAGE(OpenSSL REQUIRED)
 	FIND_PACKAGE(Curl REQUIRED)	
+	OPTION (INSTALL_SDK_HEADERS "Request installation of headers." ON)
 ENDIF()  
 
 # add preprocesser macro

@@ -107,9 +107,11 @@ ELSE()
         ARCHIVE DESTINATION lib)
 ENDIF()
 
+IF (INSTALL_SDK_HEADERS)
 # install header files.
 INSTALL(FILES ${HEADER} DESTINATION include/qingstor)
 INSTALL(FILES ${HEADER_TYPES} DESTINATION include/qingstor/types)
+ENDIF()
 
 # if BUILD_C_STYLE_INTERFACE == ON, install header files with C style.
 IF(BUILD_C_STYLE_INTERFACE)
