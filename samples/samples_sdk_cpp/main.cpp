@@ -108,7 +108,12 @@ void ShowHow2Do_UploadMultipart(Bucket * qsBucket, std::string &objectkey, std::
         ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
         printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
-    printf("Part %d is finished.\n", partNumber);
+    
+    if(QS_ERR_NO_ERROR == err)
+    {
+        printf("Part %d is finished.\n", partNumber);
+    }
+
     // when api finish, you should release resource.
     delete objectStream;
     return;
@@ -161,8 +166,14 @@ void ShowHow2Do_ListObjects(Bucket * qsBucket)
         ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
         printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
+    if(QS_ERR_SIGN_WITH_INVAILD_KEY == err)
+    {
+        printf("The Access Key ID or Secret Access Key is invaild (maybe empty).\n");
+    }
+
     if (QS_ERR_NO_ERROR != err)
     {
+        printf("Faild to get response from QingStor.\n");
         return;
     }
     std::vector<KeyType> keys = output.GetKeys();
@@ -253,9 +264,9 @@ void ShowHow2Do_DeleteObject(Bucket * qsBucket, std::string &objectkey)
 int main()
 {
     // Read necessary information from environment variables.
-    char *strConfigPath = getenv("QINGSTOR_CONFIG_PATH");
-    char *strBucketName = getenv("QINGSTOR_BUCKET_NAME");
-    char *strZone = getenv("QINGSTOR_ZONE_NAME");
+    char *strConfigPath = "/etc/qingstor/config.yaml";//getenv("QINGSTOR_CONFIG_PATH");
+    char *strBucketName = "huang-stor";//getenv("QINGSTOR_BUCKET_NAME");
+    char *strZone = "pek3a";//getenv("QINGSTOR_ZONE_NAME");
     if(!strConfigPath || !strBucketName || !strZone)
     {
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");
@@ -273,7 +284,12 @@ int main()
     // Create QsConfig object , and init it with config info loaded form ConfigPath.
     // You can also set up the config configuration item separately.
     QingStor::QsConfig qsConfig;
-    qsConfig.LoadConfigFile(strConfigPath);
+    QsError err = qsConfig.LoadConfigFile(strConfigPath);
+    if(QS_ERR_INVAILD_CONFIG_FILE == err)
+    {
+        printf("The config file is invaild, please check it again.\n");
+        //return 1;
+    }
     // Create Bucket object.
     Bucket * qsBucket = new Bucket(qsConfig, strBucketName, strZone);
     ShowHow2Do_ListObjects(qsBucket);

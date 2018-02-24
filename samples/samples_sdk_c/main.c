@@ -44,12 +44,13 @@ void ShowHow2Do_InitiateMultipartUpload(qs_context_handle context_hdl, char* obj
        printf("uploadID is %s\n",output.upload_id);
 	   *uploadID = (char*)malloc(strlen(output.upload_id) + 1);
 	   memset((*uploadID), 0, strlen(output.upload_id) + 1);
-	   memcpy((*uploadID), output.upload_id, strlen(output.upload_id));
+       memcpy((*uploadID), output.upload_id, strlen(output.upload_id));
+    
+       printf("Initiate Multipart Upload is finished\n");
     }
 
 	release_initiate_multipart_upload_output(&output);
 
-    printf("Initiate Multipart Upload is finished\n");
     return;
 }
 
@@ -153,6 +154,11 @@ void ShowHow2Do_ListObjects(qs_context_handle context_hdl)
     if (QS_ERR_UNEXCEPTED_RESPONSE == err )
     {
         printf("request_id = %s , with detail message : %s\n" , output.error_info.request_id, output.error_info.message);
+    }
+
+    if(QS_ERR_SIGN_WITH_INVAILD_KEY == err)
+    {
+        printf("The Access Key ID or Secret Access Key is invaild (maybe empty).\n");
     }
 
     release_list_objects_output(&output);
