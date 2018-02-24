@@ -71,6 +71,10 @@ std::string QsSigner::GetTimestamp() const
 
 QsError QsSigner::SignRequest(Http::HttpRequest* request) const
 {
+    if(m_AccessKeyID == "" || m_strSecretAccessKey == "")
+    {
+        return QS_ERR_SIGN_WITH_INVAILD_KEY;
+    }
     /* SHA_DIGEST_LENGTH is 32 */
     char tmpbuf[33];
     std::string timestamp = GetTimestamp();

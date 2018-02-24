@@ -122,7 +122,7 @@ QsError QsConfig::LoadConfigFile(const std::string &config_file)
             {
                 token_value = std::string((const char *)(token.data.scalar.value));
                 reach_value = false;
-                if (token_key.empty() || token_value.empty())
+                if (token_key.empty())
                 {
                     config_invalid = true;
                 }

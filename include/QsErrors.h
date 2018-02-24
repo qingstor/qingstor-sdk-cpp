@@ -23,4 +23,5 @@ typedef enum QsError
     QS_ERR_NO_REQUIRED_PARAMETER,	// The input object lacks some of the parameters that must be filled in .
     QS_ERR_SEND_REQUEST_ERROR,	// No response has been received.
     QS_ERR_UNEXCEPTED_RESPONSE,	// Response has been received, but it is not in line with expectations.
+    QS_ERR_SIGN_WITH_INVAILD_KEY, // The Access Key ID or Secret Access Key is invaild (maybe empty).
 } QsError;
