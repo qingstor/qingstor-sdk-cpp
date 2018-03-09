@@ -76,7 +76,7 @@ QsError QsSigner::SignRequest(Http::HttpRequest* request) const
         return QS_ERR_SIGN_WITH_INVAILD_KEY;
     }
     /* SHA_DIGEST_LENGTH is 32 */
-    char tmpbuf[33];
+    unsigned char tmpbuf[33];
     std::string timestamp = GetTimestamp();
     request->SetHeaderValue(DATE_HEADER, timestamp);
     std::string stringToSign = BuildStringToSign(request);
@@ -105,7 +105,7 @@ std::string QsSigner::BuildStringToSign(Http::HttpRequest* request)  const
     stringToSign += canonicalizedHeaders;
     canonicalizedResource = BuildCanonicalizedResource(request->GetQueries(), request->GetURLEncodedPath());
     stringToSign += canonicalizedResource;
-    LOG_DEBUG << "QingStor string to sign:" << stringToSign;
+
     return stringToSign;
 }
 

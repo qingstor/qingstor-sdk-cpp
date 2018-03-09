@@ -1,6 +1,6 @@
 #pragma once
 
-#define BUILD_C_STYLE_INTERFACE
+/* #undef BUILD_C_STYLE_INTERFACE */
 
 #define QS_SDK_API
 

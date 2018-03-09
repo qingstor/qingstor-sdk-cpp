@@ -24,45 +24,62 @@
 #include <openssl/buffer.h>
 #include <openssl/sha.h>
 
+static const char base64_encode_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+
 namespace QingStor
 {
 namespace Utils
 {
 namespace Encoder
 {
-/* Encodes a binary safe base 64 string */
-std::string	Base64Encode(const char *buffer, size_t length)
+
+std::string Base64Encode(const unsigned char *buffer, size_t length)
 {
-    BIO *bio, *b64;
-    BUF_MEM *bufferPtr;
-    char *ret;
-    b64 = BIO_new(BIO_f_base64());
-    bio = BIO_new(BIO_s_mem());
-    bio = BIO_push(b64, bio);
-    BIO_set_flags(bio, BIO_FLAGS_BASE64_NO_NL);  // Ignore newlines - write
-    // everything in one line
-    BIO_write(bio, buffer, length);
-    (void) BIO_flush(bio);
-    BIO_get_mem_ptr(bio, &bufferPtr);
-    ret = (char *) malloc(bufferPtr->length + 1);
-    memcpy(ret, bufferPtr->data, bufferPtr->length);
-    ret[bufferPtr->length] = 0;
-    (void) BIO_set_close(bio, BIO_NOCLOSE);
-    BIO_free_all(bio);
-    std::string strEncoded(ret);
-    free(ret);
-#ifndef _WIN32
-    free(bufferPtr->data);
-    free(bufferPtr);
-#endif
-    return strEncoded;
+    size_t blockCount = (length + 2) / 3;
+    size_t remainderCount = (length % 3);
+
+    std::string outputString;
+    outputString.reserve(4 * ((length + 2) / 3));
+
+    for(size_t i = 0; i < length; i += 3 )
+    {
+        unsigned int block = buffer[ i ];
+
+        block <<= 8;
+        if (i + 1 < length)
+        {
+            block = block | buffer[ i + 1 ];
+        }
+
+        block <<= 8;
+        if (i + 2 < length)
+        {
+            block = block | buffer[ i + 2 ];
+        }
+
+        outputString.push_back(base64_encode_table[(block >> 18) & 0x3F]);
+        outputString.push_back(base64_encode_table[(block >> 12) & 0x3F]);
+        outputString.push_back(base64_encode_table[(block >> 6) & 0x3F]);
+        outputString.push_back(base64_encode_table[block & 0x3F]);
+    }
+
+    if(remainderCount > 0)
+    {
+        outputString[blockCount * 4 - 1] = '=';
+        if(remainderCount == 1)
+        {
+            outputString[blockCount * 4 - 2] = '=';
+        }
+    }
+
+    return outputString;
 }
 
 
-void sha256hmac(const char *str, char out[33], const char *secret)
+void sha256hmac(const char *str, unsigned char out[33], const char *secret)
 {
     unsigned int len = 32;
-    (void)HMAC(EVP_sha256(), secret, strlen(secret), (unsigned char *)str, strlen(str), (unsigned char *)out, &len);
+    (void)HMAC(EVP_sha256(), secret, strlen(secret), (unsigned char *)str, strlen(str), out, &len);
     out[32] = '\0';
     return;
 }
