@@ -15,7 +15,10 @@
 // +-------------------------------------------------------------------------
 
 #include <curl/curl.h>
+#ifdef _WIN32
+#else
 #include <pthread.h>
+#endif
 
 class CurlHandlerPool
 {
@@ -35,8 +38,11 @@ public:
 
 private:
     int m_maxHandlers;
-
-    pthread_mutex_t m_lock;
+#ifdef _WIN32
+	CRITICAL_SECTION m_lock;
+#else
+	pthread_mutex_t m_lock;
+#endif
     CURL** m_handlers;
     int m_index;
 };

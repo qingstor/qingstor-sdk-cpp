@@ -19,11 +19,15 @@
 
 bool CurlHandlerPool::Init()
 {
+#ifdef _WIN32
+	InitializeCriticalSection(&m_lock);
+#else
     if (0 != pthread_mutex_init(&m_lock, NULL))
     {
         LOGE << "Init curl handlers lock failed";
         return false;
     }
+#endif
     m_handlers = new CURL*[m_maxHandlers]();
     for (int i = 0; i < m_maxHandlers; ++i, ++m_index)
     {
@@ -45,24 +49,35 @@ bool CurlHandlerPool::Destroy()
         curl_easy_cleanup(m_handlers[i]);
     }
     delete[] m_handlers;
+#ifdef _WIN32
+#else
     if (0 != pthread_mutex_destroy(&m_lock))
     {
         LOGE << "Destroy curl handlers lock failed";
         return false;
     }
+#endif
     return true;
 }
 
 CURL* CurlHandlerPool::GetHandler()
 {
     CURL* handle = NULL;
+#ifdef _WIN32
+	EnterCriticalSection(&m_lock);
+#else
     pthread_mutex_lock(&m_lock);
+#endif
     if (m_index >= 0)
     {
         LOGD << "Get handler from pool: " << m_index;
         handle = m_handlers[m_index--];
     }
+#ifdef _WIN32
+	LeaveCriticalSection(&m_lock);
+#else
     pthread_mutex_unlock(&m_lock);
+#endif
     if (!handle)
     {
         LOGI << "Pool empty: create new handler";
@@ -74,14 +89,23 @@ CURL* CurlHandlerPool::GetHandler()
 void CurlHandlerPool::ReleaseHandler(CURL* handle)
 {
     bool needCleanup = true;
+
+#ifdef _WIN32
+	EnterCriticalSection(&m_lock);
+#else
     pthread_mutex_lock(&m_lock);
+#endif
     if (m_index < m_maxHandlers - 1)
     {
         m_handlers[++m_index] = handle;
         needCleanup = false;
-        LOGD << "Release handler to pool: %d", m_index;
+        LOGD << "Release handler to pool: " << m_index;
     }
+#ifdef _WIN32
+	LeaveCriticalSection(&m_lock);
+#else
     pthread_mutex_unlock(&m_lock);
+#endif
     if (needCleanup)
     {
         LOGI << "Pool full: destroy the handler";
