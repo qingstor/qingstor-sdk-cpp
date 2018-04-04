@@ -88,8 +88,27 @@ INCLUDE_DIRECTORIES(${VC_DIR}/include)
 
 # On windows, generate static library
 IF (WIN32)  
-    ADD_LIBRARY(libqingstor-static STATIC  ${libqingstor_SOURCES})
-    SET_TARGET_PROPERTIES(libqingstor-static PROPERTIES OUTPUT_NAME "qingstor")
+    ADD_LIBRARY(libqingstor-shared SHARED  ${libqingstor_SOURCES})
+    SET_TARGET_PROPERTIES(libqingstor-shared PROPERTIES OUTPUT_NAME "qingstor")
+	ExternalProject_Get_Property(curl INSTALL_DIR) 
+	set(curl_install_dir ${INSTALL_DIR}) 
+	add_dependencies(libqingstor-shared curl) 
+	target_include_directories( libqingstor-shared
+	PRIVATE	${curl_install_dir}/include) 
+	TARGET_LINK_LIBRARIES( libqingstor-shared
+		Crypt32 
+		Ws2_32
+		debug ${curl_install_dir}/lib/libcurl-d.lib
+		optimized ${curl_install_dir}/lib/libcurl.lib
+		) 
+	link_directories(${curl_install_dir}/lib/)
+	link_libraries(${curl_install_dir}/lib/libcurl-d.lib)
+	target_compile_definitions( libqingstor-shared
+	 PRIVATE CURL_STATICLIB 
+			_CRT_SECURE_NO_WARNINGS
+			DLL_EXPORTS 
+			)
+
 ELSE() 
 #On other platform ,generate dynamic library
 

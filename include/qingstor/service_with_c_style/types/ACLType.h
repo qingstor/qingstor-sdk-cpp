@@ -42,10 +42,10 @@ typedef struct
 } qs_acl_item_t;
 
 // acl init function.
-void init_acl(qs_acl_t * input);
+void QS_SDK_API init_acl(qs_acl_t * input);
 
 // acl release function.
-void release_acl(qs_acl_t * output);
+void QS_SDK_API release_acl(qs_acl_t * output);
 
 #ifdef  __cplusplus
 };

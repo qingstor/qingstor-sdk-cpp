@@ -128,7 +128,7 @@ PutObjectInput input;
 PutObjectOutput output;
 
 // object content is come from a file stream.
-std::iostream * = new objectStream(new std::fstream("/tmp/Screenshot.jpg"));
+std::iostream * objectStream = new std::fstream("/tmp/Screenshot.jpg", std::ios::binary | std::ios::in);
 objectStream->seekg(0, objectStream->end);
 auto streamSize = objectStream->tellg();
 objectStream->seekg(0, objectStream->beg);

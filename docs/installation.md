@@ -23,8 +23,6 @@ To install these packages on Redhat/Fedora-based systems
 $ sudo yum install libcurl-devel openssl-devel
 ```
 
-To compile on Windows, you must have you must provide the header files and library of openssl, libcurl.
-
 
 ## Install from source code
 

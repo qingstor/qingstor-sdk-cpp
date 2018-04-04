@@ -46,10 +46,10 @@ typedef struct
 } qs_bucket_item_t;
 
 // bucket init function.
-void init_bucket(qs_bucket_t * input);
+QS_SDK_API void init_bucket(qs_bucket_t * input);
 
 // bucket release function.
-void release_bucket(qs_bucket_t * output);
+QS_SDK_API void release_bucket(qs_bucket_t * output);
 
 #ifdef  __cplusplus
 };

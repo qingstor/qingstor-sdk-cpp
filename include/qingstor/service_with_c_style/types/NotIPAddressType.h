@@ -49,10 +49,10 @@ typedef struct
 } qs_not_ip_address_source_ip_item_t;
 
 // not_ip_address init function.
-void init_not_ip_address(qs_not_ip_address_t * input);
+QS_SDK_API void init_not_ip_address(qs_not_ip_address_t * input);
 
 // not_ip_address release function.
-void release_not_ip_address(qs_not_ip_address_t * output);
+QS_SDK_API void release_not_ip_address(qs_not_ip_address_t * output);
 
 #ifdef  __cplusplus
 };

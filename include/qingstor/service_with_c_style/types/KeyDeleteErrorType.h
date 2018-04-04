@@ -45,10 +45,10 @@ typedef struct
 } qs_key_delete_error_item_t;
 
 // key_delete_error init function.
-void init_key_delete_error(qs_key_delete_error_t * input);
+QS_SDK_API void init_key_delete_error(qs_key_delete_error_t * input);
 
 // key_delete_error release function.
-void release_key_delete_error(qs_key_delete_error_t * output);
+QS_SDK_API void release_key_delete_error(qs_key_delete_error_t * output);
 
 #ifdef  __cplusplus
 };

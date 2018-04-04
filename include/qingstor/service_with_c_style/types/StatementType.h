@@ -77,10 +77,10 @@ typedef struct
 } qs_statement_user_item_t;
 
 // statement init function.
-void init_statement(qs_statement_t * input);
+QS_SDK_API void init_statement(qs_statement_t * input);
 
 // statement release function.
-void release_statement(qs_statement_t * output);
+QS_SDK_API void release_statement(qs_statement_t * output);
 
 #ifdef  __cplusplus
 };

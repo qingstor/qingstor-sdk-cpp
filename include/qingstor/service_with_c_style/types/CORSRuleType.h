@@ -74,10 +74,10 @@ typedef struct
 } qs_cors_rule_expose_headers_item_t;
 
 // cors_rule init function.
-void init_cors_rule(qs_cors_rule_t * input);
+QS_SDK_API void init_cors_rule(qs_cors_rule_t * input);
 
 // cors_rule release function.
-void release_cors_rule(qs_cors_rule_t * output);
+QS_SDK_API void release_cors_rule(qs_cors_rule_t * output);
 
 #ifdef  __cplusplus
 };

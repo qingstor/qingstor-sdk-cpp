@@ -46,10 +46,10 @@ typedef struct
 } qs_object_part_item_t;
 
 // object_part init function.
-void init_object_part(qs_object_part_t * input);
+QS_SDK_API void init_object_part(qs_object_part_t * input);
 
 // object_part release function.
-void release_object_part(qs_object_part_t * output);
+QS_SDK_API void release_object_part(qs_object_part_t * output);
 
 #ifdef  __cplusplus
 };

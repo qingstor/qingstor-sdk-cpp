@@ -44,10 +44,10 @@ typedef struct {
 {{template "RenderCStyleListItemStruct" passThrough $customizedType "" ""}}
 
 // {{$customizedType.ID}} init function.
-void init_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * input);
+QS_SDK_API void init_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * input);
 
 // {{$customizedType.ID}} release function.
-void release_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * output);
+QS_SDK_API void release_{{$customizedType.ID}}(qs_{{$customizedType.ID}}_t * output);
 
 
 {{- end -}}

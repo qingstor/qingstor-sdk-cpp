@@ -17,12 +17,13 @@
 #pragma once
 
 #include "QsErrors.h"
+#include "QsSdkOption.h"
 #include <string>
 
 namespace QingStor
 {
 
-class QsConfig
+class QS_SDK_API QsConfig
 {
 public:
     QsConfig(const std::string & access_key_id =

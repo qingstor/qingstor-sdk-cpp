@@ -2,10 +2,18 @@
 
 #cmakedefine BUILD_C_STYLE_INTERFACE
 
-#define QS_SDK_API
-
 #ifdef _WIN32
+
+#ifdef DLL_EXPORTS
+#define  QS_SDK_API    __declspec(dllexport)
+#else
+#define  QS_SDK_API    __declspec(dllimport)
+#endif
 #include <stdint.h>
+
+#else
+#define  QS_SDK_API
+
 #endif
 
 typedef enum LogLevel

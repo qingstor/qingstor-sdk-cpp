@@ -49,10 +49,10 @@ typedef struct
 } qs_ip_address_source_ip_item_t;
 
 // ip_address init function.
-void init_ip_address(qs_ip_address_t * input);
+QS_SDK_API void init_ip_address(qs_ip_address_t * input);
 
 // ip_address release function.
-void release_ip_address(qs_ip_address_t * output);
+QS_SDK_API void release_ip_address(qs_ip_address_t * output);
 
 #ifdef  __cplusplus
 };

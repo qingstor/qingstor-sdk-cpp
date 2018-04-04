@@ -28,7 +28,7 @@ QsError QS_SDK_API qs_{{$opID}}({{- if $isObject}}char* objectKey, {{end -}}qs_{
 	{{- $operation := index . 1 -}}
 	{{- $opID := $operation.ID | snakeCase -}}
 // {{$opID}}Input init function.
-void init_{{$opID}}_input(qs_{{$opID}}_input_t * input);
+QS_SDK_API void init_{{$opID}}_input(qs_{{$opID}}_input_t * input);
 {{- end -}}
 
 
@@ -80,7 +80,7 @@ typedef qs_default_input_s qs_{{$opID}}_input_t;
 	{{- $operation := index . 1 -}}
 	{{- $opID := $operation.ID | snakeCase}}
 // {{$opID}}Input init function.
-void release_{{$opID}}_output(qs_{{$opID}}_output_t * output);
+QS_SDK_API void release_{{$opID}}_output(qs_{{$opID}}_output_t * output);
 {{- end -}}
 
 {{define "OutputCStyleHeader"}}

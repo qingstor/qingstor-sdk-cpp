@@ -53,10 +53,10 @@ typedef struct
 } qs_key_item_t;
 
 // key init function.
-void init_key(qs_key_t * input);
+QS_SDK_API void init_key(qs_key_t * input);
 
 // key release function.
-void release_key(qs_key_t * output);
+QS_SDK_API void release_key(qs_key_t * output);
 
 #ifdef  __cplusplus
 };

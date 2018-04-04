@@ -130,7 +130,7 @@ void sha256hmac(std::string src, unsigned char out[33], std::string secret)
 #else
 
     unsigned int len = 32;
-	(void)HMAC(EVP_sha256(), secret.c_str(), secret.size(), (unsigned char *)src, strlen(src), out, &len);
+	(void)HMAC(EVP_sha256(), secret.c_str(), secret.size(), (unsigned char *)src.c_str(), src.size(), out, &len);
   
 #endif
 	out[32] = '\0';

@@ -42,10 +42,10 @@ typedef struct
 } qs_owner_item_t;
 
 // owner init function.
-void init_owner(qs_owner_t * input);
+QS_SDK_API void init_owner(qs_owner_t * input);
 
 // owner release function.
-void release_owner(qs_owner_t * output);
+QS_SDK_API void release_owner(qs_owner_t * output);
 
 #ifdef  __cplusplus
 };

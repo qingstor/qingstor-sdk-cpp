@@ -49,10 +49,10 @@ typedef struct
 } qs_string_not_like_referer_item_t;
 
 // string_not_like init function.
-void init_string_not_like(qs_string_not_like_t * input);
+QS_SDK_API void init_string_not_like(qs_string_not_like_t * input);
 
 // string_not_like release function.
-void release_string_not_like(qs_string_not_like_t * output);
+QS_SDK_API void release_string_not_like(qs_string_not_like_t * output);
 
 #ifdef  __cplusplus
 };

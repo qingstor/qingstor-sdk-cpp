@@ -44,10 +44,10 @@ typedef struct
 } qs_grantee_item_t;
 
 // grantee init function.
-void init_grantee(qs_grantee_t * input);
+QS_SDK_API void init_grantee(qs_grantee_t * input);
 
 // grantee release function.
-void release_grantee(qs_grantee_t * output);
+QS_SDK_API void release_grantee(qs_grantee_t * output);
 
 #ifdef  __cplusplus
 };

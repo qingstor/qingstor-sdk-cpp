@@ -72,24 +72,24 @@ typedef struct
 } qs_list_buckets_input_t;
 
 // list_bucketsInput init function.
-void init_list_buckets_input(qs_list_buckets_input_t * input);
+QS_SDK_API  void init_list_buckets_input(qs_list_buckets_input_t * input);
 
 typedef qs_default_input_s qs_delete_bucket_input_t;
 // delete_bucketInput init function.
-void init_delete_bucket_input(qs_delete_bucket_input_t * input);
+QS_SDK_API  void init_delete_bucket_input(qs_delete_bucket_input_t * input);
 
 typedef qs_default_input_s qs_delete_bucket_cors_input_t;
 // delete_bucket_corsInput init function.
-void init_delete_bucket_cors_input(qs_delete_bucket_cors_input_t * input);
+QS_SDK_API  void init_delete_bucket_cors_input(qs_delete_bucket_cors_input_t * input);
 
 typedef qs_default_input_s qs_delete_bucket_external_mirror_input_t;
 // delete_bucket_external_mirrorInput init function.
-void init_delete_bucket_external_mirror_input
+QS_SDK_API  void init_delete_bucket_external_mirror_input
 (qs_delete_bucket_external_mirror_input_t * input);
 
 typedef qs_default_input_s qs_delete_bucket_policy_input_t;
 // delete_bucket_policyInput init function.
-void init_delete_bucket_policy_input(qs_delete_bucket_policy_input_t *
+QS_SDK_API  void init_delete_bucket_policy_input(qs_delete_bucket_policy_input_t *
                                      input);
 
 // delete_multiple_objectsInput presents input for delete_multiple_objects.
@@ -105,34 +105,34 @@ typedef struct
 } qs_delete_multiple_objects_input_t;
 
 // delete_multiple_objectsInput init function.
-void init_delete_multiple_objects_input(qs_delete_multiple_objects_input_t *
+QS_SDK_API  void init_delete_multiple_objects_input(qs_delete_multiple_objects_input_t *
                                         input);
 
 typedef qs_default_input_s qs_get_bucket_acl_input_t;
 // get_bucket_aclInput init function.
-void init_get_bucket_acl_input(qs_get_bucket_acl_input_t * input);
+QS_SDK_API  void init_get_bucket_acl_input(qs_get_bucket_acl_input_t * input);
 
 typedef qs_default_input_s qs_get_bucket_cors_input_t;
 // get_bucket_corsInput init function.
-void init_get_bucket_cors_input(qs_get_bucket_cors_input_t * input);
+QS_SDK_API  void init_get_bucket_cors_input(qs_get_bucket_cors_input_t * input);
 
 typedef qs_default_input_s qs_get_bucket_external_mirror_input_t;
 // get_bucket_external_mirrorInput init function.
-void init_get_bucket_external_mirror_input
+QS_SDK_API  void init_get_bucket_external_mirror_input
 (qs_get_bucket_external_mirror_input_t * input);
 
 typedef qs_default_input_s qs_get_bucket_policy_input_t;
 // get_bucket_policyInput init function.
-void init_get_bucket_policy_input(qs_get_bucket_policy_input_t * input);
+QS_SDK_API  void init_get_bucket_policy_input(qs_get_bucket_policy_input_t * input);
 
 typedef qs_default_input_s qs_get_bucket_statistics_input_t;
 // get_bucket_statisticsInput init function.
-void init_get_bucket_statistics_input(qs_get_bucket_statistics_input_t *
+QS_SDK_API  void init_get_bucket_statistics_input(qs_get_bucket_statistics_input_t *
                                       input);
 
 typedef qs_default_input_s qs_head_bucket_input_t;
 // head_bucketInput init function.
-void init_head_bucket_input(qs_head_bucket_input_t * input);
+QS_SDK_API  void init_head_bucket_input(qs_head_bucket_input_t * input);
 
 // list_multipart_uploadsInput presents input for list_multipart_uploads.
 typedef struct
@@ -150,7 +150,7 @@ typedef struct
 } qs_list_multipart_uploads_input_t;
 
 // list_multipart_uploadsInput init function.
-void init_list_multipart_uploads_input(qs_list_multipart_uploads_input_t *
+QS_SDK_API  void init_list_multipart_uploads_input(qs_list_multipart_uploads_input_t *
                                        input);
 
 // list_objectsInput presents input for list_objects.
@@ -167,11 +167,11 @@ typedef struct
 } qs_list_objects_input_t;
 
 // list_objectsInput init function.
-void init_list_objects_input(qs_list_objects_input_t * input);
+QS_SDK_API  void init_list_objects_input(qs_list_objects_input_t * input);
 
 typedef qs_default_input_s qs_put_bucket_input_t;
 // put_bucketInput init function.
-void init_put_bucket_input(qs_put_bucket_input_t * input);
+QS_SDK_API  void init_put_bucket_input(qs_put_bucket_input_t * input);
 
 // put_bucket_aclInput presents input for put_bucket_acl.
 typedef struct
@@ -182,7 +182,7 @@ typedef struct
 } qs_put_bucket_acl_input_t;
 
 // put_bucket_aclInput init function.
-void init_put_bucket_acl_input(qs_put_bucket_acl_input_t * input);
+QS_SDK_API  void init_put_bucket_acl_input(qs_put_bucket_acl_input_t * input);
 
 // put_bucket_corsInput presents input for put_bucket_cors.
 typedef struct
@@ -193,7 +193,7 @@ typedef struct
 } qs_put_bucket_cors_input_t;
 
 // put_bucket_corsInput init function.
-void init_put_bucket_cors_input(qs_put_bucket_cors_input_t * input);
+QS_SDK_API  void init_put_bucket_cors_input(qs_put_bucket_cors_input_t * input);
 
 // put_bucket_external_mirrorInput presents input for put_bucket_external_mirror.
 typedef struct
@@ -203,7 +203,7 @@ typedef struct
 } qs_put_bucket_external_mirror_input_t;
 
 // put_bucket_external_mirrorInput init function.
-void init_put_bucket_external_mirror_input
+QS_SDK_API  void init_put_bucket_external_mirror_input
 (qs_put_bucket_external_mirror_input_t * input);
 
 // put_bucket_policyInput presents input for put_bucket_policy.
@@ -215,7 +215,7 @@ typedef struct
 } qs_put_bucket_policy_input_t;
 
 // put_bucket_policyInput init function.
-void init_put_bucket_policy_input(qs_put_bucket_policy_input_t * input);
+QS_SDK_API  void init_put_bucket_policy_input(qs_put_bucket_policy_input_t * input);
 
 // abort_multipart_uploadInput presents input for abort_multipart_upload.
 typedef struct
@@ -225,7 +225,7 @@ typedef struct
 } qs_abort_multipart_upload_input_t;
 
 // abort_multipart_uploadInput init function.
-void init_abort_multipart_upload_input(qs_abort_multipart_upload_input_t *
+QS_SDK_API  void init_abort_multipart_upload_input(qs_abort_multipart_upload_input_t *
                                        input);
 
 // complete_multipart_uploadInput presents input for complete_multipart_upload.
@@ -247,12 +247,12 @@ typedef struct
 } qs_complete_multipart_upload_input_t;
 
 // complete_multipart_uploadInput init function.
-void init_complete_multipart_upload_input
+QS_SDK_API  void init_complete_multipart_upload_input
 (qs_complete_multipart_upload_input_t * input);
 
 typedef qs_default_input_s qs_delete_object_input_t;
 // delete_objectInput init function.
-void init_delete_object_input(qs_delete_object_input_t * input);
+QS_SDK_API  void init_delete_object_input(qs_delete_object_input_t * input);
 
 // get_objectInput presents input for get_object.
 typedef struct
@@ -288,7 +288,7 @@ typedef struct
 } qs_get_object_input_t;
 
 // get_objectInput init function.
-void init_get_object_input(qs_get_object_input_t * input);
+QS_SDK_API  void init_get_object_input(qs_get_object_input_t * input);
 
 // head_objectInput presents input for head_object.
 typedef struct
@@ -310,7 +310,7 @@ typedef struct
 } qs_head_object_input_t;
 
 // head_objectInput init function.
-void init_head_object_input(qs_head_object_input_t * input);
+QS_SDK_API  void init_head_object_input(qs_head_object_input_t * input);
 
 // image_processInput presents input for image_process.
 typedef struct
@@ -334,7 +334,7 @@ typedef struct
 } qs_image_process_input_t;
 
 // image_processInput init function.
-void init_image_process_input(qs_image_process_input_t * input);
+QS_SDK_API  void init_image_process_input(qs_image_process_input_t * input);
 
 // initiate_multipart_uploadInput presents input for initiate_multipart_upload.
 typedef struct
@@ -350,7 +350,7 @@ typedef struct
 } qs_initiate_multipart_upload_input_t;
 
 // initiate_multipart_uploadInput init function.
-void init_initiate_multipart_upload_input
+QS_SDK_API  void init_initiate_multipart_upload_input
 (qs_initiate_multipart_upload_input_t * input);
 
 // list_multipartInput presents input for list_multipart.
@@ -365,7 +365,7 @@ typedef struct
 } qs_list_multipart_input_t;
 
 // list_multipartInput init function.
-void init_list_multipart_input(qs_list_multipart_input_t * input);
+QS_SDK_API  void init_list_multipart_input(qs_list_multipart_input_t * input);
 
 // options_objectInput presents input for options_object.
 typedef struct
@@ -379,7 +379,7 @@ typedef struct
 } qs_options_object_input_t;
 
 // options_objectInput init function.
-void init_options_object_input(qs_options_object_input_t * input);
+QS_SDK_API  void init_options_object_input(qs_options_object_input_t * input);
 
 // put_objectInput presents input for put_object.
 typedef struct
@@ -427,7 +427,7 @@ typedef struct
 } qs_put_object_input_t;
 
 // put_objectInput init function.
-void init_put_object_input(qs_put_object_input_t * input);
+QS_SDK_API  void init_put_object_input(qs_put_object_input_t * input);
 
 // upload_multipartInput presents input for upload_multipart.
 typedef struct
@@ -471,7 +471,7 @@ typedef struct
 } qs_upload_multipart_input_t;
 
 // upload_multipartInput init function.
-void init_upload_multipart_input(qs_upload_multipart_input_t * input);
+QS_SDK_API  void init_upload_multipart_input(qs_upload_multipart_input_t * input);
 
 typedef struct
 {
@@ -488,29 +488,29 @@ typedef struct
 } qs_list_buckets_output_t;
 
 // list_bucketsInput init function.
-void release_list_buckets_output(qs_list_buckets_output_t * output);
+QS_SDK_API  void release_list_buckets_output(qs_list_buckets_output_t * output);
 
 typedef qs_default_output_s qs_delete_bucket_output_t;
 
 // delete_bucketInput init function.
-void release_delete_bucket_output(qs_delete_bucket_output_t * output);
+QS_SDK_API  void release_delete_bucket_output(qs_delete_bucket_output_t * output);
 
 typedef qs_default_output_s qs_delete_bucket_cors_output_t;
 
 // delete_bucket_corsInput init function.
-void release_delete_bucket_cors_output(qs_delete_bucket_cors_output_t *
+QS_SDK_API  void release_delete_bucket_cors_output(qs_delete_bucket_cors_output_t *
                                        output);
 
 typedef qs_default_output_s qs_delete_bucket_external_mirror_output_t;
 
 // delete_bucket_external_mirrorInput init function.
-void release_delete_bucket_external_mirror_output
+QS_SDK_API  void release_delete_bucket_external_mirror_output
 (qs_delete_bucket_external_mirror_output_t * output);
 
 typedef qs_default_output_s qs_delete_bucket_policy_output_t;
 
 // delete_bucket_policyInput init function.
-void release_delete_bucket_policy_output(qs_delete_bucket_policy_output_t *
+QS_SDK_API  void release_delete_bucket_policy_output(qs_delete_bucket_policy_output_t *
         output);
 
 typedef struct
@@ -529,7 +529,7 @@ typedef struct
 } qs_delete_multiple_objects_output_t;
 
 // delete_multiple_objectsInput init function.
-void release_delete_multiple_objects_output
+QS_SDK_API  void release_delete_multiple_objects_output
 (qs_delete_multiple_objects_output_t * output);
 
 typedef struct
@@ -548,7 +548,7 @@ typedef struct
 } qs_get_bucket_acl_output_t;
 
 // get_bucket_aclInput init function.
-void release_get_bucket_acl_output(qs_get_bucket_acl_output_t * output);
+QS_SDK_API  void release_get_bucket_acl_output(qs_get_bucket_acl_output_t * output);
 
 typedef struct
 {
@@ -563,7 +563,7 @@ typedef struct
 } qs_get_bucket_cors_output_t;
 
 // get_bucket_corsInput init function.
-void release_get_bucket_cors_output(qs_get_bucket_cors_output_t * output);
+QS_SDK_API  void release_get_bucket_cors_output(qs_get_bucket_cors_output_t * output);
 
 typedef struct
 {
@@ -577,7 +577,7 @@ typedef struct
 } qs_get_bucket_external_mirror_output_t;
 
 // get_bucket_external_mirrorInput init function.
-void release_get_bucket_external_mirror_output
+QS_SDK_API  void release_get_bucket_external_mirror_output
 (qs_get_bucket_external_mirror_output_t * output);
 
 typedef struct
@@ -593,7 +593,7 @@ typedef struct
 } qs_get_bucket_policy_output_t;
 
 // get_bucket_policyInput init function.
-void release_get_bucket_policy_output(qs_get_bucket_policy_output_t *
+QS_SDK_API  void release_get_bucket_policy_output(qs_get_bucket_policy_output_t *
                                       output);
 
 typedef struct
@@ -620,13 +620,13 @@ typedef struct
 } qs_get_bucket_statistics_output_t;
 
 // get_bucket_statisticsInput init function.
-void release_get_bucket_statistics_output(qs_get_bucket_statistics_output_t
+QS_SDK_API  void release_get_bucket_statistics_output(qs_get_bucket_statistics_output_t
         * output);
 
 typedef qs_default_output_s qs_head_bucket_output_t;
 
 // head_bucketInput init function.
-void release_head_bucket_output(qs_head_bucket_output_t * output);
+QS_SDK_API  void release_head_bucket_output(qs_head_bucket_output_t * output);
 
 typedef struct
 {
@@ -658,7 +658,7 @@ typedef struct
 } qs_list_multipart_uploads_output_t;
 
 // list_multipart_uploadsInput init function.
-void release_list_multipart_uploads_output
+QS_SDK_API  void release_list_multipart_uploads_output
 (qs_list_multipart_uploads_output_t * output);
 
 typedef struct
@@ -692,39 +692,39 @@ typedef struct
 } qs_list_objects_output_t;
 
 // list_objectsInput init function.
-void release_list_objects_output(qs_list_objects_output_t * output);
+QS_SDK_API  void release_list_objects_output(qs_list_objects_output_t * output);
 
 typedef qs_default_output_s qs_put_bucket_output_t;
 
 // put_bucketInput init function.
-void release_put_bucket_output(qs_put_bucket_output_t * output);
+QS_SDK_API  void release_put_bucket_output(qs_put_bucket_output_t * output);
 
 typedef qs_default_output_s qs_put_bucket_acl_output_t;
 
 // put_bucket_aclInput init function.
-void release_put_bucket_acl_output(qs_put_bucket_acl_output_t * output);
+QS_SDK_API  void release_put_bucket_acl_output(qs_put_bucket_acl_output_t * output);
 
 typedef qs_default_output_s qs_put_bucket_cors_output_t;
 
 // put_bucket_corsInput init function.
-void release_put_bucket_cors_output(qs_put_bucket_cors_output_t * output);
+QS_SDK_API  void release_put_bucket_cors_output(qs_put_bucket_cors_output_t * output);
 
 typedef qs_default_output_s qs_put_bucket_external_mirror_output_t;
 
 // put_bucket_external_mirrorInput init function.
-void release_put_bucket_external_mirror_output
+QS_SDK_API  void release_put_bucket_external_mirror_output
 (qs_put_bucket_external_mirror_output_t * output);
 
 typedef qs_default_output_s qs_put_bucket_policy_output_t;
 
 // put_bucket_policyInput init function.
-void release_put_bucket_policy_output(qs_put_bucket_policy_output_t *
+QS_SDK_API  void release_put_bucket_policy_output(qs_put_bucket_policy_output_t *
                                       output);
 
 typedef qs_default_output_s qs_abort_multipart_upload_output_t;
 
 // abort_multipart_uploadInput init function.
-void release_abort_multipart_upload_output
+QS_SDK_API  void release_abort_multipart_upload_output
 (qs_abort_multipart_upload_output_t * output);
 
 typedef struct
@@ -739,13 +739,13 @@ typedef struct
 } qs_complete_multipart_upload_output_t;
 
 // complete_multipart_uploadInput init function.
-void release_complete_multipart_upload_output
+QS_SDK_API  void release_complete_multipart_upload_output
 (qs_complete_multipart_upload_output_t * output);
 
 typedef qs_default_output_s qs_delete_object_output_t;
 
 // delete_objectInput init function.
-void release_delete_object_output(qs_delete_object_output_t * output);
+QS_SDK_API  void release_delete_object_output(qs_delete_object_output_t * output);
 
 typedef struct
 {
@@ -782,7 +782,7 @@ typedef struct
 } qs_get_object_output_t;
 
 // get_objectInput init function.
-void release_get_object_output(qs_get_object_output_t * output);
+QS_SDK_API  void release_get_object_output(qs_get_object_output_t * output);
 
 typedef struct
 {
@@ -803,7 +803,7 @@ typedef struct
 } qs_head_object_output_t;
 
 // head_objectInput init function.
-void release_head_object_output(qs_head_object_output_t * output);
+QS_SDK_API  void release_head_object_output(qs_head_object_output_t * output);
 
 typedef struct
 {
@@ -821,7 +821,7 @@ typedef struct
 } qs_image_process_output_t;
 
 // image_processInput init function.
-void release_image_process_output(qs_image_process_output_t * output);
+QS_SDK_API  void release_image_process_output(qs_image_process_output_t * output);
 
 typedef struct
 {
@@ -841,7 +841,7 @@ typedef struct
 } qs_initiate_multipart_upload_output_t;
 
 // initiate_multipart_uploadInput init function.
-void release_initiate_multipart_upload_output
+QS_SDK_API  void release_initiate_multipart_upload_output
 (qs_initiate_multipart_upload_output_t * output);
 
 typedef struct
@@ -859,7 +859,7 @@ typedef struct
 } qs_list_multipart_output_t;
 
 // list_multipartInput init function.
-void release_list_multipart_output(qs_list_multipart_output_t * output);
+QS_SDK_API  void release_list_multipart_output(qs_list_multipart_output_t * output);
 
 typedef struct
 {
@@ -881,7 +881,7 @@ typedef struct
 } qs_options_object_output_t;
 
 // options_objectInput init function.
-void release_options_object_output(qs_options_object_output_t * output);
+QS_SDK_API  void release_options_object_output(qs_options_object_output_t * output);
 
 typedef struct
 {
@@ -897,7 +897,7 @@ typedef struct
 } qs_put_object_output_t;
 
 // put_objectInput init function.
-void release_put_object_output(qs_put_object_output_t * output);
+QS_SDK_API  void release_put_object_output(qs_put_object_output_t * output);
 
 typedef struct
 {
@@ -915,7 +915,7 @@ typedef struct
 } qs_upload_multipart_output_t;
 
 // upload_multipartInput init function.
-void release_upload_multipart_output(qs_upload_multipart_output_t * output);	// list_buckets does Retrieve the bucket list.
+QS_SDK_API  void release_upload_multipart_output(qs_upload_multipart_output_t * output);	// list_buckets does Retrieve the bucket list.
 // Documentation URL: https://docs.qingcloud.com/qingstor/api/service/get.html
 QsError QS_SDK_API qs_list_buckets(qs_list_buckets_input_t * input,
                                    qs_list_buckets_output_t * output,

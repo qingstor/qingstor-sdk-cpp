@@ -40,10 +40,10 @@ typedef struct
 } qs_is_null_item_t;
 
 // is_null init function.
-void init_is_null(qs_is_null_t * input);
+QS_SDK_API void init_is_null(qs_is_null_t * input);
 
 // is_null release function.
-void release_is_null(qs_is_null_t * output);
+QS_SDK_API void release_is_null(qs_is_null_t * output);
 
 #ifdef  __cplusplus
 };

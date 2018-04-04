@@ -52,10 +52,10 @@ typedef struct
 } qs_condition_item_t;
 
 // condition init function.
-void init_condition(qs_condition_t * input);
+QS_SDK_API void init_condition(qs_condition_t * input);
 
 // condition release function.
-void release_condition(qs_condition_t * output);
+QS_SDK_API void release_condition(qs_condition_t * output);
 
 #ifdef  __cplusplus
 };

@@ -45,10 +45,10 @@ typedef struct
 } qs_uploads_item_t;
 
 // uploads init function.
-void init_uploads(qs_uploads_t * input);
+QS_SDK_API void init_uploads(qs_uploads_t * input);
 
 // uploads release function.
-void release_uploads(qs_uploads_t * output);
+QS_SDK_API void release_uploads(qs_uploads_t * output);
 
 #ifdef  __cplusplus
 };
