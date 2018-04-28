@@ -40,7 +40,7 @@ qs_list_buckets_input_t input;
 init_list_buckets_input(&input);
 
 QsError err = qs_list_buckets(&input,&output,context_hdl);
-if ( QS_ERR_NO_ERROR != err)
+if ( QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
     printf("%d\n",output->response_code);
@@ -68,7 +68,7 @@ int limit = 200;
 input->limit =&limit;
 
 QsError err = qs_list_objects(&input,&output,context_hdl);
-if ( QS_ERR_NO_ERROR != err)
+if ( QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
     // Example: 200
@@ -119,7 +119,7 @@ qs_list_init (input.acl);
 qs_list_append (&acl_item.node, input.acl);
 
 QsError err = qs_put_bucket_acl(&input, &output, context_hdl);
-if (QS_ERR_NO_ERROR != err)
+if (QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
     printf("%d\n",output->response_code);
@@ -149,7 +149,7 @@ input.content_length = &length;
 input.bufLength = &length;
 
 QsError err = qs_put_object(objectKey, &input, &output, context_hdl);
-if ( QS_ERR_NO_ERROR != err)
+if ( QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
     printf("%d\n",output->response_code);
@@ -179,7 +179,7 @@ qs_delete_object_output_t output;
 init_delete_object_input(&input);
 
 QsError err = qs_delete_object(objectkey, &input, &output, context_hdl);
-if ( QS_ERR_NO_ERROR != err)
+if ( QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
     printf("%d\n",output->response_code);

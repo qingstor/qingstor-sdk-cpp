@@ -1,1 +1,2 @@
-#OPTION(ENABLE_CURL_WIN_CLIENT "using curl on windows" ON)
+OPTION(BUILD_STATICLIB "Set to ON to build libqingstor with static linking." OFF)
+OPTION(BUILD_SHAREDLIB "Set to ON to build libqingstor with shared linking." ON)

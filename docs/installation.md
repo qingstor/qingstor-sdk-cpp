@@ -50,7 +50,7 @@ You can use the following variations to create your build directory:
 `make`
 
 
-To create a **release build**, do one of the following:
+To create a **release build**, do the following:
 * For Auto Make build systems:
 ```
 cmake -DCMAKE_BUILD_TYPE=Release  <path-to-root-of-this-source-code>
@@ -58,8 +58,28 @@ make
 sudo make install
 ```
 
-To create a **build with C style interface (defaul is off)**, do one of the following:
+To create a **debug build with symbolic information**, do the following:
+* For Auto Make build systems:
+```
+cmake -DCMAKE_BUILD_TYPE=Debug  <path-to-root-of-this-source-code>
+make
+sudo make install
+```
+
+To create a **static library**, do the following:
+* For Auto Make build systems:
+```
+cmake -DBUILD_STATICLIB=ON  <path-to-root-of-this-source-code>
+make
+sudo make install
+```
+
+To create a **build with C style interface (defaul is off)**, do the following:
+```
 cmake -DBUILD_C_STYLE_INTERFACE=ON  <path-to-root-of-this-source-code>
+make
+sudo make install
+```
 
 ## Examples
 We provide a sample for C and a sample for C++. The samples show how to use cmake to introduce SDK to build project:

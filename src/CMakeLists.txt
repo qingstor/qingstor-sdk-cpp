@@ -108,10 +108,20 @@ IF (WIN32)
 			_CRT_SECURE_NO_WARNINGS
 			DLL_EXPORTS 
 			)
-
 ELSE() 
-#On other platform ,generate dynamic library
-
+#On other platform 
+    IF(BUILD_STATICLIB)     #generate static library
+    ADD_LIBRARY(libqingstor-static STATIC ${libqingstor_SOURCES})
+    SET_TARGET_PROPERTIES(libqingstor-static PROPERTIES OUTPUT_NAME "qingstor")
+    SET_TARGET_PROPERTIES(libqingstor-static PROPERTIES 
+    VERSION ${libqingstor_VERSION_MAJOR}.${libqingstor_VERSION_MINOR}.${libqingstor_VERSION_PATCH} 
+    SOVERSION ${libqingstor_VERSION_API})
+    # install lib files.
+    INSTALL(TARGETS libqingstor-static
+        LIBRARY DESTINATION lib
+        ARCHIVE DESTINATION lib)
+    ENDIF()    
+    #generate dynamic library
     ADD_LIBRARY(libqingstor-shared SHARED ${libqingstor_SOURCES})
     TARGET_LINK_LIBRARIES(libqingstor-shared ${CURL_LIBRARIES})
     TARGET_LINK_LIBRARIES(libqingstor-shared ${OPENSSL_SSL_LIBRARIES})

@@ -17,7 +17,7 @@ SET(SRC_LIST main.c)
 
 IF (APPLE) 
 INCLUDE_DIRECTORIES( /usr/local/include/ )
-SET(LIBRARYS_MY  /usr/local/lib/libqingstor.dylib)
+SET(LIBRARYS_MY d/usr/local/lib/libqingstor.dylib)
 ELSEIF(WIN32)
 INCLUDE_DIRECTORIES(${VC_DIR}/include/) 
 INCLUDE_DIRECTORIES( ../../include/)
@@ -27,5 +27,13 @@ SET(LIBRARYS_MY /usr/local/lib/libqingstor.so)
 ENDIF()
 
 ADD_EXECUTABLE(Sample_sdk_c ${SRC_LIST})
-
 TARGET_LINK_LIBRARIES(Sample_sdk_c ${LIBRARYS_MY})
+
+#If build with qingstor.a, the following content needs to be added
+#SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/../../CMake" ${CMAKE_MODULE_PATH})
+#FIND_PACKAGE(OpenSSL REQUIRED)
+#FIND_PACKAGE(Curl REQUIRED)
+
+#TARGET_LINK_LIBRARIES(Sample_sdk_cpp ${CURL_LIBRARIES})
+#TARGET_LINK_LIBRARIES(Sample_sdk_cpp ${OPENSSL_SSL_LIBRARIES})
+#TARGET_LINK_LIBRARIES(Sample_sdk_cpp ${OPENSSL_CRYPTO_LIBRARIES})

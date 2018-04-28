@@ -109,7 +109,7 @@ aclList.push_back(acl);
 input.SetACL(aclList);
 
 QsError err = qsBucket.PutBucketACL(input, output);
-if (QsError::QS_ERR_NO_ERROR != err)
+if (QsError::QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
    printf("Got response code : %s",output.GetResponseCode());
@@ -136,7 +136,7 @@ input.SetBody(objectStream);
 input.SetContentLength(streamSize);
 
 QsError err = qsBucket.PutObject(objectKey, input, output);
-if (QsError::QS_ERR_NO_ERROR != err)
+if (QsError::QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
    printf("Got response code : %s",output.GetResponseCode());
@@ -159,7 +159,7 @@ DeleteObjectInput input;
 DeleteObjectOutput output;
 
 QsError err = qsBucket.DeleteObject(objectkey, input, output);
-if (QsError::QS_ERR_NO_ERROR != err)
+if (QsError::QS_ERR_NO_ERROR == err)
 {
     // Print the HTTP status code.
    printf("Got response code : %s",output.GetResponseCode());
@@ -199,7 +199,7 @@ Upload Multipart
 UploadMultipartInput inputPart1;
 UploadMultipartOutput outputPart1;
 
-std::iostream* objectStream1 = new std::fstream(filePath1));
+std::iostream* objectStream1 = new std::fstream(filePath1), std::ios::binary | std::ios::in);
 objectStream1->seekg(0, objectStream1->end); 
 size_t streamSize1 = objectStream1->tellg(); 
 objectStream1->seekg(0, objectStream1->beg); 
@@ -214,7 +214,7 @@ if (QsError::QS_ERR_NO_ERROR == err1)
     printf("Got response code : %s",output.GetResponseCode());
 }
 
-if (QsError::QS_ERR_UNEXCEPTED_RESPONSE == err)
+if (QsError::QS_ERR_UNEXCEPTED_RESPONSE == err1)
 {
     ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
     printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
@@ -227,8 +227,7 @@ if(objectStream1)
 // Upload the second part
 UploadMultipartInput inputPart2;
 UploadMultipartOutput outputPart2;
-
-std::iostream* objectStream2 = new std::fstream(filePath2));
+std::iostream* objectStream2 = new std::fstream(filePath2), std::ios::binary | std::ios::in);
 objectStream2->seekg(0, objectStream2->end); 
 size_t streamSize2 = objectStream2->tellg(); 
 objectStream2->seekg(0, objectStream2->beg); 
@@ -244,7 +243,7 @@ if (QsError::QS_ERR_NO_ERROR == err2)
     printf("Got response code : %s",output.GetResponseCode());
 }
 
-if (QsError::QS_ERR_UNEXCEPTED_RESPONSE == err)
+if (QsError::QS_ERR_UNEXCEPTED_RESPONSE == err2)
 {
     ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
     printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
