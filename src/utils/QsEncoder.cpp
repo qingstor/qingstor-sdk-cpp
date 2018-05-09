@@ -32,11 +32,7 @@ typedef struct _qs_blob {
 
 }qs_blob;
 #else
-#include <openssl/hmac.h>
-#include <openssl/bio.h>
-#include <openssl/evp.h>
-#include <openssl/buffer.h>
-#include <openssl/sha.h>
+#include "utils/OpensslAuth.h"
 #endif
 
 static const char base64_encode_table[] = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
@@ -130,8 +126,7 @@ void sha256hmac(std::string src, unsigned char out[33], std::string secret)
 #else
 
     unsigned int len = 32;
-	(void)HMAC(EVP_sha256(), secret.c_str(), secret.size(), (unsigned char *)src.c_str(), src.size(), out, &len);
-  
+    (void)qingstor_HMAC256(secret.c_str(), secret.size(), (unsigned char *)src.c_str(), src.size(), out, &len);
 #endif
 	out[32] = '\0';
     return;

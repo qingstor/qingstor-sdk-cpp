@@ -49,6 +49,10 @@ public:
 
     static void DestroyGlobaleCurlPool();
 
+    static bool InitCryptMutex();
+
+    static bool DestroyCryptMutex();
+
 private:
     //bool m_allowRedirects;
     int m_timeOutPeriod;		// The timeout length of a single attempt, wthich in the unit of second.

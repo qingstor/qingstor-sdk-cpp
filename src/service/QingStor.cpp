@@ -38,6 +38,11 @@ void QingStor::InitializeSDK(const SDKOptions & options)
         LOG_DEBUG << "curl_global_init done";
     }
     HttpClient::CreateGlobaleCurlPool();
+
+    if(!HttpClient::InitCryptMutex()){
+        LOG_ERROR << "InitCryptMutex falid";
+    } 
+    return;
 }
 
 void QingStor::ShutdownSDK(const SDKOptions & options)
@@ -50,7 +55,10 @@ void QingStor::ShutdownSDK(const SDKOptions & options)
 		//InitHttp
 		curl_global_cleanup();
 		LOG_DEBUG << "curl_global_cleanup done";
-	}
+    }
+    if(!HttpClient::DestroyCryptMutex()){
+        LOG_ERROR << "InitCryptMutex falid";
+    } 
 }
 
 QingStorService::QingStorService(const QsConfig & qsConfig):m_qsConfig(qsConfig)

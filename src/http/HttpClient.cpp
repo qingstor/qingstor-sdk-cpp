@@ -20,11 +20,13 @@
 #include "http/HttpRequest.h"
 #include "http/HttpResponse.h"
 #include "StringUtils.h"
+#include "utils/OpensslAuth.h"
 #include <algorithm>
 
 using namespace QingStor;
 using namespace QingStor::Http;
 using namespace QingStor::Utils;
+
 
 struct QsWriteCallbackContext
 {
@@ -99,6 +101,25 @@ void SetOptCodeForHttpMethod(CURL *requestHandle, const HttpRequest &request)
         break;
     }
 }
+
+bool HttpClient::InitCryptMutex()
+{
+#ifdef _WIN32
+    return true
+#else
+    return qingstor_init_crypt_mutex();
+#endif
+}
+
+bool HttpClient::DestroyCryptMutex()
+{
+#ifdef _WIN32
+    return true
+#else
+    return qingstor_destroy_crypt_mutex();
+#endif
+}
+
 
 void HttpClient::CreateGlobaleCurlPool()
 {
