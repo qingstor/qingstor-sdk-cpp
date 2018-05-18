@@ -61,6 +61,8 @@ void ShowHow2Do_InitiateMultipartUpload(Bucket * qsBucket, std::string &objectke
     }
     InitiateMultipartUploadInput input;
     InitiateMultipartUploadOutput output;
+    // If you want to specify the storage type, Call SetXQSStorageClass fun.
+    input.SetXQSStorageClass("STANDARD_IA");
     QsError err = qsBucket->InitiateMultipartUpload (objectkey, input, output);
     if (QS_ERR_NO_ERROR == err)
     {
@@ -108,12 +110,10 @@ void ShowHow2Do_UploadMultipart(Bucket * qsBucket, std::string &objectkey, std::
         ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
         printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
-    
     if(QS_ERR_NO_ERROR == err)
     {
         printf("Part %d is finished.\n", partNumber);
     }
-
     // when api finish, you should release resource.
     delete objectStream;
     return;
@@ -170,7 +170,6 @@ void ShowHow2Do_ListObjects(Bucket * qsBucket)
     {
         printf("The Access Key ID or Secret Access Key is invaild (maybe empty).\n");
     }
-
     if (QS_ERR_NO_ERROR != err)
     {
         printf("Faild to get response from QingStor.\n");
@@ -232,6 +231,8 @@ void ShowHow2Do_GetObject(Bucket * qsBucket, std::string &objectkey)
     }
     delete objectStream;
     printf("The length of object is : %ld\n" , streamSize);
+    std::string strStorageClassInfo = "The storage class of object is : " +  output.GetXQSStorageClass();
+    printf("The storage class of object is : %s\n" , strStorageClassInfo.c_str());
     return;
 }
 
