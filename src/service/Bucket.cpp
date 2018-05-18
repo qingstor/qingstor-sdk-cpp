@@ -3180,3 +3180,9 @@ QsError Bucket::UploadMultipart(std::string objectKey,
     QsRequest request(operation, &bulider, &unparker);
     return request.GetResponse();
 }
+
+QsError Bucket::GetObjectSync(std::string objectKey, GetObjectInput & input,
+                              GetObjectOutput & output)
+{
+    return Bucket::GetObject(objectKey, input, output);
+}

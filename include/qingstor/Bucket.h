@@ -4205,6 +4205,10 @@ public:
                             UploadMultipartInput & input,
                             UploadMultipartOutput & output);
 
+    // When you are in conflict with the GetObjet macro on the windows platform,
+    // use method 'GetObjectSync' instead of 'GetObject'.
+    QsError GetObjectSync(std::string objectKey, GetObjectInput & input,
+                          GetObjectOutput & output);
 private:
     QsConfig m_qsConfig;
     Properties m_properties;
