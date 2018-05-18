@@ -47,11 +47,11 @@
 // Whether to return the list of deleted objects'flag
 #define SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_QUIET_FLAG 0x4
 
-// Error messages'flag
-#define SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_ERRORS_FLAG 0x1
-
 // List of deleted objects'flag
-#define SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_DELETED_FLAG 0x2
+#define SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_DELETED_FLAG 0x1
+
+// Error messages'flag
+#define SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_ERRORS_FLAG 0x2
 
 // Bucket ACL rules'flag
 #define SETTING_OUTPUT_GET_BUCKET_ACL_ACL_FLAG 0x1
@@ -90,86 +90,86 @@
 // Bucket created time'flag
 #define SETTING_OUTPUT_GET_BUCKET_STATISTICS_CREATED_FLAG 0x40
 
+// Put all keys that share a common prefix into a list'flag
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x1
+
 // Limit results returned from the first key after key_marker sorted by alphabetical order'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_KEY_MARKER_FLAG 0x1
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_KEY_MARKER_FLAG 0x2
 
 // Limit results returned from the first uploading segment after upload_id_marker sorted by the time of upload_id'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG 0x2
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG 0x4
 
 // Results count limit'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x4
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x8
 
 // Limits results to keys that begin with the prefix'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x8
-
-// Put all keys that share a common prefix into a list'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x10
-
-// The last key in uploads list'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_KEY_MARKER_FLAG 0x1
-
-// Delimiter that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x2
-
-// The last upload_id in uploads list'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_UPLOAD_ID_MARKER_FLAG 0x4
-
-// Prefix that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x8
-
-// Bucket name'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NAME_FLAG 0x10
-
-// Multipart uploads'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_UPLOADS_FLAG 0x20
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x10
 
 // Limit that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x40
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x1
+
+// The last key in uploads list'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_KEY_MARKER_FLAG 0x2
+
+// Multipart uploads'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_UPLOADS_FLAG 0x4
 
 // Other object keys that share common prefixes'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_COMMON_PREFIXES_FLAG 0x80
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_COMMON_PREFIXES_FLAG 0x8
+
+// Delimiter that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x10
+
+// Prefix that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x20
+
+// Bucket name'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NAME_FLAG 0x40
+
+// The last upload_id in uploads list'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_UPLOAD_ID_MARKER_FLAG 0x80
 
 // Marker that specified in request parameters'flag
 #define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_MARKER_FLAG 0x100
 
-// Limits results to keys that begin with the prefix'flag
-#define SETTING_INPUT_LIST_OBJECTS_PREFIX_FLAG 0x1
-
-// Put all keys that share a common prefix into a list'flag
-#define SETTING_INPUT_LIST_OBJECTS_DELIMITER_FLAG 0x2
-
 // Limit results to keys that start at this marker'flag
-#define SETTING_INPUT_LIST_OBJECTS_MARKER_FLAG 0x4
+#define SETTING_INPUT_LIST_OBJECTS_MARKER_FLAG 0x1
 
 // Results count limit'flag
-#define SETTING_INPUT_LIST_OBJECTS_LIMIT_FLAG 0x8
+#define SETTING_INPUT_LIST_OBJECTS_LIMIT_FLAG 0x2
 
-// The last key in keys list'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_NEXT_MARKER_FLAG 0x1
+// Limits results to keys that begin with the prefix'flag
+#define SETTING_INPUT_LIST_OBJECTS_PREFIX_FLAG 0x4
 
-// Prefix that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_PREFIX_FLAG 0x2
+// Put all keys that share a common prefix into a list'flag
+#define SETTING_INPUT_LIST_OBJECTS_DELIMITER_FLAG 0x8
 
 // Bucket name'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_NAME_FLAG 0x4
-
-// Bucket owner'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_OWNER_FLAG 0x8
-
-// Limit that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_LIMIT_FLAG 0x10
+#define SETTING_OUTPUT_LIST_OBJECTS_NAME_FLAG 0x1
 
 // Delimiter that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_DELIMITER_FLAG 0x20
-
-// Object keys'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_KEYS_FLAG 0x40
+#define SETTING_OUTPUT_LIST_OBJECTS_DELIMITER_FLAG 0x2
 
 // Other object keys that share common prefixes'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_COMMON_PREFIXES_FLAG 0x80
+#define SETTING_OUTPUT_LIST_OBJECTS_COMMON_PREFIXES_FLAG 0x4
+
+// Object keys'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_KEYS_FLAG 0x8
+
+// Bucket owner'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_OWNER_FLAG 0x10
+
+// Prefix that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_PREFIX_FLAG 0x20
 
 // Marker that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_MARKER_FLAG 0x100
+#define SETTING_OUTPUT_LIST_OBJECTS_MARKER_FLAG 0x40
+
+// The last key in keys list'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_NEXT_MARKER_FLAG 0x80
+
+// Limit that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_LIMIT_FLAG 0x100
 
 // Bucket ACL rules'flag
 #define SETTING_INPUT_PUT_BUCKET_ACL_ACL_FLAG 0x1
@@ -189,17 +189,17 @@
 // Object multipart upload ID'flag
 #define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG 0x1
 
-// Encryption key of the object'flag
-#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x2
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x4
-
 // MD5sum of the object part'flag
-#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_ETAG_FLAG 0x8
+#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_ETAG_FLAG 0x2
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x10
+#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4
+
+// Encryption key of the object'flag
+#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x10
 
 // Object parts'flag
 #define SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_OBJECT_PARTS_FLAG 0x20
@@ -207,135 +207,141 @@
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
 
+// Specified the Expires response header'flag
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG 0x1
+
 // Specified the Cache-Control response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG 0x1
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG 0x2
 
 // Specified the Content-Type response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG 0x2
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG 0x4
 
 // Specified the Content-Language response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG 0x4
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG 0x8
 
 // Specified the Content-Encoding response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG 0x8
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG 0x10
 
 // Specified the Content-Disposition response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG 0x10
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG 0x20
 
-// Specified the Expires response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG 0x20
+// Check whether the ETag matches'flag
+#define SETTING_INPUT_GET_OBJECT_IF_MATCH_FLAG 0x40
+
+// Check whether the ETag does not match'flag
+#define SETTING_INPUT_GET_OBJECT_IF_NONE_MATCH_FLAG 0x80
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x40
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x100
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x80
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x200
 
 // MD5sum of encryption key'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x100
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x400
 
 // Specified range of the object'flag
-#define SETTING_INPUT_GET_OBJECT_RANGE_FLAG 0x200
+#define SETTING_INPUT_GET_OBJECT_RANGE_FLAG 0x800
 
 // Check whether the object has been modified'flag
-#define SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG 0x400
+#define SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG 0x1000
 
 // Check whether the object has not been modified'flag
-#define SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x800
+#define SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x2000
 
-// Check whether the ETag matches'flag
-#define SETTING_INPUT_GET_OBJECT_IF_MATCH_FLAG 0x1000
-
-// Check whether the ETag does not match'flag
-#define SETTING_INPUT_GET_OBJECT_IF_NONE_MATCH_FLAG 0x2000
+// Object content length'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LENGTH_FLAG 0x1
 
 // The Content-Language entity header is used to describe the language(s) intended for the audience.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LANGUAGE_FLAG 0x1
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LANGUAGE_FLAG 0x2
 
 // The Content-Type entity header is used to indicate the media type of the resource.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_TYPE_FLAG 0x2
-
-// The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CACHE_CONTROL_FLAG 0x4
-
-// Object content length'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LENGTH_FLAG 0x8
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_TYPE_FLAG 0x4
 
 // MD5sum of the object'flag
-#define SETTING_OUTPUT_GET_OBJECT_ETAG_FLAG 0x10
-
-// In a multipart/form-data body, the HTTP Content-Disposition general header is a header that can be used on the subpart of a multipart body to give information about the field it applies to.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_DISPOSITION_FLAG 0x20
-
-// Range of response data content'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_RANGE_FLAG 0x40
+#define SETTING_OUTPUT_GET_OBJECT_ETAG_FLAG 0x8
 
 // The Expires header contains the date/time after which the response is considered stale.'flag
-#define SETTING_OUTPUT_GET_OBJECT_EXPIRES_FLAG 0x80
-
-// Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x100
+#define SETTING_OUTPUT_GET_OBJECT_EXPIRES_FLAG 0x10
 
 // The Content-Encoding entity header is used to compress the media-type.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_ENCODING_FLAG 0x200
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_ENCODING_FLAG 0x20
 
-#define SETTING_OUTPUT_GET_OBJECT_LAST_MODIFIED_FLAG 0x400
+// In a multipart/form-data body, the HTTP Content-Disposition general header is a header that can be used on the subpart of a multipart body to give information about the field it applies to.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_DISPOSITION_FLAG 0x40
 
-// Check whether the object has been modified'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG 0x1
+// Encryption algorithm of the object'flag
+#define SETTING_OUTPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x80
+
+#define SETTING_OUTPUT_GET_OBJECT_LAST_MODIFIED_FLAG 0x100
+
+// Storage class of the object'flag
+#define SETTING_OUTPUT_GET_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x200
+
+// The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CACHE_CONTROL_FLAG 0x400
+
+// Range of response data content'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_RANGE_FLAG 0x800
 
 // Check whether the object has not been modified'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x2
+#define SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x1
 
 // Check whether the ETag matches'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_MATCH_FLAG 0x4
+#define SETTING_INPUT_HEAD_OBJECT_IF_MATCH_FLAG 0x2
 
 // Check whether the ETag does not match'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_NONE_MATCH_FLAG 0x8
+#define SETTING_INPUT_HEAD_OBJECT_IF_NONE_MATCH_FLAG 0x4
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x10
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x8
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x20
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x10
 
 // MD5sum of encryption key'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x40
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x20
 
-// MD5sum of the object'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_ETAG_FLAG 0x1
+// Check whether the object has been modified'flag
+#define SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG 0x40
 
-#define SETTING_OUTPUT_HEAD_OBJECT_LAST_MODIFIED_FLAG 0x2
-
-// Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4
+// Storage class of the object'flag
+#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x1
 
 // Object content length'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_LENGTH_FLAG 0x8
+#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_LENGTH_FLAG 0x2
 
 // Object content type'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_TYPE_FLAG 0x10
+#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_TYPE_FLAG 0x4
 
-// Specified the Content-Language response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG 0x1
+// MD5sum of the object'flag
+#define SETTING_OUTPUT_HEAD_OBJECT_ETAG_FLAG 0x8
+
+#define SETTING_OUTPUT_HEAD_OBJECT_LAST_MODIFIED_FLAG 0x10
+
+// Encryption algorithm of the object'flag
+#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x20
 
 // Specified the Content-Encoding response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG 0x2
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG 0x1
 
 // Specified the Content-Disposition response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG 0x4
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG 0x2
 
 // Image process action'flag
-#define SETTING_INPUT_IMAGE_PROCESS_ACTION_FLAG 0x8
+#define SETTING_INPUT_IMAGE_PROCESS_ACTION_FLAG 0x4
 
 // Specified the Expires response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG 0x10
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG 0x8
 
 // Specified the Cache-Control response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG 0x20
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG 0x10
 
 // Specified the Content-Type response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_TYPE_FLAG 0x40
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_TYPE_FLAG 0x20
+
+// Specified the Content-Language response header'flag
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG 0x40
 
 // Check whether the object has been modified'flag
 #define SETTING_INPUT_IMAGE_PROCESS_IF_MODIFIED_SINCE_FLAG 0x80
@@ -354,6 +360,10 @@
 
 // MD5sum of encryption key'flag
 #define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x8
+
+// Specify the storage class for object'flag
+// XQSStorageClass's available values: STANDARD, STANDARD_IA
+#define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_STORAGE_CLASS_FLAG 0x10
 
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
@@ -376,95 +386,99 @@
 // Limit results count'flag
 #define SETTING_INPUT_LIST_MULTIPART_LIMIT_FLAG 0x4
 
-// Object multipart count'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_COUNT_FLAG 0x1
-
 // Object parts'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_OBJECT_PARTS_FLAG 0x2
+#define SETTING_OUTPUT_LIST_MULTIPART_OBJECT_PARTS_FLAG 0x1
 
-// Request origin'flag
-#define SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG 0x1
-
-// Request method'flag
-#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG 0x2
+// Object multipart count'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_COUNT_FLAG 0x2
 
 // Request headers'flag
-#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG 0x4
+#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG 0x1
 
-// Allowed headers'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_HEADERS_FLAG 0x1
+// Request origin'flag
+#define SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG 0x2
 
-// Allowed methods'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_METHODS_FLAG 0x2
+// Request method'flag
+#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG 0x4
 
 // Allowed origin'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_ORIGIN_FLAG 0x4
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_ORIGIN_FLAG 0x1
 
 // Expose headers'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_EXPOSE_HEADERS_FLAG 0x8
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_EXPOSE_HEADERS_FLAG 0x2
 
 // Max age'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_MAX_AGE_FLAG 0x10
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_MAX_AGE_FLAG 0x4
 
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
+// Allowed headers'flag
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_HEADERS_FLAG 0x8
 
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x2
-
-// Copy source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG 0x4
+// Allowed methods'flag
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_METHODS_FLAG 0x10
 
 // Check whether the copy source matches'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x8
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x1
 
-// Fetch source, should be a valid url'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG 0x10
+// Check whether the copy source does not match'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x2
+
+// Move source, format (/<bucket-name>/<object-key>)'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG 0x4
+
+// Check whether fetch target object has not been modified'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG 0x8
+
+// Specify the storage class for object'flag
+// XQSStorageClass's available values: STANDARD, STANDARD_IA
+#define SETTING_INPUT_PUT_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x10
 
 // Object content size'flag
 #define SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG 0x20
 
+// Object content type'flag
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_TYPE_FLAG 0x40
+
 // Object MD5sum'flag
-#define SETTING_INPUT_PUT_OBJECT_CONTENT_MD5_FLAG 0x40
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_MD5_FLAG 0x80
 
-// Used to indicate that particular server behaviors are required by the client'flag
-#define SETTING_INPUT_PUT_OBJECT_EXPECT_FLAG 0x80
-
-// Check whether the copy source has been modified'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x100
-
-// Check whether the copy source does not match'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x200
-
-// Encryption key of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x400
+// Copy source, format (/<bucket-name>/<object-key>)'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG 0x100
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x800
-
-// Move source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG 0x1000
-
-// Object content type'flag
-#define SETTING_INPUT_PUT_OBJECT_CONTENT_TYPE_FLAG 0x2000
-
-// Check whether the copy source has not been modified'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x4000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x200
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x400
 
 // MD5sum of encryption key'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x10000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x800
 
-// Check whether fetch target object has not been modified'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG 0x20000
+// Check whether the copy source has been modified'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x1000
+
+// Check whether the copy source has not been modified'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x2000
 
 // Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4000
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x8000
+
+// Fetch source, should be a valid url'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG 0x10000
+
+// Used to indicate that particular server behaviors are required by the client'flag
+#define SETTING_INPUT_PUT_OBJECT_EXPECT_FLAG 0x20000
+
+// Encryption key of the object'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x40000
 
 // MD5sum of the object'flag
-#define SETTING_OUTPUT_PUT_OBJECT_ETAG_FLAG 0x2
+#define SETTING_OUTPUT_PUT_OBJECT_ETAG_FLAG 0x1
+
+// Encryption algorithm of the object'flag
+#define SETTING_OUTPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x2
 
 // Object multipart upload ID'flag
 #define SETTING_INPUT_UPLOAD_MULTIPART_UPLOAD_ID_FLAG 0x1
@@ -472,56 +486,56 @@
 // Object multipart upload part number'flag
 #define SETTING_INPUT_UPLOAD_MULTIPART_PART_NUMBER_FLAG 0x2
 
-// Copy source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG 0x4
-
-// Check whether the copy source has been modified since the specified date'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x8
-
-// Check whether the Etag of copy source does not matches the specified value'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x10
-
-// Object multipart content length'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG 0x20
+// Encryption algorithm of the object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x40
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x10
+
+// Object multipart content MD5sum'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG 0x20
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x40
 
 // Specify range of the source object'flag
 #define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_RANGE_FLAG 0x80
 
-// Check whether the Etag of copy source matches the specified value'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x100
-
-// Encryption key of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x200
-
-// Object multipart content MD5sum'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG 0x400
-
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x800
-
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1000
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x2000
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x4000
+// Check whether the copy source has been modified since the specified date'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x100
 
 // Check whether the copy source has not been unmodified since the specified date'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x8000
-
-// Range of response data content'flag
-#define SETTING_OUTPUT_UPLOAD_MULTIPART_X_QS_CONTENT_COPY_RANGE_FLAG 0x1
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x200
 
 // Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x2
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x400
+
+// Object multipart content length'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG 0x800
+
+// Copy source, format (/<bucket-name>/<object-key>)'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG 0x1000
+
+// Check whether the Etag of copy source matches the specified value'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x2000
+
+// Check whether the Etag of copy source does not matches the specified value'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x4000
+
+// Encryption key of the object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8000
 
 // MD5sum of the object'flag
-#define SETTING_OUTPUT_UPLOAD_MULTIPART_ETAG_FLAG 0x4
+#define SETTING_OUTPUT_UPLOAD_MULTIPART_ETAG_FLAG 0x1
+
+// Range of response data content'flag
+#define SETTING_OUTPUT_UPLOAD_MULTIPART_X_QS_CONTENT_COPY_RANGE_FLAG 0x2
+
+// Encryption algorithm of the object'flag
+#define SETTING_OUTPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4
 
 namespace QingStor
 {
@@ -1017,7 +1031,8 @@ public:
     {
         int tmpFlag =
             BASIC_FLAG |
-            SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG;
+            SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG |
+            SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_OBJECT_PARTS_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
     };
     // Object multipart upload ID
@@ -1134,7 +1149,7 @@ private:
 
     // Object parts
 
-    std::vector < ObjectPartType > m_ObjectParts;
+    std::vector < ObjectPartType > m_ObjectParts;	// Required
 
 };
 // DeleteObjectInput presents input for DeleteObject.
@@ -1760,6 +1775,19 @@ public:
     {
         return m_XQSEncryptionCustomerKeyMD5;
     };
+    // Specify the storage class for object// XQSStorageClass's available values: STANDARD, STANDARD_IA
+
+    inline void SetXQSStorageClass(std::string XQSStorageClass)
+    {
+        m_settingFlag |=
+            SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_STORAGE_CLASS_FLAG;
+        m_XQSStorageClass = XQSStorageClass;
+    };
+
+    inline std::string GetXQSStorageClass()
+    {
+        return m_XQSStorageClass;
+    };
 
 private:
     // Object content type
@@ -1773,6 +1801,10 @@ private:
 
     // MD5sum of encryption key
     std::string m_XQSEncryptionCustomerKeyMD5;
+
+    // Specify the storage class for object
+    // XQSStorageClass's available values: STANDARD, STANDARD_IA
+    std::string m_XQSStorageClass;
 
 };
 // ListMultipartInput presents input for ListMultipart.
@@ -2193,6 +2225,18 @@ public:
     {
         return m_XQSMoveSource;
     };
+    // Specify the storage class for object// XQSStorageClass's available values: STANDARD, STANDARD_IA
+
+    inline void SetXQSStorageClass(std::string XQSStorageClass)
+    {
+        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_X_QS_STORAGE_CLASS_FLAG;
+        m_XQSStorageClass = XQSStorageClass;
+    };
+
+    inline std::string GetXQSStorageClass()
+    {
+        return m_XQSStorageClass;
+    };
 
     std::iostream * GetBody()
     {
@@ -2256,6 +2300,10 @@ private:
 
     // Move source, format (/<bucket-name>/<object-key>)
     std::string m_XQSMoveSource;
+
+    // Specify the storage class for object
+    // XQSStorageClass's available values: STANDARD, STANDARD_IA
+    std::string m_XQSStorageClass;
 
     std::iostream * m_streambody;
 };
@@ -3431,6 +3479,18 @@ public:
         return m_XQSEncryptionCustomerAlgorithm;
     };
 
+    // Storage class of the object
+    inline void SetXQSStorageClass(std::string XQSStorageClass)
+    {
+        m_settingFlag |= SETTING_OUTPUT_GET_OBJECT_X_QS_STORAGE_CLASS_FLAG;
+        m_XQSStorageClass = XQSStorageClass;
+    };
+
+    inline std::string GetXQSStorageClass()
+    {
+        return m_XQSStorageClass;
+    };
+
     std::iostream * GetBody()
     {
         return m_streambody;
@@ -3472,6 +3532,9 @@ private:
 
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
+
+    // Storage class of the object
+    std::string m_XQSStorageClass;
 
     std::iostream * m_streambody;
 
@@ -3553,6 +3616,18 @@ public:
         return m_XQSEncryptionCustomerAlgorithm;
     };
 
+    // Storage class of the object
+    inline void SetXQSStorageClass(std::string XQSStorageClass)
+    {
+        m_settingFlag |= SETTING_OUTPUT_HEAD_OBJECT_X_QS_STORAGE_CLASS_FLAG;
+        m_XQSStorageClass = XQSStorageClass;
+    };
+
+    inline std::string GetXQSStorageClass()
+    {
+        return m_XQSStorageClass;
+    };
+
 private:
     // Object content length
     int64_t m_ContentLength;
@@ -3567,6 +3642,9 @@ private:
 
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
+
+    // Storage class of the object
+    std::string m_XQSStorageClass;
 
 };
 

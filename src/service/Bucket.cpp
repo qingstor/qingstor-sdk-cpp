@@ -1501,6 +1501,12 @@ void GetObjectUnparker::ParseResponseHeaders(const Http::
         SetXQSEncryptionCustomerAlgorithm
         (XQSEncryptionCustomerAlgorithmIter->second);
     }
+    HeaderValueCollection::const_iterator XQSStorageClassIter =
+        headers.find("x-qs-storage-class");
+    if (XQSStorageClassIter != headers.end())
+    {
+        m_output->SetXQSStorageClass(XQSStorageClassIter->second);
+    }
 }
 
 void GetObjectUnparker::ParseResponseBody(std::iostream * responseBody)
@@ -1671,6 +1677,12 @@ void HeadObjectUnparker::ParseResponseHeaders(const Http::
         m_output->
         SetXQSEncryptionCustomerAlgorithm
         (XQSEncryptionCustomerAlgorithmIter->second);
+    }
+    HeaderValueCollection::const_iterator XQSStorageClassIter =
+        headers.find("x-qs-storage-class");
+    if (XQSStorageClassIter != headers.end())
+    {
+        m_output->SetXQSStorageClass(XQSStorageClassIter->second);
     }
 }
 
@@ -1912,6 +1924,14 @@ GetHeaderValueCollection()
         insert(Http::
                HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
                                ss.str()));
+        ss.str("");
+    }
+    if (m_input->
+            IsPropHasBeenSet
+            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_STORAGE_CLASS_FLAG))
+    {
+        ss << m_input->GetXQSStorageClass();
+        headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
     }
     return headers;
@@ -2184,9 +2204,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[3] = { 200, 304, 412, };
         bool isExpected = false;
-        for (int i = 0; i < 1; i++)
+        for (int i = 0; i < 3; i++)
         {
             if (expectedRespCode[i] == responseCode)
             {
@@ -2431,6 +2451,13 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
     {
         ss << m_input->GetXQSMoveSource();
         headers.insert(Http::HeaderValuePair("X-QS-Move-Source", ss.str()));
+        ss.str("");
+    }
+    if (m_input->
+            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_STORAGE_CLASS_FLAG))
+    {
+        ss << m_input->GetXQSStorageClass();
+        headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
     }
     return headers;
