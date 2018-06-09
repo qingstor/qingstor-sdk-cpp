@@ -2,7 +2,7 @@
 # Find the native OPENSSL includes and library
 #
 #  OPENSSL_INCLUDE_DIR  - where to find ssl.h, etc.
-#  CURL_LIBRARIES    - List of libraries when using OPENSSL.
+#  OPENSSL_CRYPTO_LIBRARIES    - List of libraries when using OPENSSL.
 #  CURL_FOUND        - True if OPENSSL found.
 
 IF (OPENSSL_INCLUDE_DIR AND OPENSSL_LIBRARIES)
