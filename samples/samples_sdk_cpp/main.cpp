@@ -63,6 +63,10 @@ void ShowHow2Do_InitiateMultipartUpload(Bucket * qsBucket, std::string &objectke
     InitiateMultipartUploadOutput output;
     // If you want to specify the storage type, Call SetXQSStorageClass fun.
     input.SetXQSStorageClass("STANDARD_IA");
+    std::map<std::string, std::string> metadata;
+    metadata["uid"] = "qingstor";
+    input.SetMetadata(metadata);
+
     QsError err = qsBucket->InitiateMultipartUpload (objectkey, input, output);
     if (QS_ERR_NO_ERROR == err)
     {
@@ -233,6 +237,10 @@ void ShowHow2Do_GetObject(Bucket * qsBucket, std::string &objectkey)
     printf("The length of object is : %ld\n" , streamSize);
     std::string strStorageClassInfo = "The storage class of object is : " +  output.GetXQSStorageClass();
     printf("The storage class of object is : %s\n" , strStorageClassInfo.c_str());
+    std::map<std::string, std::string> metadata = output.GetMetadata();
+    std::string strMetadataUid= "The metadata uid of object is : " +  metadata["uid"];
+    printf("The storage class of object is : %s\n" , strMetadataUid.c_str());
+
     return;
 }
 

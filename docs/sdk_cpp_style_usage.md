@@ -135,6 +135,13 @@ objectStream->seekg(0, objectStream->beg);
 input.SetBody(objectStream);
 input.SetContentLength(streamSize);
 
+// if you want to add custom metadata header to request, please 
+// refer to 'https://docs.qingcloud.com/qingstor/api/common/metadat
+// 'uid' here is taken as an example of custom metadata.
+std::map<std::string, std::string> metadata;
+metadata["uid"] = "qingstor"; 
+input.SetMetadata(metadata);
+
 QsError err = qsBucket.PutObject(objectKey, input, output);
 if (QsError::QS_ERR_NO_ERROR == err)
 {

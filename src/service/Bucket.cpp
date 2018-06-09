@@ -1507,6 +1507,19 @@ void GetObjectUnparker::ParseResponseHeaders(const Http::
     {
         m_output->SetXQSStorageClass(XQSStorageClassIter->second);
     }
+
+    std::size_t prefixSize = sizeof("x-qs-meta-") - 1; //subtract the NULL terminator out 
+    std::map<std::string, std::string> metadata;
+    for(HeaderValueCollection::const_iterator it = headers.begin(); it != headers.end(); it++)
+    {
+        std::size_t foundPrefix = it->first.find("x-qs-meta-");
+        if(foundPrefix != std::string::npos)
+        {
+            std::string key = it->first.substr(prefixSize);
+            metadata[key] = it->second;
+        }
+    }
+    m_output->SetMetadata(metadata);
 }
 
 void GetObjectUnparker::ParseResponseBody(std::iostream * responseBody)
@@ -1684,6 +1697,19 @@ void HeadObjectUnparker::ParseResponseHeaders(const Http::
     {
         m_output->SetXQSStorageClass(XQSStorageClassIter->second);
     }
+
+    std::size_t prefixSize = sizeof("x-qs-meta-") - 1; //subtract the NULL terminator out 
+    std::map < std::string, std::string> metadata;
+    for(HeaderValueCollection::const_iterator it = headers.begin(); it != headers.end(); it++)
+    {
+        std::size_t foundPrefix = it->first.find("x-qs-meta-");
+        if(foundPrefix != std::string::npos)
+        {
+            std::string key = it->first.substr(prefixSize);
+            metadata[key] = it->second;
+        }
+    }
+    m_output->SetMetadata(metadata);
 }
 
 class ImageProcessBuilder:public QsDefaultRequestBuilder < ImageProcessInput >
@@ -1933,6 +1959,19 @@ GetHeaderValueCollection()
         ss << m_input->GetXQSStorageClass();
         headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
+    }
+
+    if (m_input->
+            IsPropHasBeenSet
+            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG))
+    {
+        std::map<std::string, std::string> metadata = m_input->GetMetadata();
+        for(std::map<std::string, std::string>::iterator it = metadata.begin(); it != metadata.end(); it++)
+        {
+            ss << "x-qs-meta-" << it->first;
+            headers.insert(Http::HeaderValuePair(ss.str(), it->second));
+            ss.str("");
+        }
     }
     return headers;
 }
@@ -2460,6 +2499,19 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
     }
+
+    if (m_input->
+            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG))
+    {
+        std::map<std::string, std::string> metadata = m_input->GetMetadata();
+        for(std::map<std::string, std::string>::iterator it = metadata.begin(); it != metadata.end(); it++)
+        {
+            ss << "x-qs-meta-" << it->first;
+            headers.insert(Http::HeaderValuePair(ss.str(), it->second));
+            ss.str("");
+        }
+    }
+
     return headers;
 }
 

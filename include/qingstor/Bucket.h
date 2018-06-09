@@ -284,6 +284,8 @@
 // Range of response data content'flag
 #define SETTING_OUTPUT_GET_OBJECT_CONTENT_RANGE_FLAG 0x800
 
+#define SETTING_OUTPUT_GET_OBJECT_X_QS_METADATA_FLAG 0x1000
+
 // Check whether the object has not been modified'flag
 #define SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x1
 
@@ -321,6 +323,8 @@
 
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x20
+
+#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_METADATA_FLAG 0x40
 
 // Specified the Content-Encoding response header'flag
 #define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG 0x1
@@ -364,6 +368,9 @@
 // Specify the storage class for object'flag
 // XQSStorageClass's available values: STANDARD, STANDARD_IA
 #define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_STORAGE_CLASS_FLAG 0x10
+
+// custom meta data'flag
+#define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG 0x20
 
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
@@ -473,6 +480,9 @@
 
 // Encryption key of the object'flag
 #define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x40000
+
+// custom meta data'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG 0x80000
 
 // MD5sum of the object'flag
 #define SETTING_OUTPUT_PUT_OBJECT_ETAG_FLAG 0x1
@@ -1789,6 +1799,16 @@ public:
         return m_XQSStorageClass;
     };
 
+    inline std::map<std::string, std::string> GetMetadata()
+    {
+        return m_metadata;
+    };
+
+    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
+        m_settingFlag |= SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG;
+        m_metadata = value; 
+    }
+
 private:
     // Object content type
     std::string m_ContentType;
@@ -1805,6 +1825,9 @@ private:
     // Specify the storage class for object
     // XQSStorageClass's available values: STANDARD, STANDARD_IA
     std::string m_XQSStorageClass;
+
+    // Object metadata
+    std::map<std::string, std::string> m_metadata;
 
 };
 // ListMultipartInput presents input for ListMultipart.
@@ -2246,6 +2269,17 @@ public:
     {
         m_streambody = streambody;
     };
+
+    inline std::map<std::string, std::string> GetMetadata()
+    {
+        return m_metadata;
+    };
+
+    void SetMetadata(const std::map<std::string, std::string>& value) { 
+        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG;
+        m_metadata = value; 
+    }
+
 private:
     // Object content size
     int64_t m_ContentLength;	// Required
@@ -2306,6 +2340,8 @@ private:
     std::string m_XQSStorageClass;
 
     std::iostream * m_streambody;
+
+    std::map<std::string, std::string> m_metadata;
 };
 // UploadMultipartInput presents input for UploadMultipart.
 class QS_SDK_API UploadMultipartInput:public QsInput
@@ -3500,6 +3536,16 @@ public:
         m_streambody = streambody;
     };
 
+    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
+        m_settingFlag |= SETTING_OUTPUT_GET_OBJECT_X_QS_METADATA_FLAG;
+        m_metadata = value; 
+    }
+
+    inline std::map<std::string, std::string> GetMetadata()
+    {
+        return m_metadata;
+    };
+
 private:
     // The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.
     std::string m_CacheControl;
@@ -3537,6 +3583,8 @@ private:
     std::string m_XQSStorageClass;
 
     std::iostream * m_streambody;
+
+    std::map<std::string, std::string> m_metadata;
 
 };
 
@@ -3628,6 +3676,16 @@ public:
         return m_XQSStorageClass;
     };
 
+    inline std::map<std::string, std::string> GetMetadata()
+    {
+        return m_metadata;
+    };
+
+    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
+        m_settingFlag |= SETTING_OUTPUT_HEAD_OBJECT_X_QS_METADATA_FLAG;
+        m_metadata = value; 
+    }
+
 private:
     // Object content length
     int64_t m_ContentLength;
@@ -3646,6 +3704,7 @@ private:
     // Storage class of the object
     std::string m_XQSStorageClass;
 
+    std::map<std::string, std::string> m_metadata;
 };
 
 // ImageProcessOutput presents input for ImageProcess.
