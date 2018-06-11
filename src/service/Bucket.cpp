@@ -2512,6 +2512,14 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
         }
     }
 
+    if (m_input->
+            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG))
+    {
+        ss << m_input->GetXQSMetadataDirective();
+        headers.insert(Http::HeaderValuePair("x-qs-metadata-directive", ss.str()));
+        ss.str("");
+    }
+
     return headers;
 }
 

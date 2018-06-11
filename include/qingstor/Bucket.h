@@ -484,6 +484,9 @@
 // custom meta data'flag
 #define SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG 0x80000
 
+// custom meta data directive'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG 0x100000
+
 // MD5sum of the object'flag
 #define SETTING_OUTPUT_PUT_OBJECT_ETAG_FLAG 0x1
 
@@ -2280,6 +2283,16 @@ public:
         m_metadata = value; 
     }
 
+    inline std::string GetXQSMetadataDirective()
+    {
+        return m_XQSMetadataDirective;
+    };
+
+    void SetXQSMetadataDirective(std::string metadataDirective) { 
+        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG;
+        m_XQSMetadataDirective = metadataDirective; 
+    }
+
 private:
     // Object content size
     int64_t m_ContentLength;	// Required
@@ -2338,6 +2351,8 @@ private:
     // Specify the storage class for object
     // XQSStorageClass's available values: STANDARD, STANDARD_IA
     std::string m_XQSStorageClass;
+
+    std::string m_XQSMetadataDirective;
 
     std::iostream * m_streambody;
 
