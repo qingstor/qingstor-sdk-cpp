@@ -77,7 +77,7 @@ public:
         : m_operation(operation),
           m_signer(operation.GetConfig()->accessKeyId, operation.GetConfig()->secretAccessKey),
           m_pReqBuilder(pReqBuilder), m_pRespUnpacker(pRespUnparker),
-          m_httpClient(operation.GetConfig()->timeOutPeriod),
+          m_httpClient(operation.GetConfig()->additionalUserAgent,operation.GetConfig()->timeOutPeriod),
           httpRequest(NULL),httpResponse(NULL) {};
 
     virtual ~QsRequest() {};

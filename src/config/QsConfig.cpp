@@ -45,7 +45,7 @@ static const char *DEFAULT_HOST = "qingstor.com";
 
 static const char *DEFAULT_PROTOCOL = "https";
 
-static const char *DEFAULT_ADDITIONAL_USER_AGENT = "";
+static const char *DEFAULT_ADDITIONAL_USER_AGENT = "QingStor SDK Cpp";
 
 static int DEFAULT_RETRIES = 3;
 
@@ -247,7 +247,7 @@ QsError QsConfig::LoadConfigFile(const std::string &config_file)
     }
     if (kvs[std::string(CONFIG_KEY_ADDITIONAL_USER_AGENT)].empty())
     {
-        additionalUserAgent = "";
+        additionalUserAgent = DEFAULT_ADDITIONAL_USER_AGENT;
     }
     else
     {

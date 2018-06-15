@@ -172,6 +172,11 @@ HttpResponse * HttpClient::SendRequest(HttpRequest *request) const
         {
             curl_easy_setopt(connectionHandle, CURLOPT_CONNECTTIMEOUT, 3);
         }
+        if(m_userAgent != "")
+        {
+            curl_easy_setopt(connectionHandle, CURLOPT_USERAGENT, m_userAgent.c_str());
+        }
+
         curl_easy_setopt(connectionHandle, CURLOPT_URL, url.c_str());
         curl_easy_setopt(connectionHandle, CURLOPT_WRITEFUNCTION, &HttpClient::WriteData);
         curl_easy_setopt(connectionHandle, CURLOPT_WRITEDATA, &writeContext);

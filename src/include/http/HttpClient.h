@@ -39,7 +39,7 @@ class HttpResponse;
 class QS_SDK_API HttpClient
 {
 public:
-    HttpClient(int timeOutPeriod = 3):m_timeOutPeriod(timeOutPeriod) {};
+    HttpClient(std::string userAgent, int timeOutPeriod = 3):m_timeOutPeriod(timeOutPeriod),m_userAgent(userAgent) {};
     virtual ~HttpClient() {};
 
     // Send an http request, returns the newly allocated HttpResponse
@@ -52,6 +52,7 @@ public:
 private:
     //bool m_allowRedirects;
     int m_timeOutPeriod;		// The timeout length of a single attempt, wthich in the unit of second.
+    std::string m_userAgent;
 
     //Callback to read the content from the content body of the request
     static size_t ReadBody(char *ptr, size_t size, size_t nmemb, void *userdata);
