@@ -56,13 +56,17 @@ void HttpRequest::SetHeaderValue(const std::string& headerName, const std::strin
 void HttpRequest::SetQueryStringParameter(const char* name, const std::string& value)
 {
     queryMap[StringUtils::ToLower(name)] = StringUtils::Trim(value.c_str());
-    m_uri.AddQueryStringParameter(name, value);
+    if (value != ""){
+        m_uri.AddQueryStringParameter(name, value);
+    }
 }
 
 void HttpRequest::SetQueryStringParameter(const std::string& name, const std::string& value)
 {
     queryMap[StringUtils::ToLower(name.c_str())] = StringUtils::Trim(value.c_str());
-    m_uri.AddQueryStringParameter(name.c_str(), value);
+    if (value != ""){
+        m_uri.AddQueryStringParameter(name.c_str(), value);
+    }
 }
 
 void HttpRequest::DeleteHeader(const char* headerName)
