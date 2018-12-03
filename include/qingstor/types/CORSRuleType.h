@@ -25,20 +25,20 @@
 #include "../service_with_c_style/types/CORSRuleType.h"
 #endif							// BUILD_C_STYLE_INTERFACE
 
-// Allowed origin'flag
-#define SETTING_CORS_RULE_ALLOWED_ORIGIN_FLAG 0x1
-
-// Expose headers'flag
-#define SETTING_CORS_RULE_EXPOSE_HEADERS_FLAG 0x2
-
-// Max age seconds'flag
-#define SETTING_CORS_RULE_MAX_AGE_SECONDS_FLAG 0x4
-
 // Allowed headers'flag
-#define SETTING_CORS_RULE_ALLOWED_HEADERS_FLAG 0x8
+#define SETTING_CORS_RULE_ALLOWED_HEADERS_FLAG 0x1
 
 // Allowed methods'flag
-#define SETTING_CORS_RULE_ALLOWED_METHODS_FLAG 0x10
+#define SETTING_CORS_RULE_ALLOWED_METHODS_FLAG 0x2
+
+// Allowed origin'flag
+#define SETTING_CORS_RULE_ALLOWED_ORIGIN_FLAG 0x4
+
+// Expose headers'flag
+#define SETTING_CORS_RULE_EXPOSE_HEADERS_FLAG 0x8
+
+// Max age seconds'flag
+#define SETTING_CORS_RULE_MAX_AGE_SECONDS_FLAG 0x10
 
 //CORSRuleType presents costom type：CORSRule.
 class QS_SDK_API CORSRuleType:QsBaseType

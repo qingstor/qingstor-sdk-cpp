@@ -43,14 +43,13 @@ void QingStor::InitializeSDK(const SDKOptions & options)
 void QingStor::ShutdownSDK(const SDKOptions & options)
 {
     LOG_DEBUG << "Shutdowning SDK...";
-
+    if (options.initAndCleanupCurl)
+    {
+        //InitHttp
+        curl_global_cleanup();
+        LOG_DEBUG << "curl_global_cleanup done";
+    }
     HttpClient::DestroyGlobaleCurlPool();
-	if (options.initAndCleanupCurl)
-	{
-		//InitHttp
-		curl_global_cleanup();
-		LOG_DEBUG << "curl_global_cleanup done";
-	}
 }
 
 QingStorService::QingStorService(const QsConfig & qsConfig):m_qsConfig(qsConfig)

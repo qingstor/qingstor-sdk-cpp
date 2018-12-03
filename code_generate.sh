@@ -9,9 +9,9 @@
     if [ ! -f $snips ]; then \
 		echo "ERROR: Command \"snips\" not found."; \
 	fi
-	sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/header/" -o="./include/"
+	sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/header/" -o="./include/qingstor/"
     sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/source/" -o="./src/service"
-    sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/header_with_c_style/" -o="./include/service_with_c_style/"
+    sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/header_with_c_style/" -o="./include/qingstor/service_with_c_style/"
     sudo $snips -f="./specs/2016-01-06/swagger/api_v2.0.json" -t="./template/source_with_c_style/" -o="./src/service/service_with_c_style/"
     
     # format code 
@@ -26,11 +26,11 @@
     echo "[------- orgnizing files... -------]"
     sudo rm -rf ./src/service/Object.cpp
     echo "delete file ./src/service/Object.cpp"
-    sudo rm -rf ./include/Object.h
-    echo "delete file ./include/Object.h"
+    sudo rm -rf ./include/qingstor/Object.h
+    echo "delete file ./include/qingstor/Object.h"
     sudo mv ./src/service/service_with_c_style/QingStor.cpp ./src/service/service_with_c_style/QingStorCStyle.cpp
     echo "rename file QingStorCStyle.cpp "
-    sudo mv ./include/service_with_c_style/QingStor.h ./include/service_with_c_style/QingStorCStyle.h
+    sudo mv ./include/qingstor/service_with_c_style/QingStor.h ./include/qingstor/service_with_c_style/QingStorCStyle.h
     echo "rename file QingStorCStyle.h "
 
 	echo "Done"

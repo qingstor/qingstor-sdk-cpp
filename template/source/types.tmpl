@@ -69,7 +69,7 @@ qs_{{$customizedType.ID}}_t * {{$customizedType.ID | camelCase}}Type::toCStyleOb
     }else{
         {{$customizedType.ID}}->{{$property.ID | snakeCase}} = NULL;
     }
-    {{else if or $isIntgerProp $isLongPorp}}
+    {{else if or $isIntgerProp $isLongPorp $isBooleanPorp}}
     {{$customizedType.ID}}->{{$property.ID | snakeCase}} = ({{template "TypeWithCStyle" passThrough $property.Type false}} *)malloc(sizeof({{template "TypeWithCStyle" passThrough $property.Type false}}));
     *{{$customizedType.ID}}->{{$property.ID | snakeCase}} = Get{{$property.ID | camelCase}}();
     {{else if $isBooleanPorp}}

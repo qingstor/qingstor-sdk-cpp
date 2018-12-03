@@ -17,7 +17,10 @@
 
 #include "../QsList.h"
 // Headers of CustomizedType.
-#include "GranteeType.h"
+#include "AbortIncompleteMultipartUploadType.h"
+#include "ExpirationType.h"
+#include "FilterType.h"
+#include "TransitionType.h"
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -25,27 +28,36 @@ extern "C" {
 typedef struct
 {
 
-    qs_grantee_t *grantee;	// Required
-    //Permission for this grantee//permission's available values: READ, WRITE, FULL_CONTROL
-    char *permission;		// Required
+    qs_abort_incomplete_multipart_upload_t
+    *abort_incomplete_multipart_upload;
+
+    qs_expiration_t *expiration;
+
+    qs_filter_t *filter;	// Required
+    //rule id
+    char *id;				// Required
+    //rule status//status's available values: enabled, disabled
+    char *status;			// Required
+
+    qs_transition_t *transition;
 
     int setting_flag;
-} qs_acl_t;
+} qs_rule_t;
 
 typedef struct
 {
 
     qs_list_t node;
 
-    qs_acl_t *content;
+    qs_rule_t *content;
 
-} qs_acl_item_t;
+} qs_rule_item_t;
 
-// acl init function.
-QS_SDK_API void init_acl(qs_acl_t * input);
+// rule init function.
+QS_SDK_API void init_rule(qs_rule_t * input);
 
-// acl release function.
-QS_SDK_API void release_acl(qs_acl_t * output);
+// rule release function.
+QS_SDK_API void release_rule(qs_rule_t * output);
 
 #ifdef  __cplusplus
 };

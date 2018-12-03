@@ -55,6 +55,18 @@ DeleteBucketExternalMirrorBuilder;
 typedef QsDefaultResponseUnparker < DeleteBucketExternalMirrorOutput >
 DeleteBucketExternalMirrorUnparker;
 
+typedef QsDefaultRequestBuilder < DeleteBucketLifecycleInput >
+DeleteBucketLifecycleBuilder;
+
+typedef QsDefaultResponseUnparker < DeleteBucketLifecycleOutput >
+DeleteBucketLifecycleUnparker;
+
+typedef QsDefaultRequestBuilder < DeleteBucketNotificationInput >
+DeleteBucketNotificationBuilder;
+
+typedef QsDefaultResponseUnparker < DeleteBucketNotificationOutput >
+DeleteBucketNotificationUnparker;
+
 typedef QsDefaultRequestBuilder < DeleteBucketPolicyInput >
 DeleteBucketPolicyBuilder;
 
@@ -370,6 +382,126 @@ void GetBucketExternalMirrorUnparker::ParseResponseBody(std::iostream *
     if (jsonContent.isMember("source_site"))
     {
         m_output->SetSourceSite(jsonContent["source_site"].asString());
+    }
+    m_bNeedReleaseBody = true;
+}
+
+typedef QsDefaultRequestBuilder < GetBucketLifecycleInput >
+GetBucketLifecycleBuilder;
+
+class GetBucketLifecycleUnparker:public QsDefaultResponseUnparker <
+    GetBucketLifecycleOutput >
+{
+public:
+    GetBucketLifecycleUnparker(GetBucketLifecycleOutput *
+                               output):QsDefaultResponseUnparker <
+        GetBucketLifecycleOutput > (output)
+    {
+    };
+
+    virtual ~ GetBucketLifecycleUnparker()
+    {
+    };
+
+    virtual bool CkeckIfOutputIsVaild()
+    {
+        return m_output->IsVaild();
+    };
+
+    virtual bool CheckIfResponseExpected(Http::HttpResponseCode responseCode)
+    {
+        m_output->SetResponseCode(responseCode);
+        // Expected response codes.
+        int expectedRespCode[1] = { 200, };
+        bool isExpected = false;
+        for (int i = 0; i < 1; i++)
+        {
+            if (expectedRespCode[i] == responseCode)
+            {
+                isExpected = true;
+                break;
+            }
+        }
+        return isExpected;
+    };
+    virtual void ParseResponseBody(std::iostream * responseBody);
+};
+
+void GetBucketLifecycleUnparker::ParseResponseBody(std::iostream * responseBody)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(*responseBody, jsonContent);
+    if (jsonContent.isMember("rule"))
+    {
+        std::vector < RuleType > vecRule;
+        for (unsigned i = 0; i < jsonContent["rule"].size(); ++i)
+        {
+            vecRule.push_back(jsonContent["rule"][i].toStyledString());
+        }
+        m_output->SetRule(vecRule);
+    }
+    m_bNeedReleaseBody = true;
+}
+
+typedef QsDefaultRequestBuilder < GetBucketNotificationInput >
+GetBucketNotificationBuilder;
+
+class GetBucketNotificationUnparker:public QsDefaultResponseUnparker <
+    GetBucketNotificationOutput >
+{
+public:
+    GetBucketNotificationUnparker(GetBucketNotificationOutput *
+                                  output):QsDefaultResponseUnparker <
+        GetBucketNotificationOutput > (output)
+    {
+    };
+
+    virtual ~ GetBucketNotificationUnparker()
+    {
+    };
+
+    virtual bool CkeckIfOutputIsVaild()
+    {
+        return m_output->IsVaild();
+    };
+
+    virtual bool CheckIfResponseExpected(Http::HttpResponseCode responseCode)
+    {
+        m_output->SetResponseCode(responseCode);
+        // Expected response codes.
+        int expectedRespCode[1] = { 200, };
+        bool isExpected = false;
+        for (int i = 0; i < 1; i++)
+        {
+            if (expectedRespCode[i] == responseCode)
+            {
+                isExpected = true;
+                break;
+            }
+        }
+        return isExpected;
+    };
+    virtual void ParseResponseBody(std::iostream * responseBody);
+};
+
+void GetBucketNotificationUnparker::ParseResponseBody(std::iostream *
+        responseBody)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(*responseBody, jsonContent);
+    if (jsonContent.isMember("notifications"))
+    {
+        std::vector < NotificationType > vecNotifications;
+        for (unsigned i = 0; i < jsonContent["notifications"].size(); ++i)
+        {
+            vecNotifications.push_back(jsonContent["notifications"][i].
+                                       toStyledString());
+        }
+        m_output->SetNotifications(vecNotifications);
     }
     m_bNeedReleaseBody = true;
 }
@@ -788,6 +920,10 @@ void ListObjectsUnparker::ParseResponseBody(std::iostream * responseBody)
     {
         m_output->SetDelimiter(jsonContent["delimiter"].asString());
     }
+    if (jsonContent.isMember("has_more"))
+    {
+        m_output->SetHasMore(jsonContent["has_more"].asBool());
+    }
     if (jsonContent.isMember("keys"))
     {
         std::vector < KeyType > vecKeys;
@@ -958,6 +1094,105 @@ std::iostream * PutBucketExternalMirrorBuilder::GetRequestBody()
 
 typedef QsDefaultResponseUnparker < PutBucketExternalMirrorOutput >
 PutBucketExternalMirrorUnparker;
+
+class PutBucketLifecycleBuilder:public QsDefaultRequestBuilder <
+    PutBucketLifecycleInput >
+{
+public:
+    PutBucketLifecycleBuilder(PutBucketLifecycleInput *
+                              input):QsDefaultRequestBuilder <
+        PutBucketLifecycleInput > (input)
+    {
+    };
+
+    virtual ~ PutBucketLifecycleBuilder()
+    {
+    };
+
+    virtual bool CkeckIfInputIsVaild()
+    {
+        return m_input->CheckIfInputIsVaild();
+    };
+    virtual std::iostream * GetRequestBody();
+};
+
+// PutBucketLifecycleRequest GetRequestBody.
+std::iostream * PutBucketLifecycleBuilder::GetRequestBody()
+{
+    //TO DO;
+    Json::FastWriter jsonWriter;
+    Json::Value jsonContent;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_LIFECYCLE_RULE_FLAG))
+    {
+        Json::Value arrayRule;
+        std::vector < RuleType > rule = m_input->GetRule();
+        for (std::vector < RuleType >::iterator it = rule.begin();
+                it != rule.end(); it++)
+        {
+            Json::Reader jsonReader;
+            Json::Value itemJsonValue;
+            jsonReader.parse(it->Serialize(), itemJsonValue);
+            arrayRule.append(itemJsonValue);
+        }
+        jsonContent["rule"] = arrayRule;
+    }
+    m_bNeedReleaseBody = true;
+    return new std::stringstream(jsonWriter.write(jsonContent));
+}
+
+typedef QsDefaultResponseUnparker < PutBucketLifecycleOutput >
+PutBucketLifecycleUnparker;
+
+class PutBucketNotificationBuilder:public QsDefaultRequestBuilder <
+    PutBucketNotificationInput >
+{
+public:
+    PutBucketNotificationBuilder(PutBucketNotificationInput *
+                                 input):QsDefaultRequestBuilder <
+        PutBucketNotificationInput > (input)
+    {
+    };
+
+    virtual ~ PutBucketNotificationBuilder()
+    {
+    };
+
+    virtual bool CkeckIfInputIsVaild()
+    {
+        return m_input->CheckIfInputIsVaild();
+    };
+    virtual std::iostream * GetRequestBody();
+};
+
+// PutBucketNotificationRequest GetRequestBody.
+std::iostream * PutBucketNotificationBuilder::GetRequestBody()
+{
+    //TO DO;
+    Json::FastWriter jsonWriter;
+    Json::Value jsonContent;
+    if (m_input->
+            IsPropHasBeenSet
+            (SETTING_INPUT_PUT_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG))
+    {
+        Json::Value arrayNotifications;
+        std::vector < NotificationType > notifications =
+            m_input->GetNotifications();
+        for (std::vector < NotificationType >::iterator it =
+                    notifications.begin(); it != notifications.end(); it++)
+        {
+            Json::Reader jsonReader;
+            Json::Value itemJsonValue;
+            jsonReader.parse(it->Serialize(), itemJsonValue);
+            arrayNotifications.append(itemJsonValue);
+        }
+        jsonContent["notifications"] = arrayNotifications;
+    }
+    m_bNeedReleaseBody = true;
+    return new std::stringstream(jsonWriter.write(jsonContent));
+}
+
+typedef QsDefaultResponseUnparker < PutBucketNotificationOutput >
+PutBucketNotificationUnparker;
 
 class PutBucketPolicyBuilder:public QsDefaultRequestBuilder <
     PutBucketPolicyInput >
@@ -1507,19 +1742,6 @@ void GetObjectUnparker::ParseResponseHeaders(const Http::
     {
         m_output->SetXQSStorageClass(XQSStorageClassIter->second);
     }
-
-    std::size_t prefixSize = sizeof("x-qs-meta-") - 1; //subtract the NULL terminator out 
-    std::map<std::string, std::string> metadata;
-    for(HeaderValueCollection::const_iterator it = headers.begin(); it != headers.end(); it++)
-    {
-        std::size_t foundPrefix = it->first.find("x-qs-meta-");
-        if(foundPrefix != std::string::npos)
-        {
-            std::string key = it->first.substr(prefixSize);
-            metadata[key] = it->second;
-        }
-    }
-    m_output->SetMetadata(metadata);
 }
 
 void GetObjectUnparker::ParseResponseBody(std::iostream * responseBody)
@@ -1697,19 +1919,6 @@ void HeadObjectUnparker::ParseResponseHeaders(const Http::
     {
         m_output->SetXQSStorageClass(XQSStorageClassIter->second);
     }
-
-    std::size_t prefixSize = sizeof("x-qs-meta-") - 1; //subtract the NULL terminator out 
-    std::map < std::string, std::string> metadata;
-    for(HeaderValueCollection::const_iterator it = headers.begin(); it != headers.end(); it++)
-    {
-        std::size_t foundPrefix = it->first.find("x-qs-meta-");
-        if(foundPrefix != std::string::npos)
-        {
-            std::string key = it->first.substr(prefixSize);
-            metadata[key] = it->second;
-        }
-    }
-    m_output->SetMetadata(metadata);
 }
 
 class ImageProcessBuilder:public QsDefaultRequestBuilder < ImageProcessInput >
@@ -1959,19 +2168,6 @@ GetHeaderValueCollection()
         ss << m_input->GetXQSStorageClass();
         headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
-    }
-
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG))
-    {
-        std::map<std::string, std::string> metadata = m_input->GetMetadata();
-        for(std::map<std::string, std::string>::iterator it = metadata.begin(); it != metadata.end(); it++)
-        {
-            ss << "x-qs-meta-" << it->first;
-            headers.insert(Http::HeaderValuePair(ss.str(), it->second));
-            ss.str("");
-        }
     }
     return headers;
 }
@@ -2329,6 +2525,19 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
     Http::HeaderValueCollection headers;
     std::stringstream ss;
     std::vector < std::string >::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CACHE_CONTROL_FLAG))
+    {
+        ss << m_input->GetCacheControl();
+        headers.insert(Http::HeaderValuePair("Cache-Control", ss.str()));
+        ss.str("");
+    }
+    if (m_input->
+            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CONTENT_ENCODING_FLAG))
+    {
+        ss << m_input->GetContentEncoding();
+        headers.insert(Http::HeaderValuePair("Content-Encoding", ss.str()));
+        ss.str("");
+    }
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG))
     {
         ss << m_input->GetContentLength();
@@ -2499,27 +2708,6 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("X-QS-Storage-Class", ss.str()));
         ss.str("");
     }
-
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG))
-    {
-        std::map<std::string, std::string> metadata = m_input->GetMetadata();
-        for(std::map<std::string, std::string>::iterator it = metadata.begin(); it != metadata.end(); it++)
-        {
-            ss << "x-qs-meta-" << it->first;
-            headers.insert(Http::HeaderValuePair(ss.str(), it->second));
-            ss.str("");
-        }
-    }
-
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG))
-    {
-        ss << m_input->GetXQSMetadataDirective();
-        headers.insert(Http::HeaderValuePair("x-qs-metadata-directive", ss.str()));
-        ss.str("");
-    }
-
     return headers;
 }
 
@@ -2896,6 +3084,33 @@ DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput & input,
     return request.GetResponse();
 }
 
+QsError Bucket::DeleteBucketLifecycle(DeleteBucketLifecycleInput & input,
+                                      DeleteBucketLifecycleOutput & output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "DELETE Bucket Lifecycle",
+                        HTTP_DELETE, "/<bucket-name>?lifecycle");
+    DeleteBucketLifecycleBuilder bulider(&input);
+    DeleteBucketLifecycleUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::DeleteBucketNotification(DeleteBucketNotificationInput & input,
+        DeleteBucketNotificationOutput &
+        output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "DELETE Bucket Notification",
+                        HTTP_DELETE, "/<bucket-name>?notification");
+    DeleteBucketNotificationBuilder bulider(&input);
+    DeleteBucketNotificationUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
 QsError Bucket::DeleteBucketPolicy(DeleteBucketPolicyInput & input,
                                    DeleteBucketPolicyOutput & output)
 {
@@ -2955,6 +3170,32 @@ QsError Bucket::GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
                         HTTP_GET, "/<bucket-name>?mirror");
     GetBucketExternalMirrorBuilder bulider(&input);
     GetBucketExternalMirrorUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::GetBucketLifecycle(GetBucketLifecycleInput & input,
+                                   GetBucketLifecycleOutput & output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "GET Bucket Lifecycle",
+                        HTTP_GET, "/<bucket-name>?lifecycle");
+    GetBucketLifecycleBuilder bulider(&input);
+    GetBucketLifecycleUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::GetBucketNotification(GetBucketNotificationInput & input,
+                                      GetBucketNotificationOutput & output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "GET Bucket Notification",
+                        HTTP_GET, "/<bucket-name>?notification");
+    GetBucketNotificationBuilder bulider(&input);
+    GetBucketNotificationUnparker unparker(&output);
     QsRequest request(operation, &bulider, &unparker);
     return request.GetResponse();
 }
@@ -3065,6 +3306,32 @@ QsError Bucket::PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
                         HTTP_PUT, "/<bucket-name>?mirror");
     PutBucketExternalMirrorBuilder bulider(&input);
     PutBucketExternalMirrorUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::PutBucketLifecycle(PutBucketLifecycleInput & input,
+                                   PutBucketLifecycleOutput & output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "PUT Bucket Lifecycle",
+                        HTTP_PUT, "/<bucket-name>?lifecycle");
+    PutBucketLifecycleBuilder bulider(&input);
+    PutBucketLifecycleUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::PutBucketNotification(PutBucketNotificationInput & input,
+                                      PutBucketNotificationOutput & output)
+{
+    Properties properties(m_properties);
+    Operation operation(&m_qsConfig, properties,
+                        "PUT Bucket Notification",
+                        HTTP_PUT, "/<bucket-name>?notification");
+    PutBucketNotificationBuilder bulider(&input);
+    PutBucketNotificationUnparker unparker(&output);
     QsRequest request(operation, &bulider, &unparker);
     return request.GetResponse();
 }
@@ -3239,10 +3506,4 @@ QsError Bucket::UploadMultipart(std::string objectKey,
     UploadMultipartUnparker unparker(&output);
     QsRequest request(operation, &bulider, &unparker);
     return request.GetResponse();
-}
-
-QsError Bucket::GetObjectSync(std::string objectKey, GetObjectInput & input,
-                              GetObjectOutput & output)
-{
-    return Bucket::GetObject(objectKey, input, output);
 }

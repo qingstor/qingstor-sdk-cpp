@@ -438,6 +438,117 @@ qs_delete_bucket_external_mirror(qs_delete_bucket_external_mirror_input_t *
     return err;
 }
 
+// delete_bucket_lifecycleInput init function.
+void init_delete_bucket_lifecycle_input(qs_delete_bucket_lifecycle_input_t *
+                                        input)
+{
+    // nothing to do;
+    return;
+}
+
+// delete_bucket_lifecycleoutput init function.
+void init_delete_bucket_lifecycle_output(qs_delete_bucket_lifecycle_output_t *
+        output)
+{
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// delete_bucket_lifecycle Output release function.
+void release_delete_bucket_lifecycle_output(qs_delete_bucket_lifecycle_output_t
+        * output)
+{
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_delete_bucket_lifecycle(qs_delete_bucket_lifecycle_input_t * input,
+                                   qs_delete_bucket_lifecycle_output_t * output,
+                                   qs_context_handle context_hdl)
+{
+    //init class DeleteBucketLifecycleinputCpp
+    DeleteBucketLifecycleInput inputCpp;
+    DeleteBucketLifecycleOutput outputCpp;
+    // packer cpp input
+    // init output
+    init_delete_bucket_lifecycle_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->DeleteBucketLifecycle(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
+// delete_bucket_notificationInput init function.
+void init_delete_bucket_notification_input(qs_delete_bucket_notification_input_t
+        * input)
+{
+    // nothing to do;
+    return;
+}
+
+// delete_bucket_notificationoutput init function.
+void
+init_delete_bucket_notification_output(qs_delete_bucket_notification_output_t *
+                                       output)
+{
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// delete_bucket_notification Output release function.
+void
+release_delete_bucket_notification_output(qs_delete_bucket_notification_output_t
+        * output)
+{
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_delete_bucket_notification(qs_delete_bucket_notification_input_t *
+                                      input,
+                                      qs_delete_bucket_notification_output_t *
+                                      output, qs_context_handle context_hdl)
+{
+    //init class DeleteBucketNotificationinputCpp
+    DeleteBucketNotificationInput inputCpp;
+    DeleteBucketNotificationOutput outputCpp;
+    // packer cpp input
+    // init output
+    init_delete_bucket_notification_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->DeleteBucketNotification(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
 // delete_bucket_policyInput init function.
 void init_delete_bucket_policy_input(qs_delete_bucket_policy_input_t * input)
 {
@@ -863,6 +974,179 @@ QsError qs_get_bucket_external_mirror(qs_get_bucket_external_mirror_input_t *
         else
         {
             output->source_site = NULL;
+        }
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
+// get_bucket_lifecycleInput init function.
+void init_get_bucket_lifecycle_input(qs_get_bucket_lifecycle_input_t * input)
+{
+    // nothing to do;
+    return;
+}
+
+// get_bucket_lifecycleoutput init function.
+void init_get_bucket_lifecycle_output(qs_get_bucket_lifecycle_output_t * output)
+{
+    output->rule = NULL;
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// get_bucket_lifecycle Output release function.
+void release_get_bucket_lifecycle_output(qs_get_bucket_lifecycle_output_t *
+        output)
+{
+    if (output->rule)
+    {
+        qs_rule_item_t *item = NULL;
+        qs_rule_item_t *item_to_delete = NULL;
+        qs_list_for_each_entry(qs_rule_item_t, item, output->rule)
+        {
+            if (item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+            release_rule(item->content);
+            free(item->content);
+        }
+        if (item_to_delete)
+        {
+            free(item_to_delete);
+        }
+        free(output->rule);
+    }
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_get_bucket_lifecycle(qs_get_bucket_lifecycle_input_t * input,
+                                qs_get_bucket_lifecycle_output_t * output,
+                                qs_context_handle context_hdl)
+{
+    //init class GetBucketLifecycleinputCpp
+    GetBucketLifecycleInput inputCpp;
+    GetBucketLifecycleOutput outputCpp;
+    // packer cpp input
+    // init output
+    init_get_bucket_lifecycle_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->GetBucketLifecycle(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->rule = (qs_list_t *) malloc(sizeof(qs_list_t));
+        qs_list_init(output->rule);
+        std::vector < RuleType > rule = outputCpp.GetRule();
+        for (std::vector < RuleType >::iterator it = rule.begin();
+                it != rule.end(); it++)
+        {
+            qs_rule_item_t *item =
+                (qs_rule_item_t *) malloc(sizeof(qs_rule_item_t));
+            item->content = it->toCStyleObj();
+            qs_list_append(&item->node, output->rule);
+        }
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
+// get_bucket_notificationInput init function.
+void init_get_bucket_notification_input(qs_get_bucket_notification_input_t *
+                                        input)
+{
+    // nothing to do;
+    return;
+}
+
+// get_bucket_notificationoutput init function.
+void init_get_bucket_notification_output(qs_get_bucket_notification_output_t *
+        output)
+{
+    output->notifications = NULL;
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// get_bucket_notification Output release function.
+void release_get_bucket_notification_output(qs_get_bucket_notification_output_t
+        * output)
+{
+    if (output->notifications)
+    {
+        qs_notification_item_t *item = NULL;
+        qs_notification_item_t *item_to_delete = NULL;
+        qs_list_for_each_entry(qs_notification_item_t, item,
+                               output->notifications)
+        {
+            if (item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+            release_notification(item->content);
+            free(item->content);
+        }
+        if (item_to_delete)
+        {
+            free(item_to_delete);
+        }
+        free(output->notifications);
+    }
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_get_bucket_notification(qs_get_bucket_notification_input_t * input,
+                                   qs_get_bucket_notification_output_t * output,
+                                   qs_context_handle context_hdl)
+{
+    //init class GetBucketNotificationinputCpp
+    GetBucketNotificationInput inputCpp;
+    GetBucketNotificationOutput outputCpp;
+    // packer cpp input
+    // init output
+    init_get_bucket_notification_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->GetBucketNotification(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->notifications = (qs_list_t *) malloc(sizeof(qs_list_t));
+        qs_list_init(output->notifications);
+        std::vector < NotificationType > notifications =
+            outputCpp.GetNotifications();
+        for (std::vector < NotificationType >::iterator it =
+                    notifications.begin(); it != notifications.end(); it++)
+        {
+            qs_notification_item_t *item =
+                (qs_notification_item_t *)
+                malloc(sizeof(qs_notification_item_t));
+            item->content = it->toCStyleObj();
+            qs_list_append(&item->node, output->notifications);
         }
         output->response_code = (int) outputCpp.GetResponseCode();
     }
@@ -1442,6 +1726,7 @@ void init_list_objects_output(qs_list_objects_output_t * output)
 {
     output->common_prefixes = NULL;
     output->delimiter = NULL;
+    output->has_more = NULL;
     output->keys = NULL;
     output->limit = NULL;
     output->marker = NULL;
@@ -1478,6 +1763,10 @@ void release_list_objects_output(qs_list_objects_output_t * output)
     if (output->delimiter)
     {
         free(output->delimiter);
+    }
+    if (output->has_more)
+    {
+        free(output->has_more);
     }
     if (output->keys)
     {
@@ -1595,6 +1884,8 @@ QsError qs_list_objects(qs_list_objects_input_t * input,
         {
             output->delimiter = NULL;
         }
+        output->has_more = (bool *) malloc(sizeof(bool));
+        *output->has_more = outputCpp.GetHasMore();
         output->keys = (qs_list_t *) malloc(sizeof(qs_list_t));
         qs_list_init(output->keys);
         std::vector < KeyType > keys = outputCpp.GetKeys();
@@ -1891,6 +2182,137 @@ QsError qs_put_bucket_external_mirror(qs_put_bucket_external_mirror_input_t *
     // call cpp op
     Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
     QsError err = qsBucket->PutBucketExternalMirror(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
+// put_bucket_lifecycleInput init function.
+void init_put_bucket_lifecycle_input(qs_put_bucket_lifecycle_input_t * input)
+{
+    input->rule = NULL;
+    return;
+}
+
+// put_bucket_lifecycleoutput init function.
+void init_put_bucket_lifecycle_output(qs_put_bucket_lifecycle_output_t * output)
+{
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// put_bucket_lifecycle Output release function.
+void release_put_bucket_lifecycle_output(qs_put_bucket_lifecycle_output_t *
+        output)
+{
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_put_bucket_lifecycle(qs_put_bucket_lifecycle_input_t * input,
+                                qs_put_bucket_lifecycle_output_t * output,
+                                qs_context_handle context_hdl)
+{
+    //init class PutBucketLifecycleinputCpp
+    PutBucketLifecycleInput inputCpp;
+    PutBucketLifecycleOutput outputCpp;
+    // packer cpp input
+    if (input->rule)
+    {
+        //qs_list_t list_rule;
+        //qs_list_init(list_rule);
+        std::vector < RuleType > Rule;
+        qs_rule_item_t *item;
+        qs_list_for_each_entry(qs_rule_item_t, item, input->rule)
+        {
+            Rule.push_back(*item->content);
+        }
+        inputCpp.SetRule(Rule);
+    }
+    // init output
+    init_put_bucket_lifecycle_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->PutBucketLifecycle(inputCpp, outputCpp);
+    if (QS_ERR_NO_ERROR == err)
+    {
+        // uppacker cpp output
+        output->response_code = (int) outputCpp.GetResponseCode();
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        // if got unexcepted response
+        output->response_code = (int) outputCpp.GetResponseCode();
+        ResponseErrorInfo errorInfo = outputCpp.GetResponseErrInfo();
+        LOGW << "Got unexcepted response with code:" << errorInfo.
+             code << " " << errorInfo.message;
+        qs_set_error_info(&output->error_info, errorInfo);
+    }
+    return err;
+}
+
+// put_bucket_notificationInput init function.
+void init_put_bucket_notification_input(qs_put_bucket_notification_input_t *
+                                        input)
+{
+    input->notifications = NULL;
+    return;
+}
+
+// put_bucket_notificationoutput init function.
+void init_put_bucket_notification_output(qs_put_bucket_notification_output_t *
+        output)
+{
+    qs_init_error_info(&output->error_info);
+    return;
+}
+
+// put_bucket_notification Output release function.
+void release_put_bucket_notification_output(qs_put_bucket_notification_output_t
+        * output)
+{
+    qs_release_error_info(&output->error_info);
+    return;
+}
+
+QsError qs_put_bucket_notification(qs_put_bucket_notification_input_t * input,
+                                   qs_put_bucket_notification_output_t * output,
+                                   qs_context_handle context_hdl)
+{
+    //init class PutBucketNotificationinputCpp
+    PutBucketNotificationInput inputCpp;
+    PutBucketNotificationOutput outputCpp;
+    // packer cpp input
+    if (input->notifications)
+    {
+        //qs_list_t list_notifications;
+        //qs_list_init(list_notifications);
+        std::vector < NotificationType > Notifications;
+        qs_notification_item_t *item;
+        qs_list_for_each_entry(qs_notification_item_t, item,
+                               input->notifications)
+        {
+            Notifications.push_back(*item->content);
+        }
+        inputCpp.SetNotifications(Notifications);
+    }
+    // init output
+    init_put_bucket_notification_output(output);
+    // call cpp op
+    Bucket *qsBucket = (Bucket *) (context_hdl.pQsBucket);
+    QsError err = qsBucket->PutBucketNotification(inputCpp, outputCpp);
     if (QS_ERR_NO_ERROR == err)
     {
         // uppacker cpp output
@@ -2235,6 +2657,7 @@ void init_get_object_output(qs_get_object_output_t * output)
     output->expires = NULL;
     output->last_modified = NULL;
     output->x_qs_encryption_customer_algorithm = NULL;
+    output->x_qs_storage_class = NULL;
     output->bufLength = NULL;
     output->bodybuf = NULL;
     qs_init_error_info(&output->error_info);
@@ -2290,6 +2713,10 @@ void release_get_object_output(qs_get_object_output_t * output)
     if (output->x_qs_encryption_customer_algorithm)
     {
         free(output->x_qs_encryption_customer_algorithm);
+    }
+    if (output->x_qs_storage_class)
+    {
+        free(output->x_qs_storage_class);
     }
     // release binary body content
     if (output->bodybuf)
@@ -2513,6 +2940,20 @@ QsError qs_get_object(char *objectKey, qs_get_object_input_t * input,
         {
             output->x_qs_encryption_customer_algorithm = NULL;
         }
+        int XQSStorageClassLength = outputCpp.GetXQSStorageClass().length();
+        if (XQSStorageClassLength > 0)
+        {
+            output->x_qs_storage_class =
+                (char *) malloc(XQSStorageClassLength + 1);
+            memset(output->x_qs_storage_class, 0, XQSStorageClassLength + 1);
+            strncpy(output->x_qs_storage_class,
+                    outputCpp.GetXQSStorageClass().c_str(),
+                    XQSStorageClassLength);
+        }
+        else
+        {
+            output->x_qs_storage_class = NULL;
+        }
         std::iostream * respStreamBody = outputCpp.GetBody();
         if (respStreamBody)
         {
@@ -2563,6 +3004,7 @@ void init_head_object_output(qs_head_object_output_t * output)
     output->etag = NULL;
     output->last_modified = NULL;
     output->x_qs_encryption_customer_algorithm = NULL;
+    output->x_qs_storage_class = NULL;
     qs_init_error_info(&output->error_info);
     return;
 }
@@ -2589,6 +3031,10 @@ void release_head_object_output(qs_head_object_output_t * output)
     if (output->x_qs_encryption_customer_algorithm)
     {
         free(output->x_qs_encryption_customer_algorithm);
+    }
+    if (output->x_qs_storage_class)
+    {
+        free(output->x_qs_storage_class);
     }
     qs_release_error_info(&output->error_info);
     return;
@@ -2693,6 +3139,20 @@ QsError qs_head_object(char *objectKey, qs_head_object_input_t * input,
         else
         {
             output->x_qs_encryption_customer_algorithm = NULL;
+        }
+        int XQSStorageClassLength = outputCpp.GetXQSStorageClass().length();
+        if (XQSStorageClassLength > 0)
+        {
+            output->x_qs_storage_class =
+                (char *) malloc(XQSStorageClassLength + 1);
+            memset(output->x_qs_storage_class, 0, XQSStorageClassLength + 1);
+            strncpy(output->x_qs_storage_class,
+                    outputCpp.GetXQSStorageClass().c_str(),
+                    XQSStorageClassLength);
+        }
+        else
+        {
+            output->x_qs_storage_class = NULL;
         }
         output->response_code = (int) outputCpp.GetResponseCode();
     }
@@ -2841,6 +3301,7 @@ void init_initiate_multipart_upload_input(qs_initiate_multipart_upload_input_t *
     input->x_qs_encryption_customer_algorithm = NULL;
     input->x_qs_encryption_customer_key = NULL;
     input->x_qs_encryption_customer_key_md5 = NULL;
+    input->x_qs_storage_class = NULL;
     return;
 }
 
@@ -2909,6 +3370,10 @@ QsError qs_initiate_multipart_upload(char *objectKey,
     {
         inputCpp.SetXQSEncryptionCustomerKeyMD5(input->
                                                 x_qs_encryption_customer_key_md5);
+    }
+    if (input->x_qs_storage_class)
+    {
+        inputCpp.SetXQSStorageClass(input->x_qs_storage_class);
     }
     // init output
     init_initiate_multipart_upload_output(output);
@@ -3107,6 +3572,8 @@ void init_options_object_output(qs_options_object_output_t * output)
     output->access_control_expose_headers = NULL;
     output->access_control_max_age = NULL;
     qs_init_error_info(&output->error_info);
+    qs_init_error_info(&output->error_info);
+    qs_init_error_info(&output->error_info);
     return;
 }
 
@@ -3264,6 +3731,8 @@ QsError qs_options_object(char *objectKey, qs_options_object_input_t * input,
 // put_objectInput init function.
 void init_put_object_input(qs_put_object_input_t * input)
 {
+    input->cache_control = NULL;
+    input->content_encoding = NULL;
     input->content_length = NULL;
     input->content_md5 = NULL;
     input->content_type = NULL;
@@ -3282,6 +3751,7 @@ void init_put_object_input(qs_put_object_input_t * input)
     input->x_qs_fetch_if_unmodified_since = NULL;
     input->x_qs_fetch_source = NULL;
     input->x_qs_move_source = NULL;
+    input->x_qs_storage_class = NULL;
     input->bufLength = NULL;
     input->bodybuf = NULL;
     return;
@@ -3320,6 +3790,14 @@ QsError qs_put_object(char *objectKey, qs_put_object_input_t * input,
     PutObjectOutput outputCpp;
     std::iostream * reqStreamBody = NULL;
     // packer cpp input
+    if (input->cache_control)
+    {
+        inputCpp.SetCacheControl(input->cache_control);
+    }
+    if (input->content_encoding)
+    {
+        inputCpp.SetContentEncoding(input->content_encoding);
+    }
     if (input->content_length)
     {
         inputCpp.SetContentLength(*input->content_length);
@@ -3401,6 +3879,10 @@ QsError qs_put_object(char *objectKey, qs_put_object_input_t * input,
     if (input->x_qs_move_source)
     {
         inputCpp.SetXQSMoveSource(input->x_qs_move_source);
+    }
+    if (input->x_qs_storage_class)
+    {
+        inputCpp.SetXQSStorageClass(input->x_qs_storage_class);
     }
     if (input->bodybuf)
     {

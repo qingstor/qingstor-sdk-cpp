@@ -26,26 +26,26 @@
 #include "../service_with_c_style/types/KeyType.h"
 #endif							// BUILD_C_STYLE_INTERFACE
 
-// Object key'flag
-#define SETTING_KEY_KEY_FLAG 0x1
-
-// MIME type of the object'flag
-#define SETTING_KEY_MIME_TYPE_FLAG 0x2
-
-// Last modified time in unix time format'flag
-#define SETTING_KEY_MODIFIED_FLAG 0x4
-
-// Object content size'flag
-#define SETTING_KEY_SIZE_FLAG 0x8
-
 // Object created time'flag
-#define SETTING_KEY_CREATED_FLAG 0x10
+#define SETTING_KEY_CREATED_FLAG 0x1
 
 // Whether this key is encrypted'flag
-#define SETTING_KEY_ENCRYPTED_FLAG 0x20
+#define SETTING_KEY_ENCRYPTED_FLAG 0x2
 
 // MD5sum of the object'flag
-#define SETTING_KEY_ETAG_FLAG 0x40
+#define SETTING_KEY_ETAG_FLAG 0x4
+
+// Object key'flag
+#define SETTING_KEY_KEY_FLAG 0x8
+
+// MIME type of the object'flag
+#define SETTING_KEY_MIME_TYPE_FLAG 0x10
+
+// Last modified time in unix time format'flag
+#define SETTING_KEY_MODIFIED_FLAG 0x20
+
+// Object content size'flag
+#define SETTING_KEY_SIZE_FLAG 0x40
 
 //KeyType presents costom type：Key.
 class QS_SDK_API KeyType:QsBaseType

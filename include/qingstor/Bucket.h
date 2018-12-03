@@ -65,30 +65,36 @@
 // Source site url'flag
 #define SETTING_OUTPUT_GET_BUCKET_EXTERNAL_MIRROR_SOURCE_SITE_FLAG 0x1
 
+// Bucket Lifecycle rule'flag
+#define SETTING_OUTPUT_GET_BUCKET_LIFECYCLE_RULE_FLAG 0x1
+
+// Bucket Notification'flag
+#define SETTING_OUTPUT_GET_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG 0x1
+
 // Bucket policy statement'flag
 #define SETTING_OUTPUT_GET_BUCKET_POLICY_STATEMENT_FLAG 0x1
 
+// Objects count in the bucket'flag
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_COUNT_FLAG 0x1
+
+// Bucket created time'flag
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_CREATED_FLAG 0x2
+
 // QingCloud Zone ID'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_LOCATION_FLAG 0x1
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_LOCATION_FLAG 0x4
 
 // Bucket name'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_NAME_FLAG 0x2
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_NAME_FLAG 0x8
 
 // Bucket storage size'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_SIZE_FLAG 0x4
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_SIZE_FLAG 0x10
 
 // Bucket status'flag
 // Status's available values: active, suspended
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_STATUS_FLAG 0x8
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_STATUS_FLAG 0x20
 
 // URL to access the bucket'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_URL_FLAG 0x10
-
-// Objects count in the bucket'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_COUNT_FLAG 0x20
-
-// Bucket created time'flag
-#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_CREATED_FLAG 0x40
+#define SETTING_OUTPUT_GET_BUCKET_STATISTICS_URL_FLAG 0x40
 
 // Put all keys that share a common prefix into a list'flag
 #define SETTING_INPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x1
@@ -96,80 +102,83 @@
 // Limit results returned from the first key after key_marker sorted by alphabetical order'flag
 #define SETTING_INPUT_LIST_MULTIPART_UPLOADS_KEY_MARKER_FLAG 0x2
 
-// Limit results returned from the first uploading segment after upload_id_marker sorted by the time of upload_id'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG 0x4
-
 // Results count limit'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x8
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x4
 
 // Limits results to keys that begin with the prefix'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x10
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x8
 
-// Limit that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x1
-
-// The last key in uploads list'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_KEY_MARKER_FLAG 0x2
-
-// Multipart uploads'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_UPLOADS_FLAG 0x4
+// Limit results returned from the first uploading segment after upload_id_marker sorted by the time of upload_id'flag
+#define SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG 0x10
 
 // Other object keys that share common prefixes'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_COMMON_PREFIXES_FLAG 0x8
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_COMMON_PREFIXES_FLAG 0x1
 
 // Delimiter that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x10
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG 0x2
 
-// Prefix that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x20
-
-// Bucket name'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NAME_FLAG 0x40
-
-// The last upload_id in uploads list'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_UPLOAD_ID_MARKER_FLAG 0x80
+// Limit that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG 0x4
 
 // Marker that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_MARKER_FLAG 0x100
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_MARKER_FLAG 0x8
 
-// Limit results to keys that start at this marker'flag
-#define SETTING_INPUT_LIST_OBJECTS_MARKER_FLAG 0x1
+// Bucket name'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NAME_FLAG 0x10
+
+// The last key in uploads list'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_KEY_MARKER_FLAG 0x20
+
+// The last upload_id in uploads list'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_NEXT_UPLOAD_ID_MARKER_FLAG 0x40
+
+// Prefix that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG 0x80
+
+// Multipart uploads'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_UPLOADS_FLAG 0x100
+
+// Put all keys that share a common prefix into a list'flag
+#define SETTING_INPUT_LIST_OBJECTS_DELIMITER_FLAG 0x1
 
 // Results count limit'flag
 #define SETTING_INPUT_LIST_OBJECTS_LIMIT_FLAG 0x2
 
+// Limit results to keys that start at this marker'flag
+#define SETTING_INPUT_LIST_OBJECTS_MARKER_FLAG 0x4
+
 // Limits results to keys that begin with the prefix'flag
-#define SETTING_INPUT_LIST_OBJECTS_PREFIX_FLAG 0x4
+#define SETTING_INPUT_LIST_OBJECTS_PREFIX_FLAG 0x8
 
-// Put all keys that share a common prefix into a list'flag
-#define SETTING_INPUT_LIST_OBJECTS_DELIMITER_FLAG 0x8
-
-// Bucket name'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_NAME_FLAG 0x1
+// Other object keys that share common prefixes'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_COMMON_PREFIXES_FLAG 0x1
 
 // Delimiter that specified in request parameters'flag
 #define SETTING_OUTPUT_LIST_OBJECTS_DELIMITER_FLAG 0x2
 
-// Other object keys that share common prefixes'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_COMMON_PREFIXES_FLAG 0x4
+// Indicate if these are more results in the next page'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_HAS_MORE_FLAG 0x4
 
 // Object keys'flag
 #define SETTING_OUTPUT_LIST_OBJECTS_KEYS_FLAG 0x8
 
-// Bucket owner'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_OWNER_FLAG 0x10
-
-// Prefix that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_PREFIX_FLAG 0x20
+// Limit that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_LIMIT_FLAG 0x10
 
 // Marker that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_MARKER_FLAG 0x40
+#define SETTING_OUTPUT_LIST_OBJECTS_MARKER_FLAG 0x20
+
+// Bucket name'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_NAME_FLAG 0x40
 
 // The last key in keys list'flag
 #define SETTING_OUTPUT_LIST_OBJECTS_NEXT_MARKER_FLAG 0x80
 
-// Limit that specified in request parameters'flag
-#define SETTING_OUTPUT_LIST_OBJECTS_LIMIT_FLAG 0x100
+// Bucket owner'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_OWNER_FLAG 0x100
+
+// Prefix that specified in request parameters'flag
+#define SETTING_OUTPUT_LIST_OBJECTS_PREFIX_FLAG 0x200
 
 // Bucket ACL rules'flag
 #define SETTING_INPUT_PUT_BUCKET_ACL_ACL_FLAG 0x1
@@ -179,6 +188,12 @@
 
 // Source site url'flag
 #define SETTING_INPUT_PUT_BUCKET_EXTERNAL_MIRROR_SOURCE_SITE_FLAG 0x1
+
+// Bucket Lifecycle rule'flag
+#define SETTING_INPUT_PUT_BUCKET_LIFECYCLE_RULE_FLAG 0x1
+
+// Bucket Notification'flag
+#define SETTING_INPUT_PUT_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG 0x1
 
 // Bucket policy statement'flag
 #define SETTING_INPUT_PUT_BUCKET_POLICY_STATEMENT_FLAG 0x1
@@ -207,145 +222,141 @@
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
 
-// Specified the Expires response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG 0x1
-
 // Specified the Cache-Control response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG 0x2
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG 0x1
 
-// Specified the Content-Type response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG 0x4
+// Specified the Content-Disposition response header'flag
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG 0x2
+
+// Specified the Content-Encoding response header'flag
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG 0x4
 
 // Specified the Content-Language response header'flag
 #define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG 0x8
 
-// Specified the Content-Encoding response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG 0x10
+// Specified the Content-Type response header'flag
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG 0x10
 
-// Specified the Content-Disposition response header'flag
-#define SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG 0x20
+// Specified the Expires response header'flag
+#define SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG 0x20
 
 // Check whether the ETag matches'flag
 #define SETTING_INPUT_GET_OBJECT_IF_MATCH_FLAG 0x40
 
+// Check whether the object has been modified'flag
+#define SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG 0x80
+
 // Check whether the ETag does not match'flag
-#define SETTING_INPUT_GET_OBJECT_IF_NONE_MATCH_FLAG 0x80
+#define SETTING_INPUT_GET_OBJECT_IF_NONE_MATCH_FLAG 0x100
 
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x100
-
-// Encryption key of the object'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x200
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x400
+// Check whether the object has not been modified'flag
+#define SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x200
 
 // Specified range of the object'flag
-#define SETTING_INPUT_GET_OBJECT_RANGE_FLAG 0x800
-
-// Check whether the object has been modified'flag
-#define SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG 0x1000
-
-// Check whether the object has not been modified'flag
-#define SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x2000
-
-// Object content length'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LENGTH_FLAG 0x1
-
-// The Content-Language entity header is used to describe the language(s) intended for the audience.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LANGUAGE_FLAG 0x2
-
-// The Content-Type entity header is used to indicate the media type of the resource.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_TYPE_FLAG 0x4
-
-// MD5sum of the object'flag
-#define SETTING_OUTPUT_GET_OBJECT_ETAG_FLAG 0x8
-
-// The Expires header contains the date/time after which the response is considered stale.'flag
-#define SETTING_OUTPUT_GET_OBJECT_EXPIRES_FLAG 0x10
-
-// The Content-Encoding entity header is used to compress the media-type.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_ENCODING_FLAG 0x20
-
-// In a multipart/form-data body, the HTTP Content-Disposition general header is a header that can be used on the subpart of a multipart body to give information about the field it applies to.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_DISPOSITION_FLAG 0x40
+#define SETTING_INPUT_GET_OBJECT_RANGE_FLAG 0x400
 
 // Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x80
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x800
 
-#define SETTING_OUTPUT_GET_OBJECT_LAST_MODIFIED_FLAG 0x100
+// Encryption key of the object'flag
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x1000
 
-// Storage class of the object'flag
-#define SETTING_OUTPUT_GET_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x200
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x2000
 
 // The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.'flag
-#define SETTING_OUTPUT_GET_OBJECT_CACHE_CONTROL_FLAG 0x400
+#define SETTING_OUTPUT_GET_OBJECT_CACHE_CONTROL_FLAG 0x1
+
+// In a multipart/form-data body, the HTTP Content-Disposition general header is a header that can be used on the subpart of a multipart body to give information about the field it applies to.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_DISPOSITION_FLAG 0x2
+
+// The Content-Encoding entity header is used to compress the media-type.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_ENCODING_FLAG 0x4
+
+// The Content-Language entity header is used to describe the language(s) intended for the audience.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LANGUAGE_FLAG 0x8
+
+// Object content length'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_LENGTH_FLAG 0x10
 
 // Range of response data content'flag
-#define SETTING_OUTPUT_GET_OBJECT_CONTENT_RANGE_FLAG 0x800
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_RANGE_FLAG 0x20
 
-#define SETTING_OUTPUT_GET_OBJECT_X_QS_METADATA_FLAG 0x1000
+// The Content-Type entity header is used to indicate the media type of the resource.'flag
+#define SETTING_OUTPUT_GET_OBJECT_CONTENT_TYPE_FLAG 0x40
 
-// Check whether the object has not been modified'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x1
+// MD5sum of the object'flag
+#define SETTING_OUTPUT_GET_OBJECT_ETAG_FLAG 0x80
+
+// The Expires header contains the date/time after which the response is considered stale.'flag
+#define SETTING_OUTPUT_GET_OBJECT_EXPIRES_FLAG 0x100
+
+#define SETTING_OUTPUT_GET_OBJECT_LAST_MODIFIED_FLAG 0x200
+
+// Encryption algorithm of the object'flag
+#define SETTING_OUTPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x400
+
+// Storage class of the object'flag
+#define SETTING_OUTPUT_GET_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x800
 
 // Check whether the ETag matches'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_MATCH_FLAG 0x2
+#define SETTING_INPUT_HEAD_OBJECT_IF_MATCH_FLAG 0x1
+
+// Check whether the object has been modified'flag
+#define SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG 0x2
 
 // Check whether the ETag does not match'flag
 #define SETTING_INPUT_HEAD_OBJECT_IF_NONE_MATCH_FLAG 0x4
 
+// Check whether the object has not been modified'flag
+#define SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG 0x8
+
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x8
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x10
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x10
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x20
 
 // MD5sum of encryption key'flag
-#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x20
-
-// Check whether the object has been modified'flag
-#define SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG 0x40
-
-// Storage class of the object'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x1
+#define SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x40
 
 // Object content length'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_LENGTH_FLAG 0x2
+#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_LENGTH_FLAG 0x1
 
 // Object content type'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_TYPE_FLAG 0x4
+#define SETTING_OUTPUT_HEAD_OBJECT_CONTENT_TYPE_FLAG 0x2
 
 // MD5sum of the object'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_ETAG_FLAG 0x8
+#define SETTING_OUTPUT_HEAD_OBJECT_ETAG_FLAG 0x4
 
-#define SETTING_OUTPUT_HEAD_OBJECT_LAST_MODIFIED_FLAG 0x10
+#define SETTING_OUTPUT_HEAD_OBJECT_LAST_MODIFIED_FLAG 0x8
 
 // Encryption algorithm of the object'flag
-#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x20
+#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x10
 
-#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_METADATA_FLAG 0x40
-
-// Specified the Content-Encoding response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG 0x1
-
-// Specified the Content-Disposition response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG 0x2
+// Storage class of the object'flag
+#define SETTING_OUTPUT_HEAD_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x20
 
 // Image process action'flag
-#define SETTING_INPUT_IMAGE_PROCESS_ACTION_FLAG 0x4
-
-// Specified the Expires response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG 0x8
+#define SETTING_INPUT_IMAGE_PROCESS_ACTION_FLAG 0x1
 
 // Specified the Cache-Control response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG 0x10
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG 0x2
+
+// Specified the Content-Disposition response header'flag
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG 0x4
+
+// Specified the Content-Encoding response header'flag
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG 0x8
+
+// Specified the Content-Language response header'flag
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG 0x10
 
 // Specified the Content-Type response header'flag
 #define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_TYPE_FLAG 0x20
 
-// Specified the Content-Language response header'flag
-#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG 0x40
+// Specified the Expires response header'flag
+#define SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG 0x40
 
 // Check whether the object has been modified'flag
 #define SETTING_INPUT_IMAGE_PROCESS_IF_MODIFIED_SINCE_FLAG 0x80
@@ -369,9 +380,6 @@
 // XQSStorageClass's available values: STANDARD, STANDARD_IA
 #define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_STORAGE_CLASS_FLAG 0x10
 
-// custom meta data'flag
-#define SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG 0x20
-
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
 
@@ -384,108 +392,108 @@
 // Object multipart upload ID'flag
 #define SETTING_OUTPUT_INITIATE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG 0x8
 
-// Object multipart upload ID'flag
-#define SETTING_INPUT_LIST_MULTIPART_UPLOAD_ID_FLAG 0x1
+// Limit results count'flag
+#define SETTING_INPUT_LIST_MULTIPART_LIMIT_FLAG 0x1
 
 // Object multipart upload part number'flag
 #define SETTING_INPUT_LIST_MULTIPART_PART_NUMBER_MARKER_FLAG 0x2
 
-// Limit results count'flag
-#define SETTING_INPUT_LIST_MULTIPART_LIMIT_FLAG 0x4
-
-// Object parts'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_OBJECT_PARTS_FLAG 0x1
+// Object multipart upload ID'flag
+#define SETTING_INPUT_LIST_MULTIPART_UPLOAD_ID_FLAG 0x4
 
 // Object multipart count'flag
-#define SETTING_OUTPUT_LIST_MULTIPART_COUNT_FLAG 0x2
+#define SETTING_OUTPUT_LIST_MULTIPART_COUNT_FLAG 0x1
+
+// Object parts'flag
+#define SETTING_OUTPUT_LIST_MULTIPART_OBJECT_PARTS_FLAG 0x2
 
 // Request headers'flag
 #define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG 0x1
 
-// Request origin'flag
-#define SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG 0x2
-
 // Request method'flag
-#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG 0x4
+#define SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG 0x2
 
-// Allowed origin'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_ORIGIN_FLAG 0x1
-
-// Expose headers'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_EXPOSE_HEADERS_FLAG 0x2
-
-// Max age'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_MAX_AGE_FLAG 0x4
+// Request origin'flag
+#define SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG 0x4
 
 // Allowed headers'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_HEADERS_FLAG 0x8
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_HEADERS_FLAG 0x1
 
 // Allowed methods'flag
-#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_METHODS_FLAG 0x10
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_METHODS_FLAG 0x2
 
-// Check whether the copy source matches'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x1
+// Allowed origin'flag
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_ORIGIN_FLAG 0x4
 
-// Check whether the copy source does not match'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x2
+// Expose headers'flag
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_EXPOSE_HEADERS_FLAG 0x8
 
-// Move source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG 0x4
+// Max age'flag
+#define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_MAX_AGE_FLAG 0x10
 
-// Check whether fetch target object has not been modified'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG 0x8
+// Object cache control'flag
+#define SETTING_INPUT_PUT_OBJECT_CACHE_CONTROL_FLAG 0x1
 
-// Specify the storage class for object'flag
-// XQSStorageClass's available values: STANDARD, STANDARD_IA
-#define SETTING_INPUT_PUT_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x10
+// Object content encoding'flag
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_ENCODING_FLAG 0x2
 
 // Object content size'flag
-#define SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG 0x20
-
-// Object content type'flag
-#define SETTING_INPUT_PUT_OBJECT_CONTENT_TYPE_FLAG 0x40
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG 0x4
 
 // Object MD5sum'flag
-#define SETTING_INPUT_PUT_OBJECT_CONTENT_MD5_FLAG 0x80
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_MD5_FLAG 0x8
+
+// Object content type'flag
+#define SETTING_INPUT_PUT_OBJECT_CONTENT_TYPE_FLAG 0x10
+
+// Used to indicate that particular server behaviors are required by the client'flag
+#define SETTING_INPUT_PUT_OBJECT_EXPECT_FLAG 0x20
 
 // Copy source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG 0x100
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG 0x40
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x200
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x80
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x400
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x100
 
 // MD5sum of encryption key'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x800
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x200
+
+// Check whether the copy source matches'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x400
 
 // Check whether the copy source has been modified'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x1000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x800
+
+// Check whether the copy source does not match'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x1000
 
 // Check whether the copy source has not been modified'flag
 #define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x2000
 
 // Encryption algorithm of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4000
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x8000
-
-// Fetch source, should be a valid url'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG 0x10000
-
-// Used to indicate that particular server behaviors are required by the client'flag
-#define SETTING_INPUT_PUT_OBJECT_EXPECT_FLAG 0x20000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4000
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x40000
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8000
 
-// custom meta data'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG 0x80000
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x10000
 
-// custom meta data directive'flag
-#define SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG 0x100000
+// Check whether fetch target object has not been modified'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG 0x20000
+
+// Fetch source, should be a valid url'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG 0x40000
+
+// Move source, format (/<bucket-name>/<object-key>)'flag
+#define SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG 0x80000
+
+// Specify the storage class for object'flag
+// XQSStorageClass's available values: STANDARD, STANDARD_IA
+#define SETTING_INPUT_PUT_OBJECT_X_QS_STORAGE_CLASS_FLAG 0x100000
 
 // MD5sum of the object'flag
 #define SETTING_OUTPUT_PUT_OBJECT_ETAG_FLAG 0x1
@@ -493,53 +501,53 @@
 // Encryption algorithm of the object'flag
 #define SETTING_OUTPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x2
 
-// Object multipart upload ID'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_UPLOAD_ID_FLAG 0x1
-
 // Object multipart upload part number'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_PART_NUMBER_FLAG 0x2
+#define SETTING_INPUT_UPLOAD_MULTIPART_PART_NUMBER_FLAG 0x1
 
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x4
-
-// Encryption key of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x10
-
-// Object multipart content MD5sum'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG 0x20
-
-// MD5sum of encryption key'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x40
-
-// Specify range of the source object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_RANGE_FLAG 0x80
-
-// Check whether the copy source has been modified since the specified date'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x100
-
-// Check whether the copy source has not been unmodified since the specified date'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x200
-
-// Encryption algorithm of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x400
+// Object multipart upload ID'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_UPLOAD_ID_FLAG 0x2
 
 // Object multipart content length'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG 0x800
+#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG 0x4
+
+// Object multipart content MD5sum'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG 0x8
+
+// Specify range of the source object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_RANGE_FLAG 0x10
 
 // Copy source, format (/<bucket-name>/<object-key>)'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG 0x1000
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG 0x20
 
-// Check whether the Etag of copy source matches the specified value'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x2000
-
-// Check whether the Etag of copy source does not matches the specified value'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x4000
+// Encryption algorithm of the object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x40
 
 // Encryption key of the object'flag
-#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x8000
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG 0x80
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x100
+
+// Check whether the Etag of copy source matches the specified value'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG 0x200
+
+// Check whether the copy source has been modified since the specified date'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG 0x400
+
+// Check whether the Etag of copy source does not matches the specified value'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG 0x800
+
+// Check whether the copy source has not been unmodified since the specified date'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG 0x1000
+
+// Encryption algorithm of the object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x2000
+
+// Encryption key of the object'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG 0x4000
+
+// MD5sum of encryption key'flag
+#define SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG 0x8000
 
 // MD5sum of the object'flag
 #define SETTING_OUTPUT_UPLOAD_MULTIPART_ETAG_FLAG 0x1
@@ -561,6 +569,10 @@ typedef QsInput DeleteBucketInput;
 typedef QsInput DeleteBucketCORSInput;
 // DeleteBucketExternalMirrorInput presents input for DeleteBucketExternalMirror.
 typedef QsInput DeleteBucketExternalMirrorInput;
+// DeleteBucketLifecycleInput presents input for DeleteBucketLifecycle.
+typedef QsInput DeleteBucketLifecycleInput;
+// DeleteBucketNotificationInput presents input for DeleteBucketNotification.
+typedef QsInput DeleteBucketNotificationInput;
 // DeleteBucketPolicyInput presents input for DeleteBucketPolicy.
 typedef QsInput DeleteBucketPolicyInput;
 // DeleteMultipleObjectsInput presents input for DeleteMultipleObjects.
@@ -652,6 +664,10 @@ typedef QsInput GetBucketACLInput;
 typedef QsInput GetBucketCORSInput;
 // GetBucketExternalMirrorInput presents input for GetBucketExternalMirror.
 typedef QsInput GetBucketExternalMirrorInput;
+// GetBucketLifecycleInput presents input for GetBucketLifecycle.
+typedef QsInput GetBucketLifecycleInput;
+// GetBucketNotificationInput presents input for GetBucketNotification.
+typedef QsInput GetBucketNotificationInput;
 // GetBucketPolicyInput presents input for GetBucketPolicy.
 typedef QsInput GetBucketPolicyInput;
 // GetBucketStatisticsInput presents input for GetBucketStatistics.
@@ -949,6 +965,95 @@ public:
 private:
     // Source site url
     std::string m_SourceSite;	// Required
+
+};
+// PutBucketLifecycleInput presents input for PutBucketLifecycle.
+class QS_SDK_API PutBucketLifecycleInput:public QsInput
+{
+public:
+    PutBucketLifecycleInput()
+    {
+    };
+
+    inline bool CheckIfInputIsVaild()
+    {
+        int tmpFlag =
+            BASIC_FLAG | SETTING_INPUT_PUT_BUCKET_LIFECYCLE_RULE_FLAG;
+        return (tmpFlag == (tmpFlag & m_settingFlag));
+    };
+    // Bucket Lifecycle rule
+#ifdef BUILD_C_STYLE_INTERFACE
+    inline void SetRule(qs_list_t * rule)
+    {
+        qs_rule_item_t *item;
+        qs_list_for_each_entry(qs_rule_item_t, item, rule)
+        {
+            m_Rule.push_back(*item->content);
+        }
+    };
+#endif							// BUILD_C_STYLE_INTERFACE
+
+    inline void SetRule(std::vector < RuleType > Rule)
+    {
+        m_settingFlag |= SETTING_INPUT_PUT_BUCKET_LIFECYCLE_RULE_FLAG;
+        m_Rule = Rule;
+    };
+
+    inline std::vector < RuleType > GetRule()
+    {
+        return m_Rule;
+    };
+
+private:
+    // Bucket Lifecycle rule
+
+    std::vector < RuleType > m_Rule;	// Required
+
+};
+// PutBucketNotificationInput presents input for PutBucketNotification.
+class QS_SDK_API PutBucketNotificationInput:public QsInput
+{
+public:
+    PutBucketNotificationInput()
+    {
+    };
+
+    inline bool CheckIfInputIsVaild()
+    {
+        int tmpFlag =
+            BASIC_FLAG |
+            SETTING_INPUT_PUT_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG;
+        return (tmpFlag == (tmpFlag & m_settingFlag));
+    };
+    // Bucket Notification
+#ifdef BUILD_C_STYLE_INTERFACE
+    inline void SetNotifications(qs_list_t * notifications)
+    {
+        qs_notification_item_t *item;
+        qs_list_for_each_entry(qs_notification_item_t, item, notifications)
+        {
+            m_Notifications.push_back(*item->content);
+        }
+    };
+#endif							// BUILD_C_STYLE_INTERFACE
+
+    inline void SetNotifications(std::vector < NotificationType >
+                                 Notifications)
+    {
+        m_settingFlag |=
+            SETTING_INPUT_PUT_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG;
+        m_Notifications = Notifications;
+    };
+
+    inline std::vector < NotificationType > GetNotifications()
+    {
+        return m_Notifications;
+    };
+
+private:
+    // Bucket Notification
+
+    std::vector < NotificationType > m_Notifications;	// Required
 
 };
 // PutBucketPolicyInput presents input for PutBucketPolicy.
@@ -1802,16 +1907,6 @@ public:
         return m_XQSStorageClass;
     };
 
-    inline std::map<std::string, std::string> GetMetadata()
-    {
-        return m_metadata;
-    };
-
-    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
-        m_settingFlag |= SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_METADATA_FLAG;
-        m_metadata = value; 
-    }
-
 private:
     // Object content type
     std::string m_ContentType;
@@ -1828,9 +1923,6 @@ private:
     // Specify the storage class for object
     // XQSStorageClass's available values: STANDARD, STANDARD_IA
     std::string m_XQSStorageClass;
-
-    // Object metadata
-    std::map<std::string, std::string> m_metadata;
 
 };
 // ListMultipartInput presents input for ListMultipart.
@@ -1980,6 +2072,30 @@ public:
         int tmpFlag =
             BASIC_FLAG | SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
+    };
+    // Object cache control
+
+    inline void SetCacheControl(std::string CacheControl)
+    {
+        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_CACHE_CONTROL_FLAG;
+        m_CacheControl = CacheControl;
+    };
+
+    inline std::string GetCacheControl()
+    {
+        return m_CacheControl;
+    };
+    // Object content encoding
+
+    inline void SetContentEncoding(std::string ContentEncoding)
+    {
+        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_CONTENT_ENCODING_FLAG;
+        m_ContentEncoding = ContentEncoding;
+    };
+
+    inline std::string GetContentEncoding()
+    {
+        return m_ContentEncoding;
     };
     // Object content size
 
@@ -2272,28 +2388,13 @@ public:
     {
         m_streambody = streambody;
     };
-
-    inline std::map<std::string, std::string> GetMetadata()
-    {
-        return m_metadata;
-    };
-
-    void SetMetadata(const std::map<std::string, std::string>& value) { 
-        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_FLAG;
-        m_metadata = value; 
-    }
-
-    inline std::string GetXQSMetadataDirective()
-    {
-        return m_XQSMetadataDirective;
-    };
-
-    void SetXQSMetadataDirective(std::string metadataDirective) { 
-        m_settingFlag |= SETTING_INPUT_PUT_OBJECT_X_QS_METADATA_DIRECTIVE_FLAG;
-        m_XQSMetadataDirective = metadataDirective; 
-    }
-
 private:
+    // Object cache control
+    std::string m_CacheControl;
+
+    // Object content encoding
+    std::string m_ContentEncoding;
+
     // Object content size
     int64_t m_ContentLength;	// Required
 
@@ -2352,11 +2453,7 @@ private:
     // XQSStorageClass's available values: STANDARD, STANDARD_IA
     std::string m_XQSStorageClass;
 
-    std::string m_XQSMetadataDirective;
-
     std::iostream * m_streambody;
-
-    std::map<std::string, std::string> m_metadata;
 };
 // UploadMultipartInput presents input for UploadMultipart.
 class QS_SDK_API UploadMultipartInput:public QsInput
@@ -2683,6 +2780,10 @@ typedef QsOutput DeleteBucketCORSOutput;
 
 typedef QsOutput DeleteBucketExternalMirrorOutput;
 
+typedef QsOutput DeleteBucketLifecycleOutput;
+
+typedef QsOutput DeleteBucketNotificationOutput;
+
 typedef QsOutput DeleteBucketPolicyOutput;
 
 // DeleteMultipleObjectsOutput presents input for DeleteMultipleObjects.
@@ -2850,6 +2951,76 @@ public:
 private:
     // Source site url
     std::string m_SourceSite;
+
+};
+
+// GetBucketLifecycleOutput presents input for GetBucketLifecycle.
+class QS_SDK_API GetBucketLifecycleOutput:public QsOutput
+{
+
+public:
+    GetBucketLifecycleOutput(QsError err,
+                             Http::
+                             HttpResponseCode responseCode):QsOutput(err,
+                                         responseCode)
+    {
+    };
+    GetBucketLifecycleOutput()
+    {
+    };
+
+    // Bucket Lifecycle rule
+    inline void SetRule(std::vector < RuleType > Rule)
+    {
+        m_settingFlag |= SETTING_OUTPUT_GET_BUCKET_LIFECYCLE_RULE_FLAG;
+        m_Rule = Rule;
+    };
+
+    inline std::vector < RuleType > GetRule()
+    {
+        return m_Rule;
+    };
+
+private:
+    // Bucket Lifecycle rule
+
+    std::vector < RuleType > m_Rule;
+
+};
+
+// GetBucketNotificationOutput presents input for GetBucketNotification.
+class QS_SDK_API GetBucketNotificationOutput:public QsOutput
+{
+
+public:
+    GetBucketNotificationOutput(QsError err,
+                                Http::
+                                HttpResponseCode responseCode):QsOutput(err,
+                                            responseCode)
+    {
+    };
+    GetBucketNotificationOutput()
+    {
+    };
+
+    // Bucket Notification
+    inline void SetNotifications(std::vector < NotificationType >
+                                 Notifications)
+    {
+        m_settingFlag |=
+            SETTING_OUTPUT_GET_BUCKET_NOTIFICATION_NOTIFICATIONS_FLAG;
+        m_Notifications = Notifications;
+    };
+
+    inline std::vector < NotificationType > GetNotifications()
+    {
+        return m_Notifications;
+    };
+
+private:
+    // Bucket Notification
+
+    std::vector < NotificationType > m_Notifications;
 
 };
 
@@ -3211,6 +3382,18 @@ public:
         return m_Delimiter;
     };
 
+    // Indicate if these are more results in the next page
+    inline void SetHasMore(bool HasMore)
+    {
+        m_settingFlag |= SETTING_OUTPUT_LIST_OBJECTS_HAS_MORE_FLAG;
+        m_HasMore = HasMore;
+    };
+
+    inline bool GetHasMore()
+    {
+        return m_HasMore;
+    };
+
     // Object keys
     inline void SetKeys(std::vector < KeyType > Keys)
     {
@@ -3303,6 +3486,9 @@ private:
     // Delimiter that specified in request parameters
     std::string m_Delimiter;
 
+    // Indicate if these are more results in the next page
+    bool m_HasMore;
+
     // Object keys
 
     std::vector < KeyType > m_Keys;
@@ -3335,6 +3521,10 @@ typedef QsOutput PutBucketACLOutput;
 typedef QsOutput PutBucketCORSOutput;
 
 typedef QsOutput PutBucketExternalMirrorOutput;
+
+typedef QsOutput PutBucketLifecycleOutput;
+
+typedef QsOutput PutBucketNotificationOutput;
 
 typedef QsOutput PutBucketPolicyOutput;
 // +--------------------------------------------------------------------
@@ -3551,16 +3741,6 @@ public:
         m_streambody = streambody;
     };
 
-    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
-        m_settingFlag |= SETTING_OUTPUT_GET_OBJECT_X_QS_METADATA_FLAG;
-        m_metadata = value; 
-    }
-
-    inline std::map<std::string, std::string> GetMetadata()
-    {
-        return m_metadata;
-    };
-
 private:
     // The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.
     std::string m_CacheControl;
@@ -3598,8 +3778,6 @@ private:
     std::string m_XQSStorageClass;
 
     std::iostream * m_streambody;
-
-    std::map<std::string, std::string> m_metadata;
 
 };
 
@@ -3691,16 +3869,6 @@ public:
         return m_XQSStorageClass;
     };
 
-    inline std::map<std::string, std::string> GetMetadata()
-    {
-        return m_metadata;
-    };
-
-    inline void SetMetadata(const std::map<std::string, std::string>& value) { 
-        m_settingFlag |= SETTING_OUTPUT_HEAD_OBJECT_X_QS_METADATA_FLAG;
-        m_metadata = value; 
-    }
-
 private:
     // Object content length
     int64_t m_ContentLength;
@@ -3719,7 +3887,6 @@ private:
     // Storage class of the object
     std::string m_XQSStorageClass;
 
-    std::map<std::string, std::string> m_metadata;
 };
 
 // ImageProcessOutput presents input for ImageProcess.
@@ -4147,6 +4314,17 @@ public:
                                        DeleteBucketExternalMirrorOutput &
                                        output);
 
+    // DeleteLifecycle does Delete Lifecycle information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/delete_lifecycle.html
+    QsError DeleteBucketLifecycle(DeleteBucketLifecycleInput & input,
+                                  DeleteBucketLifecycleOutput & output);
+
+    // DeleteNotification does Delete Notification information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/delete_notification.html
+    QsError DeleteBucketNotification(DeleteBucketNotificationInput & input,
+                                     DeleteBucketNotificationOutput &
+                                     output);
+
     // DeletePolicy does Delete policy information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/delete_policy.html
     QsError DeleteBucketPolicy(DeleteBucketPolicyInput & input,
@@ -4171,6 +4349,16 @@ public:
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/get_external_mirror.html
     QsError GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
                                     GetBucketExternalMirrorOutput & output);
+
+    // GetLifecycle does Get Lifecycle information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/get_lifecycle.html
+    QsError GetBucketLifecycle(GetBucketLifecycleInput & input,
+                               GetBucketLifecycleOutput & output);
+
+    // GetNotification does Get Notification information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/get_notification.html
+    QsError GetBucketNotification(GetBucketNotificationInput & input,
+                                  GetBucketNotificationOutput & output);
 
     // GetPolicy does Get policy information of the bucket.
     // Documentation URL: https://https://docs.qingcloud.com/qingstor/api/bucket/policy/get_policy.html
@@ -4214,6 +4402,16 @@ public:
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/put_external_mirror.html
     QsError PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
                                     PutBucketExternalMirrorOutput & output);
+
+    // PutLifecycle does Set Lifecycle information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/put_lifecycle.html
+    QsError PutBucketLifecycle(PutBucketLifecycleInput & input,
+                               PutBucketLifecycleOutput & output);
+
+    // PutNotification does Set Notification information of the bucket.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/put_notification.html
+    QsError PutBucketNotification(PutBucketNotificationInput & input,
+                                  PutBucketNotificationOutput & output);
 
     // PutPolicy does Set policy information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/put_policy.html
@@ -4279,10 +4477,6 @@ public:
                             UploadMultipartInput & input,
                             UploadMultipartOutput & output);
 
-    // When you are in conflict with the GetObjet macro on the windows platform,
-    // use method 'GetObjectSync' instead of 'GetObject'.
-    QsError GetObjectSync(std::string objectKey, GetObjectInput & input,
-                          GetObjectOutput & output);
 private:
     QsConfig m_qsConfig;
     Properties m_properties;

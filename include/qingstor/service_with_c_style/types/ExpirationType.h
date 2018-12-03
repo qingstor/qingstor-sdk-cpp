@@ -17,7 +17,6 @@
 
 #include "../QsList.h"
 // Headers of CustomizedType.
-#include "GranteeType.h"
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -25,27 +24,26 @@ extern "C" {
 typedef struct
 {
 
-    qs_grantee_t *grantee;	// Required
-    //Permission for this grantee//permission's available values: READ, WRITE, FULL_CONTROL
-    char *permission;		// Required
+    //days
+    int *days;
 
     int setting_flag;
-} qs_acl_t;
+} qs_expiration_t;
 
 typedef struct
 {
 
     qs_list_t node;
 
-    qs_acl_t *content;
+    qs_expiration_t *content;
 
-} qs_acl_item_t;
+} qs_expiration_item_t;
 
-// acl init function.
-QS_SDK_API void init_acl(qs_acl_t * input);
+// expiration init function.
+QS_SDK_API void init_expiration(qs_expiration_t * input);
 
-// acl release function.
-QS_SDK_API void release_acl(qs_acl_t * output);
+// expiration release function.
+QS_SDK_API void release_expiration(qs_expiration_t * output);
 
 #ifdef  __cplusplus
 };

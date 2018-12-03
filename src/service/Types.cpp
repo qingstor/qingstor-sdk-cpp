@@ -24,6 +24,57 @@
 #include <memory>
 
 #ifdef BUILD_C_STYLE_INTERFACE
+AbortIncompleteMultipartUploadType::
+AbortIncompleteMultipartUploadType(qs_abort_incomplete_multipart_upload_t
+                                   abort_incomplete_multipart_upload)
+{
+    if (abort_incomplete_multipart_upload.days_after_initiation)
+        SetDaysAfterInitiation(*abort_incomplete_multipart_upload.
+                               days_after_initiation);
+}
+
+qs_abort_incomplete_multipart_upload_t *AbortIncompleteMultipartUploadType::
+toCStyleObj()
+{
+    qs_abort_incomplete_multipart_upload_t *abort_incomplete_multipart_upload =
+        (qs_abort_incomplete_multipart_upload_t *)
+        malloc(sizeof(qs_abort_incomplete_multipart_upload_t));
+    abort_incomplete_multipart_upload->days_after_initiation =
+        (int *) malloc(sizeof(int));
+    *abort_incomplete_multipart_upload->days_after_initiation =
+        GetDaysAfterInitiation();
+    return abort_incomplete_multipart_upload;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+AbortIncompleteMultipartUploadType::AbortIncompleteMultipartUploadType(std::
+        string
+        serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("days_after_initiation"))
+    {
+        SetDaysAfterInitiation(jsonContent["days_after_initiation"].asInt());
+    }
+}
+
+std::string AbortIncompleteMultipartUploadType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag &
+            SETTING_ABORT_INCOMPLETE_MULTIPART_UPLOAD_DAYS_AFTER_INITIATION_FLAG)
+    {
+        jsonContent["days_after_initiation"] = m_DaysAfterInitiation;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
 ACLType::ACLType(qs_acl_t acl)
 {
     if (acl.grantee)
@@ -199,6 +250,126 @@ std::string BucketType::Serialize()
     if (m_settingFlag & SETTING_BUCKET_URL_FLAG)
     {
         jsonContent["url"] = m_URL;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+CloudfuncArgsType::CloudfuncArgsType(qs_cloudfunc_args_t cloudfunc_args)
+{
+    if (cloudfunc_args.action)
+        SetAction(cloudfunc_args.action);
+    if (cloudfunc_args.key_prefix)
+        SetKeyPrefix(cloudfunc_args.key_prefix);
+    if (cloudfunc_args.key_seprate)
+        SetKeySeprate(cloudfunc_args.key_seprate);
+    if (cloudfunc_args.save_bucket)
+        SetSaveBucket(cloudfunc_args.save_bucket);
+}
+
+qs_cloudfunc_args_t *CloudfuncArgsType::toCStyleObj()
+{
+    qs_cloudfunc_args_t *cloudfunc_args =
+        (qs_cloudfunc_args_t *) malloc(sizeof(qs_cloudfunc_args_t));
+    int actionLength = 0;
+    actionLength = GetAction().length();
+    if (actionLength > 0)
+    {
+        cloudfunc_args->action = (char *) malloc(actionLength + 1);
+        memset(cloudfunc_args->action, 0, actionLength + 1);
+        strncpy(cloudfunc_args->action, GetAction().c_str(), actionLength);
+    }
+    else
+    {
+        cloudfunc_args->action = NULL;
+    }
+    int keyPrefixLength = 0;
+    keyPrefixLength = GetKeyPrefix().length();
+    if (keyPrefixLength > 0)
+    {
+        cloudfunc_args->key_prefix = (char *) malloc(keyPrefixLength + 1);
+        memset(cloudfunc_args->key_prefix, 0, keyPrefixLength + 1);
+        strncpy(cloudfunc_args->key_prefix, GetKeyPrefix().c_str(),
+                keyPrefixLength);
+    }
+    else
+    {
+        cloudfunc_args->key_prefix = NULL;
+    }
+    int keySeprateLength = 0;
+    keySeprateLength = GetKeySeprate().length();
+    if (keySeprateLength > 0)
+    {
+        cloudfunc_args->key_seprate = (char *) malloc(keySeprateLength + 1);
+        memset(cloudfunc_args->key_seprate, 0, keySeprateLength + 1);
+        strncpy(cloudfunc_args->key_seprate, GetKeySeprate().c_str(),
+                keySeprateLength);
+    }
+    else
+    {
+        cloudfunc_args->key_seprate = NULL;
+    }
+    int saveBucketLength = 0;
+    saveBucketLength = GetSaveBucket().length();
+    if (saveBucketLength > 0)
+    {
+        cloudfunc_args->save_bucket = (char *) malloc(saveBucketLength + 1);
+        memset(cloudfunc_args->save_bucket, 0, saveBucketLength + 1);
+        strncpy(cloudfunc_args->save_bucket, GetSaveBucket().c_str(),
+                saveBucketLength);
+    }
+    else
+    {
+        cloudfunc_args->save_bucket = NULL;
+    }
+    return cloudfunc_args;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+CloudfuncArgsType::CloudfuncArgsType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("action"))
+    {
+        SetAction(jsonContent["action"].asString());
+    }
+    if (jsonContent.isMember("key_prefix"))
+    {
+        SetKeyPrefix(jsonContent["key_prefix"].asString());
+    }
+    if (jsonContent.isMember("key_seprate"))
+    {
+        SetKeySeprate(jsonContent["key_seprate"].asString());
+    }
+    if (jsonContent.isMember("save_bucket"))
+    {
+        SetSaveBucket(jsonContent["save_bucket"].asString());
+    }
+}
+
+std::string CloudfuncArgsType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_CLOUDFUNC_ARGS_ACTION_FLAG)
+    {
+        jsonContent["action"] = m_Action;
+    }
+    if (m_settingFlag & SETTING_CLOUDFUNC_ARGS_KEY_PREFIX_FLAG)
+    {
+        jsonContent["key_prefix"] = m_KeyPrefix;
+    }
+    if (m_settingFlag & SETTING_CLOUDFUNC_ARGS_KEY_SEPRATE_FLAG)
+    {
+        jsonContent["key_seprate"] = m_KeySeprate;
+    }
+    if (m_settingFlag & SETTING_CLOUDFUNC_ARGS_SAVE_BUCKET_FLAG)
+    {
+        jsonContent["save_bucket"] = m_SaveBucket;
     }
     return jsonWriter.write(jsonContent);
 }
@@ -505,6 +676,97 @@ std::string CORSRuleType::Serialize()
 }
 
 #ifdef BUILD_C_STYLE_INTERFACE
+ExpirationType::ExpirationType(qs_expiration_t expiration)
+{
+    if (expiration.days)
+        SetDays(*expiration.days);
+}
+
+qs_expiration_t *ExpirationType::toCStyleObj()
+{
+    qs_expiration_t *expiration =
+        (qs_expiration_t *) malloc(sizeof(qs_expiration_t));
+    expiration->days = (int *) malloc(sizeof(int));
+    *expiration->days = GetDays();
+    return expiration;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+ExpirationType::ExpirationType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("days"))
+    {
+        SetDays(jsonContent["days"].asInt());
+    }
+}
+
+std::string ExpirationType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_EXPIRATION_DAYS_FLAG)
+    {
+        jsonContent["days"] = m_Days;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+FilterType::FilterType(qs_filter_t filter)
+{
+    if (filter.prefix)
+        SetPrefix(filter.prefix);
+}
+
+qs_filter_t *FilterType::toCStyleObj()
+{
+    qs_filter_t *filter = (qs_filter_t *) malloc(sizeof(qs_filter_t));
+    int prefixLength = 0;
+    prefixLength = GetPrefix().length();
+    if (prefixLength > 0)
+    {
+        filter->prefix = (char *) malloc(prefixLength + 1);
+        memset(filter->prefix, 0, prefixLength + 1);
+        strncpy(filter->prefix, GetPrefix().c_str(), prefixLength);
+    }
+    else
+    {
+        filter->prefix = NULL;
+    }
+    return filter;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+FilterType::FilterType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("prefix"))
+    {
+        SetPrefix(jsonContent["prefix"].asString());
+    }
+}
+
+std::string FilterType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_FILTER_PREFIX_FLAG)
+    {
+        jsonContent["prefix"] = m_Prefix;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
 GranteeType::GranteeType(qs_grantee_t grantee)
 {
     if (grantee.id)
@@ -682,8 +944,8 @@ IsNullType::IsNullType(qs_is_null_t is_null)
 qs_is_null_t *IsNullType::toCStyleObj()
 {
     qs_is_null_t *is_null = (qs_is_null_t *) malloc(sizeof(qs_is_null_t));
-    is_null->referer = (int *) malloc(sizeof(int));
-    *is_null->referer = (int) GetReferer();
+    is_null->referer = (bool *) malloc(sizeof(bool));
+    *is_null->referer = GetReferer();
     return is_null;
 }
 
@@ -746,8 +1008,8 @@ qs_key_t *KeyType::toCStyleObj()
     {
         key->created = NULL;
     }
-    key->encrypted = (int *) malloc(sizeof(int));
-    *key->encrypted = (int) GetEncrypted();
+    key->encrypted = (bool *) malloc(sizeof(bool));
+    *key->encrypted = GetEncrypted();
     int etagLength = 0;
     etagLength = GetEtag().length();
     if (etagLength > 0)
@@ -1034,6 +1296,208 @@ std::string NotIPAddressType::Serialize()
 }
 
 #ifdef BUILD_C_STYLE_INTERFACE
+NotificationType::NotificationType(qs_notification_t notification)
+{
+    if (notification.cloudfunc)
+        SetCloudfunc(notification.cloudfunc);
+    if (notification.cloudfunc_args)
+        SetCloudfuncArgs(*notification.cloudfunc_args);
+    if (notification.event_types)
+        SetEventTypes(notification.event_types);
+    if (notification.id)
+        SetID(notification.id);
+    if (notification.notify_url)
+        SetNotifyURL(notification.notify_url);
+    if (notification.object_filters)
+        SetObjectFilters(notification.object_filters);
+}
+
+qs_notification_t *NotificationType::toCStyleObj()
+{
+    qs_notification_t *notification =
+        (qs_notification_t *) malloc(sizeof(qs_notification_t));
+    int cloudfuncLength = 0;
+    cloudfuncLength = GetCloudfunc().length();
+    if (cloudfuncLength > 0)
+    {
+        notification->cloudfunc = (char *) malloc(cloudfuncLength + 1);
+        memset(notification->cloudfunc, 0, cloudfuncLength + 1);
+        strncpy(notification->cloudfunc, GetCloudfunc().c_str(),
+                cloudfuncLength);
+    }
+    else
+    {
+        notification->cloudfunc = NULL;
+    }
+    notification->cloudfunc_args = GetCloudfuncArgs().toCStyleObj();
+    qs_list_t *list_event_types = (qs_list_t *) malloc(sizeof(qs_list_t));
+    qs_list_init(list_event_types);
+    std::vector < std::string > eventTypes = GetEventTypes();
+    for (std::vector < std::string >::iterator it = eventTypes.begin();
+            it != eventTypes.end(); it++)
+    {
+        qs_notification_event_types_item_t *item =
+            (qs_notification_event_types_item_t *)
+            malloc(sizeof(qs_notification_event_types_item_t));
+        int eventTypesLength = it->length();
+        if (eventTypesLength > 0)
+        {
+            item->content = (char *) malloc(eventTypesLength + 1);
+            memset(item->content, 0, eventTypesLength + 1);
+            strncpy(item->content, it->c_str(), eventTypesLength);
+        }
+        else
+        {
+            item->content = NULL;
+        }
+        qs_list_append(&item->node, list_event_types);
+    }
+    notification->event_types = list_event_types;
+    int idLength = 0;
+    idLength = GetID().length();
+    if (idLength > 0)
+    {
+        notification->id = (char *) malloc(idLength + 1);
+        memset(notification->id, 0, idLength + 1);
+        strncpy(notification->id, GetID().c_str(), idLength);
+    }
+    else
+    {
+        notification->id = NULL;
+    }
+    int notifyURLLength = 0;
+    notifyURLLength = GetNotifyURL().length();
+    if (notifyURLLength > 0)
+    {
+        notification->notify_url = (char *) malloc(notifyURLLength + 1);
+        memset(notification->notify_url, 0, notifyURLLength + 1);
+        strncpy(notification->notify_url, GetNotifyURL().c_str(),
+                notifyURLLength);
+    }
+    else
+    {
+        notification->notify_url = NULL;
+    }
+    qs_list_t *list_object_filters = (qs_list_t *) malloc(sizeof(qs_list_t));
+    qs_list_init(list_object_filters);
+    std::vector < std::string > objectFilters = GetObjectFilters();
+    for (std::vector < std::string >::iterator it = objectFilters.begin();
+            it != objectFilters.end(); it++)
+    {
+        qs_notification_object_filters_item_t *item =
+            (qs_notification_object_filters_item_t *)
+            malloc(sizeof(qs_notification_object_filters_item_t));
+        int objectFiltersLength = it->length();
+        if (objectFiltersLength > 0)
+        {
+            item->content = (char *) malloc(objectFiltersLength + 1);
+            memset(item->content, 0, objectFiltersLength + 1);
+            strncpy(item->content, it->c_str(), objectFiltersLength);
+        }
+        else
+        {
+            item->content = NULL;
+        }
+        qs_list_append(&item->node, list_object_filters);
+    }
+    notification->object_filters = list_object_filters;
+    return notification;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+NotificationType::NotificationType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("cloudfunc"))
+    {
+        SetCloudfunc(jsonContent["cloudfunc"].asString());
+    }
+    if (jsonContent.isMember("cloudfunc_args"))
+    {
+        SetCloudfuncArgs(jsonContent["cloudfunc_args"].toStyledString());
+    }
+    if (jsonContent.isMember("event_types"))
+    {
+        std::vector < std::string > vecEventTypes;
+        for (unsigned i = 0; i < jsonContent["event_types"].size(); ++i)
+        {
+            vecEventTypes.push_back(jsonContent["event_types"][i].asString());
+        }
+        SetEventTypes(vecEventTypes);
+    }
+    if (jsonContent.isMember("id"))
+    {
+        SetID(jsonContent["id"].asString());
+    }
+    if (jsonContent.isMember("notify_url"))
+    {
+        SetNotifyURL(jsonContent["notify_url"].asString());
+    }
+    if (jsonContent.isMember("object_filters"))
+    {
+        std::vector < std::string > vecObjectFilters;
+        for (unsigned i = 0; i < jsonContent["object_filters"].size(); ++i)
+        {
+            vecObjectFilters.push_back(jsonContent["object_filters"][i].
+                                       asString());
+        }
+        SetObjectFilters(vecObjectFilters);
+    }
+}
+
+std::string NotificationType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_NOTIFICATION_CLOUDFUNC_FLAG)
+    {
+        jsonContent["cloudfunc"] = m_Cloudfunc;
+    }
+    if (m_settingFlag & SETTING_NOTIFICATION_CLOUDFUNC_ARGS_FLAG)
+    {
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_CloudfuncArgs.Serialize(), itemJsonValue);
+        jsonContent["cloudfunc_args"] = itemJsonValue;
+    }
+    if (m_settingFlag & SETTING_NOTIFICATION_EVENT_TYPES_FLAG)
+    {
+        Json::Value arrayEventTypes;
+        std::vector < std::string > eventTypes = m_EventTypes;
+        for (std::vector < std::string >::iterator it = eventTypes.begin();
+                it != eventTypes.end(); it++)
+        {
+            arrayEventTypes.append(*it);
+        }
+        jsonContent["event_types"] = arrayEventTypes;
+    }
+    if (m_settingFlag & SETTING_NOTIFICATION_ID_FLAG)
+    {
+        jsonContent["id"] = m_ID;
+    }
+    if (m_settingFlag & SETTING_NOTIFICATION_NOTIFY_URL_FLAG)
+    {
+        jsonContent["notify_url"] = m_NotifyURL;
+    }
+    if (m_settingFlag & SETTING_NOTIFICATION_OBJECT_FILTERS_FLAG)
+    {
+        Json::Value arrayObjectFilters;
+        std::vector < std::string > objectFilters = m_ObjectFilters;
+        for (std::vector < std::string >::iterator it = objectFilters.begin();
+                it != objectFilters.end(); it++)
+        {
+            arrayObjectFilters.append(*it);
+        }
+        jsonContent["object_filters"] = arrayObjectFilters;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
 ObjectPartType::ObjectPartType(qs_object_part_t object_part)
 {
     if (object_part.created)
@@ -1198,6 +1662,139 @@ std::string OwnerType::Serialize()
     if (m_settingFlag & SETTING_OWNER_NAME_FLAG)
     {
         jsonContent["name"] = m_Name;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+RuleType::RuleType(qs_rule_t rule)
+{
+    if (rule.abort_incomplete_multipart_upload)
+        SetAbortIncompleteMultipartUpload(*rule.
+                                          abort_incomplete_multipart_upload);
+    if (rule.expiration)
+        SetExpiration(*rule.expiration);
+    if (rule.filter)
+        SetFilter(*rule.filter);
+    if (rule.id)
+        SetID(rule.id);
+    if (rule.status)
+        SetStatus(rule.status);
+    if (rule.transition)
+        SetTransition(*rule.transition);
+}
+
+qs_rule_t *RuleType::toCStyleObj()
+{
+    qs_rule_t *rule = (qs_rule_t *) malloc(sizeof(qs_rule_t));
+    rule->abort_incomplete_multipart_upload =
+        GetAbortIncompleteMultipartUpload().toCStyleObj();
+    rule->expiration = GetExpiration().toCStyleObj();
+    rule->filter = GetFilter().toCStyleObj();
+    int idLength = 0;
+    idLength = GetID().length();
+    if (idLength > 0)
+    {
+        rule->id = (char *) malloc(idLength + 1);
+        memset(rule->id, 0, idLength + 1);
+        strncpy(rule->id, GetID().c_str(), idLength);
+    }
+    else
+    {
+        rule->id = NULL;
+    }
+    int statusLength = 0;
+    statusLength = GetStatus().length();
+    if (statusLength > 0)
+    {
+        rule->status = (char *) malloc(statusLength + 1);
+        memset(rule->status, 0, statusLength + 1);
+        strncpy(rule->status, GetStatus().c_str(), statusLength);
+    }
+    else
+    {
+        rule->status = NULL;
+    }
+    rule->transition = GetTransition().toCStyleObj();
+    return rule;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+RuleType::RuleType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("abort_incomplete_multipart_upload"))
+    {
+        SetAbortIncompleteMultipartUpload(jsonContent
+                                          ["abort_incomplete_multipart_upload"].
+                                          toStyledString());
+    }
+    if (jsonContent.isMember("expiration"))
+    {
+        SetExpiration(jsonContent["expiration"].toStyledString());
+    }
+    if (jsonContent.isMember("filter"))
+    {
+        SetFilter(jsonContent["filter"].toStyledString());
+    }
+    if (jsonContent.isMember("id"))
+    {
+        SetID(jsonContent["id"].asString());
+    }
+    if (jsonContent.isMember("status"))
+    {
+        SetStatus(jsonContent["status"].asString());
+    }
+    if (jsonContent.isMember("transition"))
+    {
+        SetTransition(jsonContent["transition"].toStyledString());
+    }
+}
+
+std::string RuleType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_RULE_ABORT_INCOMPLETE_MULTIPART_UPLOAD_FLAG)
+    {
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_AbortIncompleteMultipartUpload.Serialize(),
+                         itemJsonValue);
+        jsonContent["abort_incomplete_multipart_upload"] = itemJsonValue;
+    }
+    if (m_settingFlag & SETTING_RULE_EXPIRATION_FLAG)
+    {
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_Expiration.Serialize(), itemJsonValue);
+        jsonContent["expiration"] = itemJsonValue;
+    }
+    if (m_settingFlag & SETTING_RULE_FILTER_FLAG)
+    {
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_Filter.Serialize(), itemJsonValue);
+        jsonContent["filter"] = itemJsonValue;
+    }
+    if (m_settingFlag & SETTING_RULE_ID_FLAG)
+    {
+        jsonContent["id"] = m_ID;
+    }
+    if (m_settingFlag & SETTING_RULE_STATUS_FLAG)
+    {
+        jsonContent["status"] = m_Status;
+    }
+    if (m_settingFlag & SETTING_RULE_TRANSITION_FLAG)
+    {
+        Json::Reader jsonReader;
+        Json::Value itemJsonValue;
+        jsonReader.parse(m_Transition.Serialize(), itemJsonValue);
+        jsonContent["transition"] = itemJsonValue;
     }
     return jsonWriter.write(jsonContent);
 }
@@ -1568,6 +2165,59 @@ std::string StringNotLikeType::Serialize()
             arrayReferer.append(*it);
         }
         jsonContent["Referer"] = arrayReferer;
+    }
+    return jsonWriter.write(jsonContent);
+}
+
+#ifdef BUILD_C_STYLE_INTERFACE
+TransitionType::TransitionType(qs_transition_t transition)
+{
+    if (transition.days)
+        SetDays(*transition.days);
+    if (transition.storage_class)
+        SetStorageClass(*transition.storage_class);
+}
+
+qs_transition_t *TransitionType::toCStyleObj()
+{
+    qs_transition_t *transition =
+        (qs_transition_t *) malloc(sizeof(qs_transition_t));
+    transition->days = (int *) malloc(sizeof(int));
+    *transition->days = GetDays();
+    transition->storage_class = (int *) malloc(sizeof(int));
+    *transition->storage_class = GetStorageClass();
+    return transition;
+}
+
+#endif							// BUILD_C_STYLE_INTERFACE
+
+TransitionType::TransitionType(std::string serializedString)
+{
+    // parse json content
+    Json::Reader jsonReader;
+    Json::Value jsonContent;
+    jsonReader.parse(serializedString, jsonContent);
+    if (jsonContent.isMember("days"))
+    {
+        SetDays(jsonContent["days"].asInt());
+    }
+    if (jsonContent.isMember("storage_class"))
+    {
+        SetStorageClass(jsonContent["storage_class"].asInt());
+    }
+}
+
+std::string TransitionType::Serialize()
+{
+    Json::Value jsonContent;
+    Json::FastWriter jsonWriter;
+    if (m_settingFlag & SETTING_TRANSITION_DAYS_FLAG)
+    {
+        jsonContent["days"] = m_Days;
+    }
+    if (m_settingFlag & SETTING_TRANSITION_STORAGE_CLASS_FLAG)
+    {
+        jsonContent["storage_class"] = m_StorageClass;
     }
     return jsonWriter.write(jsonContent);
 }

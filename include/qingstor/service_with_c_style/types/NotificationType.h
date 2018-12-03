@@ -17,7 +17,7 @@
 
 #include "../QsList.h"
 // Headers of CustomizedType.
-#include "GranteeType.h"
+#include "CloudfuncArgsType.h"
 #ifdef  __cplusplus
 extern "C" {
 #endif
@@ -25,27 +25,54 @@ extern "C" {
 typedef struct
 {
 
-    qs_grantee_t *grantee;	// Required
-    //Permission for this grantee//permission's available values: READ, WRITE, FULL_CONTROL
-    char *permission;		// Required
+    //Event processing service//cloudfunc's available values: tupu-porn, notifier, image
+    char *cloudfunc;		// Required
+
+    qs_cloudfunc_args_t *cloudfunc_args;
+    //event types
+
+    qs_list_t *event_types;	// Required
+    //notification id
+    char *id;				// Required
+    //notify url
+    char *notify_url;
+    //Object name matching rule
+
+    qs_list_t *object_filters;
 
     int setting_flag;
-} qs_acl_t;
+} qs_notification_t;
 
 typedef struct
 {
 
     qs_list_t node;
 
-    qs_acl_t *content;
+    qs_notification_t *content;
 
-} qs_acl_item_t;
+} qs_notification_item_t;
 
-// acl init function.
-QS_SDK_API void init_acl(qs_acl_t * input);
+typedef struct
+{
+    qs_list_t node;
 
-// acl release function.
-QS_SDK_API void release_acl(qs_acl_t * output);
+    char *content;
+
+} qs_notification_event_types_item_t;
+
+typedef struct
+{
+    qs_list_t node;
+
+    char *content;
+
+} qs_notification_object_filters_item_t;
+
+// notification init function.
+QS_SDK_API void init_notification(qs_notification_t * input);
+
+// notification release function.
+QS_SDK_API void release_notification(qs_notification_t * output);
 
 #ifdef  __cplusplus
 };

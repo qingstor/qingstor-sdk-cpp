@@ -17,6 +17,25 @@
 // Headers of CustomizedType.
 #include "service_with_c_style/Types.h"
 
+// abort_incomplete_multipart_upload init function.
+void
+init_abort_incomplete_multipart_upload(qs_abort_incomplete_multipart_upload_t *
+                                       content)
+{
+    content->days_after_initiation = NULL;
+}
+
+// abort_incomplete_multipart_upload release function.
+void
+release_abort_incomplete_multipart_upload(qs_abort_incomplete_multipart_upload_t
+        * content)
+{
+    if (content->days_after_initiation)
+    {
+        free(content->days_after_initiation);
+    }
+}
+
 // acl init function.
 void init_acl(qs_acl_t * content)
 {
@@ -65,6 +84,36 @@ void release_bucket(qs_bucket_t * content)
     if (content->url)
     {
         free(content->url);
+    }
+}
+
+// cloudfunc_args init function.
+void init_cloudfunc_args(qs_cloudfunc_args_t * content)
+{
+    content->action = NULL;
+    content->key_prefix = NULL;
+    content->key_seprate = NULL;
+    content->save_bucket = NULL;
+}
+
+// cloudfunc_args release function.
+void release_cloudfunc_args(qs_cloudfunc_args_t * content)
+{
+    if (content->action)
+    {
+        free(content->action);
+    }
+    if (content->key_prefix)
+    {
+        free(content->key_prefix);
+    }
+    if (content->key_seprate)
+    {
+        free(content->key_seprate);
+    }
+    if (content->save_bucket)
+    {
+        free(content->save_bucket);
     }
 }
 
@@ -185,6 +234,36 @@ void release_cors_rule(qs_cors_rule_t * content)
     if (content->max_age_seconds)
     {
         free(content->max_age_seconds);
+    }
+}
+
+// expiration init function.
+void init_expiration(qs_expiration_t * content)
+{
+    content->days = NULL;
+}
+
+// expiration release function.
+void release_expiration(qs_expiration_t * content)
+{
+    if (content->days)
+    {
+        free(content->days);
+    }
+}
+
+// filter init function.
+void init_filter(qs_filter_t * content)
+{
+    content->prefix = NULL;
+}
+
+// filter release function.
+void release_filter(qs_filter_t * content)
+{
+    if (content->prefix)
+    {
+        free(content->prefix);
     }
 }
 
@@ -358,6 +437,77 @@ void release_not_ip_address(qs_not_ip_address_t * content)
     }
 }
 
+// notification init function.
+void init_notification(qs_notification_t * content)
+{
+    content->cloudfunc = NULL;
+    content->cloudfunc_args = NULL;
+    content->event_types = NULL;
+    content->id = NULL;
+    content->notify_url = NULL;
+    content->object_filters = NULL;
+}
+
+// notification release function.
+void release_notification(qs_notification_t * content)
+{
+    if (content->cloudfunc)
+    {
+        free(content->cloudfunc);
+    }
+    if (content->cloudfunc_args)
+    {
+        release_cloudfunc_args(content->cloudfunc_args);
+        free(content->cloudfunc_args);
+    }
+    if (content->event_types)
+    {
+        qs_string_item_t *item = NULL;
+        qs_string_item_t *item_to_delete = NULL;
+        qs_list_for_each_entry(qs_string_item_t, item, content->event_types)
+        {
+            if (item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+            free(item->content);
+        }
+        if (item_to_delete)
+        {
+            free(item_to_delete);
+        }
+        free(content->event_types);
+    }
+    if (content->id)
+    {
+        free(content->id);
+    }
+    if (content->notify_url)
+    {
+        free(content->notify_url);
+    }
+    if (content->object_filters)
+    {
+        qs_string_item_t *item = NULL;
+        qs_string_item_t *item_to_delete = NULL;
+        qs_list_for_each_entry(qs_string_item_t, item, content->object_filters)
+        {
+            if (item_to_delete)
+            {
+                free(item_to_delete);
+            }
+            item_to_delete = item;
+            free(item->content);
+        }
+        if (item_to_delete)
+        {
+            free(item_to_delete);
+        }
+        free(content->object_filters);
+    }
+}
+
 // object_part init function.
 void init_object_part(qs_object_part_t * content)
 {
@@ -405,6 +555,51 @@ void release_owner(qs_owner_t * content)
     if (content->name)
     {
         free(content->name);
+    }
+}
+
+// rule init function.
+void init_rule(qs_rule_t * content)
+{
+    content->abort_incomplete_multipart_upload = NULL;
+    content->expiration = NULL;
+    content->filter = NULL;
+    content->id = NULL;
+    content->status = NULL;
+    content->transition = NULL;
+}
+
+// rule release function.
+void release_rule(qs_rule_t * content)
+{
+    if (content->abort_incomplete_multipart_upload)
+    {
+        release_abort_incomplete_multipart_upload(content->
+                abort_incomplete_multipart_upload);
+        free(content->abort_incomplete_multipart_upload);
+    }
+    if (content->expiration)
+    {
+        release_expiration(content->expiration);
+        free(content->expiration);
+    }
+    if (content->filter)
+    {
+        release_filter(content->filter);
+        free(content->filter);
+    }
+    if (content->id)
+    {
+        free(content->id);
+    }
+    if (content->status)
+    {
+        free(content->status);
+    }
+    if (content->transition)
+    {
+        release_transition(content->transition);
+        free(content->transition);
     }
 }
 
@@ -551,6 +746,26 @@ void release_string_not_like(qs_string_not_like_t * content)
             free(item_to_delete);
         }
         free(content->referer);
+    }
+}
+
+// transition init function.
+void init_transition(qs_transition_t * content)
+{
+    content->days = NULL;
+    content->storage_class = NULL;
+}
+
+// transition release function.
+void release_transition(qs_transition_t * content)
+{
+    if (content->days)
+    {
+        free(content->days);
+    }
+    if (content->storage_class)
+    {
+        free(content->storage_class);
     }
 }
 

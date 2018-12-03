@@ -28,9 +28,7 @@ struct QS_SDK_API SDKOptions
     SDKOptions():initAndCleanupCurl(true), logLevel(None), logPath("")
     {
     }
-    // SDK wide options for curl
-    // If it is being used then we automatically initialize and clean it up.
-    // If this is a problem for you, set this to false. 
+    // SDK wide options for curl// If it is being used then we automatically initialize and clean it up.// If this is a problem for you, set this to false.
     bool initAndCleanupCurl;
 
     // Option for logging level ,defaults to Off

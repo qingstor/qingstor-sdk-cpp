@@ -26,23 +26,23 @@
 #include "../service_with_c_style/types/StatementType.h"
 #endif							// BUILD_C_STYLE_INTERFACE
 
-// Bucket policy id, must be unique'flag
-#define SETTING_STATEMENT_ID_FLAG 0x1
-
-// The resources to apply bucket policy'flag
-#define SETTING_STATEMENT_RESOURCE_FLAG 0x2
-
-// The user to apply bucket policy'flag
-#define SETTING_STATEMENT_USER_FLAG 0x4
-
 // QingStor API methods'flag
-#define SETTING_STATEMENT_ACTION_FLAG 0x8
+#define SETTING_STATEMENT_ACTION_FLAG 0x1
 
-#define SETTING_STATEMENT_CONDITION_FLAG 0x10
+#define SETTING_STATEMENT_CONDITION_FLAG 0x2
 
 // Statement effect'flag
 // Effect's available values: allow, deny
-#define SETTING_STATEMENT_EFFECT_FLAG 0x20
+#define SETTING_STATEMENT_EFFECT_FLAG 0x4
+
+// Bucket policy id, must be unique'flag
+#define SETTING_STATEMENT_ID_FLAG 0x8
+
+// The resources to apply bucket policy'flag
+#define SETTING_STATEMENT_RESOURCE_FLAG 0x10
+
+// The user to apply bucket policy'flag
+#define SETTING_STATEMENT_USER_FLAG 0x20
 
 //StatementType presents costom type：Statement.
 class QS_SDK_API StatementType:QsBaseType

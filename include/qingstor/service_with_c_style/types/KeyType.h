@@ -28,7 +28,7 @@ typedef struct
     //Object created time
     char *created;
     //Whether this key is encrypted
-    int *encrypted;
+    bool *encrypted;
     //MD5sum of the object
     char *etag;
     //Object key

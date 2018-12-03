@@ -217,8 +217,9 @@ void release_{{$opID}}_output(qs_{{$opID}}_output_t * output)
 	{{- $isTypeInteger := eq $property.Type "integer" -}}
 	{{- $isTypeLong := eq $property.Type "long" -}}
 	{{- $isTypeBinary := eq $property.Type "binary" -}}
+	{{- $isTypeBool := eq $property.Type "boolean" -}}
 
-		{{- if or $isTypeString $isTypeTimestamp $isTypeInteger $isTypeLong $isTypeBinary}}
+		{{- if or $isTypeString $isTypeTimestamp $isTypeInteger $isTypeLong $isTypeBinary $isTypeBool}}
 	if(output->{{$property.ID | snakeCase}}){
 
 		free(output->{{$property.ID | snakeCase}});
@@ -852,7 +853,7 @@ void {{$opID}}Result::BuildFromResp(const std::shared_ptr<HttpResponse>& httpRes
 	{{- if eq $typeName "string" -}}
 	std::string{{" " -}}
 	{{- else if eq $typeName "boolean" -}}
-	_Bool{{" " -}}
+	bool{{" " -}}
 	{{- else if eq $typeName "integer" -}}
 	int{{" " -}}
 	{{- else if eq $typeName "long" -}}

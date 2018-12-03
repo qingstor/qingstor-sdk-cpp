@@ -1,5 +1,5 @@
 // +-------------------------------------------------------------------------
-// | Copyright (C) 2016 Yunify, Inc.
+// | Copyright (C) 2017 Yunify, Inc.
 // +-------------------------------------------------------------------------
 // | Licensed under the Apache License, Version 2.0 (the "License");
 // | you may not use this work except in compliance with the License.
@@ -13,40 +13,53 @@
 // | See the License for the specific language governing permissions and
 // | limitations under the License.
 // +-------------------------------------------------------------------------
+
 #pragma once
 
-#include "../QsList.h"
-// Headers of CustomizedType.
-#include "GranteeType.h"
-#ifdef  __cplusplus
-extern "C" {
-#endif
+#include "../QsBaseType.h"
+#include <string>
 
-typedef struct
+// Headers of CustomizedType.
+
+#ifdef BUILD_C_STYLE_INTERFACE
+#include "../service_with_c_style/types/ExpirationType.h"
+#endif							// BUILD_C_STYLE_INTERFACE
+
+// days'flag
+#define SETTING_EXPIRATION_DAYS_FLAG 0x1
+
+//ExpirationType presents costom type：Expiration.
+class QS_SDK_API ExpirationType:QsBaseType
 {
 
-    qs_grantee_t *grantee;	// Required
-    //Permission for this grantee//permission's available values: READ, WRITE, FULL_CONTROL
-    char *permission;		// Required
+public:
+    ExpirationType()
+    {
+    };
+    ExpirationType(std::string serializedStr);
+
+#ifdef BUILD_C_STYLE_INTERFACE
+    ExpirationType(qs_expiration_t expiration);
+    qs_expiration_t *toCStyleObj();
+#endif							// BUILD_C_STYLE_INTERFACE// days
+
+    inline void SetDays(int Days)
+    {
+        m_settingFlag |= SETTING_EXPIRATION_DAYS_FLAG;
+        m_Days = Days;
+    };
+
+    inline int GetDays()
+    {
+        return m_Days;
+    };
+
+    std::string Serialize();
+
+private:
+
+    // days
+    int m_Days;
 
     int setting_flag;
-} qs_acl_t;
-
-typedef struct
-{
-
-    qs_list_t node;
-
-    qs_acl_t *content;
-
-} qs_acl_item_t;
-
-// acl init function.
-QS_SDK_API void init_acl(qs_acl_t * input);
-
-// acl release function.
-QS_SDK_API void release_acl(qs_acl_t * output);
-
-#ifdef  __cplusplus
 };
-#endif

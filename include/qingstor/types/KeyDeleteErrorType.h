@@ -26,14 +26,14 @@
 #include "../service_with_c_style/types/KeyDeleteErrorType.h"
 #endif							// BUILD_C_STYLE_INTERFACE
 
+// Error code'flag
+#define SETTING_KEY_DELETE_ERROR_CODE_FLAG 0x1
+
 // Object key'flag
-#define SETTING_KEY_DELETE_ERROR_KEY_FLAG 0x1
+#define SETTING_KEY_DELETE_ERROR_KEY_FLAG 0x2
 
 // Error message'flag
-#define SETTING_KEY_DELETE_ERROR_MESSAGE_FLAG 0x2
-
-// Error code'flag
-#define SETTING_KEY_DELETE_ERROR_CODE_FLAG 0x4
+#define SETTING_KEY_DELETE_ERROR_MESSAGE_FLAG 0x4
 
 //KeyDeleteErrorType presents costom type：KeyDeleteError.
 class QS_SDK_API KeyDeleteErrorType:QsBaseType

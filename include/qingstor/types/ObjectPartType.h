@@ -25,17 +25,17 @@
 #include "../service_with_c_style/types/ObjectPartType.h"
 #endif							// BUILD_C_STYLE_INTERFACE
 
-// Object part size'flag
-#define SETTING_OBJECT_PART_SIZE_FLAG 0x1
-
 // Object part created time'flag
-#define SETTING_OBJECT_PART_CREATED_FLAG 0x2
+#define SETTING_OBJECT_PART_CREATED_FLAG 0x1
 
 // MD5sum of the object part'flag
-#define SETTING_OBJECT_PART_ETAG_FLAG 0x4
+#define SETTING_OBJECT_PART_ETAG_FLAG 0x2
 
 // Object part number'flag
-#define SETTING_OBJECT_PART_PART_NUMBER_FLAG 0x8
+#define SETTING_OBJECT_PART_PART_NUMBER_FLAG 0x4
+
+// Object part size'flag
+#define SETTING_OBJECT_PART_SIZE_FLAG 0x8
 
 //ObjectPartType presents costom type：ObjectPart.
 class QS_SDK_API ObjectPartType:QsBaseType

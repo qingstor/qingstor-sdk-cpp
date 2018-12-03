@@ -25,7 +25,7 @@ typedef struct
 {
 
     //Refer url
-    int *referer;
+    bool *referer;
 
     int setting_flag;
 } qs_is_null_t;
