@@ -94,6 +94,17 @@ void SetOptCodeForHttpMethod(CURL *requestHandle, const HttpRequest &request)
             curl_easy_setopt(requestHandle, CURLOPT_CUSTOMREQUEST, "PATCH");
         }
         break;
+    case HTTP_OPTIONS:
+        if (!request.HasHeader(CONTENT_LENGTH_HEADER) || request.GetHeaderValue(CONTENT_LENGTH_HEADER) == "0")
+        {
+            curl_easy_setopt(requestHandle, CURLOPT_CUSTOMREQUEST, "OPTIONS");
+        }
+        else
+        {
+            curl_easy_setopt(requestHandle, CURLOPT_POST, 1L);
+            curl_easy_setopt(requestHandle, CURLOPT_CUSTOMREQUEST, "OPTIONS");
+        }
+        break;
     default:
         curl_easy_setopt(requestHandle, CURLOPT_CUSTOMREQUEST, "GET");
         break;
@@ -176,7 +187,6 @@ HttpResponse * HttpClient::SendRequest(HttpRequest *request) const
         {
             curl_easy_setopt(connectionHandle, CURLOPT_USERAGENT, m_userAgent.c_str());
         }
-
         curl_easy_setopt(connectionHandle, CURLOPT_URL, url.c_str());
         curl_easy_setopt(connectionHandle, CURLOPT_WRITEFUNCTION, &HttpClient::WriteData);
         curl_easy_setopt(connectionHandle, CURLOPT_WRITEDATA, &writeContext);
