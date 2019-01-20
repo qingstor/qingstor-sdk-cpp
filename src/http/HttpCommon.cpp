@@ -36,6 +36,8 @@ const char *GetNameForHttpMethod(HttpMethod httpMethod)
         return "PUT";
     case HTTP_HEAD:
         return "HEAD";
+    case HTTP_OPTIONS:
+        return "OPTIONS";
     case HTTP_PATCH:
         return "PATCH";
     default:
