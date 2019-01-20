@@ -5,6 +5,7 @@
 #include "qingstor/service_with_c_style/QingStorCStyle.h"
 #include <memory>
 #include <string>
+#include <fstream>
 
 using cucumber::ScenarioScope;
 
@@ -50,9 +51,6 @@ void init_test_config(void)
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");
         return;
     }
-    printf("QINGSTOR_CONFIG_PATH: %s.\n",strConfigPath);
-    printf("QINGSTOR_BUCKET_NAME: %s.\n",strBucketName);
-    printf("QINGSTOR_ZONE_NAME: %s.\n",strZone);
 
     qs_init_sdk("/tmp/", Debug, true);
 }

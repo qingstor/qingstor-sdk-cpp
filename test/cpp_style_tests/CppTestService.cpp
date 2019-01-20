@@ -60,10 +60,7 @@ void init_test_config(void)
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");
         return;
     }
-    printf("QINGSTOR_CONFIG_PATH: %s.\n",configPath);
-    printf("QINGSTOR_BUCKET_NAME: %s.\n",bucketName);
-    printf("QINGSTOR_ZONE_NAME: %s.\n",zone);
-
+    
     strConfigPath = configPath;
     strBucketName = bucketName;
     strZone = zone;
