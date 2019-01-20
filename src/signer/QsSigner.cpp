@@ -38,7 +38,7 @@ using namespace QingStor::Http;
 static const char* LINE_BREAK = "\n";
 static const char* CANONICALHEADERS_PREFIX = "x-qs-";
 
-static const int  counToSign = 15;
+static const int  counToSign = 19;
 static std::string pramaterToSign[counToSign] =
 {
     "acl",
@@ -50,7 +50,11 @@ static std::string pramaterToSign[counToSign] =
     "stats",
     "upload_id",
     "uploads",
+    "image",
+    "notification",
     "response-expires",
+    "lifecycle",
+    "logging",
     "response-cache-control",
     "response-content-type",
     "response-content-language",

@@ -205,12 +205,14 @@ THEN("^head object status code is (\\d+)$")
 WHEN("^options object \"(.{1,})\" with method \"([^\"]*)\" and origin \"([^\"]*)\"$")
 {
     REGEX_PARAM(std::string, objectkey);
+    REGEX_PARAM(std::string, method);
+    REGEX_PARAM(std::string, origin);
     ScenarioScope<TestObjectCtx> contextObjectTest;
     Bucket qsBucket = *contextObjectTest->pQsBucket;
     OptionsObjectInput input;
     ScenarioScope<OptionsObjectOutput> contextOutput;
-    input.SetAccessControlRequestMethod("GET");
-    input.SetOrigin("qingcloud.com");
+    input.SetAccessControlRequestMethod(method);
+    input.SetOrigin(origin);
     QsError err = qsBucket.OptionsObject(objectkey, input, *contextOutput);
     if (QS_ERR_NO_ERROR != err)
     {

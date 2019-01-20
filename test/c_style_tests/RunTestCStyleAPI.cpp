@@ -6,3 +6,4 @@
 #include "CTestBucketPolicy.cpp"
 #include "CTestObject.cpp"
 #include "CTestObjectMultipart.cpp"
+#include "CTestImage.cpp"
