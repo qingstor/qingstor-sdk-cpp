@@ -206,7 +206,7 @@ Upload Multipart
 UploadMultipartInput inputPart1;
 UploadMultipartOutput outputPart1;
 
-std::iostream* objectStream1 = new std::fstream(filePath1), std::ios::binary | std::ios::in);
+std::iostream* objectStream1 = new std::fstream(filePath1, std::ios::binary | std::ios::in);
 objectStream1->seekg(0, objectStream1->end); 
 size_t streamSize1 = objectStream1->tellg(); 
 objectStream1->seekg(0, objectStream1->beg); 
@@ -234,7 +234,7 @@ if(objectStream1)
 // Upload the second part
 UploadMultipartInput inputPart2;
 UploadMultipartOutput outputPart2;
-std::iostream* objectStream2 = new std::fstream(filePath2), std::ios::binary | std::ios::in);
+std::iostream* objectStream2 = new std::fstream(filePath2, std::ios::binary | std::ios::in);
 objectStream2->seekg(0, objectStream2->end); 
 size_t streamSize2 = objectStream2->tellg(); 
 objectStream2->seekg(0, objectStream2->beg); 
