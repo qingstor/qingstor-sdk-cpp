@@ -61,8 +61,7 @@ void ShowHow2Do_InitiateMultipartUpload(Bucket * qsBucket, std::string &objectke
     }
     InitiateMultipartUploadInput input;
     InitiateMultipartUploadOutput output;
-    // If you want to specify the storage type, Call SetXQSStorageClass fun.
-    input.SetXQSStorageClass("STANDARD_IA");
+
     std::map<std::string, std::string> metadata;
     metadata["uid"] = "qingstor";
     input.SetMetadata(metadata);
