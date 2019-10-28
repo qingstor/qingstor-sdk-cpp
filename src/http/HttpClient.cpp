@@ -105,7 +105,7 @@ void SetOptCodeForHttpMethod(CURL *requestHandle, const HttpRequest &request)
 bool HttpClient::InitCryptMutex()
 {
 #ifdef _WIN32
-    return true
+    return true;
 #else
     return qingstor_init_crypt_mutex();
 #endif
@@ -114,7 +114,7 @@ bool HttpClient::InitCryptMutex()
 bool HttpClient::DestroyCryptMutex()
 {
 #ifdef _WIN32
-    return true
+    return true;
 #else
     return qingstor_destroy_crypt_mutex();
 #endif

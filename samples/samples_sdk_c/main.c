@@ -30,15 +30,17 @@
 
 void ShowHow2Do_InitiateMultipartUpload(qs_context_handle context_hdl, char* objectkey, char** uploadID)
 {
+	qs_initiate_multipart_upload_input_t input;
+    qs_initiate_multipart_upload_output_t output;
+	QsError err;
+   
     if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
 
-    qs_initiate_multipart_upload_input_t input;
-    qs_initiate_multipart_upload_output_t output;
-    init_initiate_multipart_upload_input (&input);
+	init_initiate_multipart_upload_input(&input);
 
-    QsError err = qs_initiate_multipart_upload(objectkey, &input, &output, context_hdl);
+    err = qs_initiate_multipart_upload(objectkey, &input, &output, context_hdl);
     if (QS_ERR_NO_ERROR == err && output.response_code == 200)
     {
        printf("uploadID is %s\n",output.upload_id);
@@ -56,16 +58,18 @@ void ShowHow2Do_InitiateMultipartUpload(qs_context_handle context_hdl, char* obj
 
 void ShowHow2Do_UploadMultipart(qs_context_handle context_hdl, char* objectkey, char* uploadID ,int partNumber)
 {
-    if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
+	qs_upload_multipart_input_t input;
+    qs_upload_multipart_output_t output;
+	int64_t length = 5 * 1024 * 1024; //fiveMbSize
+	int part_number = partNumber;
+	QsError err;
+
+	if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
 
-    qs_upload_multipart_input_t input;
-    qs_upload_multipart_output_t output;
     init_upload_multipart_input (&input);
 
-	long length = 5 * 1024 * 1024; //fiveMbSize
-	int part_number = partNumber;
 	input.bodybuf = (char *)malloc(length);
 	memset(input.bodybuf, 0, length);
 	input.bufLength = &length;
@@ -73,7 +77,7 @@ void ShowHow2Do_UploadMultipart(qs_context_handle context_hdl, char* objectkey, 
 	input.part_number = &part_number;
     input.upload_id = uploadID;
 
-    QsError err = qs_upload_multipart (objectkey, &input, &output, context_hdl);
+    err = qs_upload_multipart (objectkey, &input, &output, context_hdl);
     if (QS_ERR_NO_ERROR == err)
     {
         // print sth
@@ -94,18 +98,19 @@ void ShowHow2Do_UploadMultipart(qs_context_handle context_hdl, char* objectkey, 
 
 void ShowHow2Do_CompleteMultipartUpload(qs_context_handle context_hdl, char* objectkey, char* uploadID, qs_list_t * objectParts)
 {
+	qs_complete_multipart_upload_input_t input;
+	qs_complete_multipart_upload_output_t output;
+	QsError err;
+
 	if (context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
 		return;
 	}
-
-	qs_complete_multipart_upload_input_t input;
-	qs_complete_multipart_upload_output_t output;
 	init_complete_multipart_upload_input(&input);
 
 	input.object_parts = objectParts;
 	input.upload_id = uploadID;
 
-	QsError err = qs_complete_multipart_upload(objectkey, &input, &output, context_hdl);
+	err = qs_complete_multipart_upload(objectkey, &input, &output, context_hdl);
 	if (QS_ERR_NO_REQUIRED_PARAMETER == err)
 	{
 		printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
@@ -123,22 +128,23 @@ void ShowHow2Do_CompleteMultipartUpload(qs_context_handle context_hdl, char* obj
 
 void ShowHow2Do_ListObjects(qs_context_handle context_hdl)
 {
+	// List Objects
+    qs_list_objects_input_t input;
+    qs_list_objects_output_t output;
+	int limitNum = 100;
+	QsError err;
+
     if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
 
-    // List Objects
-    qs_list_objects_input_t input;
-    qs_list_objects_output_t output;
     init_list_objects_input(&input);
     // if you want limit the maximum number of object in response, you can set "Limit" paramter. 
     // the default value is 200, maximum allowable set 1000
-    int limitNum = 100;
+
     input.limit = &limitNum;// 
 
-    QsError err = qs_list_objects(&input, &output, context_hdl);
-
-
+    err = qs_list_objects(&input, &output, context_hdl);
     if(QS_ERR_NO_ERROR == err)
     {
         qs_list_t *keys = output.keys;
@@ -170,11 +176,16 @@ void ShowHow2Do_ListObjects(qs_context_handle context_hdl)
 
 void ShowHow2Do_MultipartUploadObject(qs_context_handle context_hdl, char* objectkey)
 {
+	char* uploadID = NULL;
+	int part_number_1 = 1;
+	int part_number_2 = 2;
+	qs_list_t object_parts_list;
+	qs_object_part_item_t object_parts_item_1, object_parts_item_2;
+	qs_object_part_t object_parts_1, object_parts_2;
+
     if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
-
-    char* uploadID = NULL;
 
     ShowHow2Do_InitiateMultipartUpload(context_hdl , objectkey , &uploadID);
 
@@ -182,15 +193,10 @@ void ShowHow2Do_MultipartUploadObject(qs_context_handle context_hdl, char* objec
 
     ShowHow2Do_UploadMultipart(context_hdl, objectkey, uploadID ,2);
 
-	qs_list_t object_parts_list;
 	qs_list_init(&object_parts_list);
-	qs_object_part_item_t object_parts_item_1, object_parts_item_2;
-	qs_object_part_t object_parts_1, object_parts_2;
 	init_object_part(&object_parts_1);
 	init_object_part(&object_parts_2);
 
-	int part_number_1 = 1;
-	int part_number_2 = 2;
 	object_parts_1.part_number = &part_number_1;
 	object_parts_2.part_number = &part_number_2;
 	object_parts_item_1.content = &object_parts_1;
@@ -211,15 +217,17 @@ void ShowHow2Do_MultipartUploadObject(qs_context_handle context_hdl, char* objec
 
 void ShowHow2Do_GetObject(qs_context_handle context_hdl, char* objectkey)
 {
+	qs_get_object_input_t input;
+    qs_get_object_output_t output;
+	QsError err;
+
     if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
 
-    qs_get_object_input_t input;
-    qs_get_object_output_t output;
     init_get_object_input (&input);
 
-	QsError err = qs_get_object(objectkey, &input, &output, context_hdl);
+	err = qs_get_object(objectkey, &input, &output, context_hdl);
     if(QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
         printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
@@ -243,15 +251,17 @@ void ShowHow2Do_GetObject(qs_context_handle context_hdl, char* objectkey)
 
 void ShowHow2Do_DeleteObject(qs_context_handle context_hdl, char* objectkey)
 {
-    if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
+	qs_delete_object_input_t input;
+    qs_delete_object_output_t output;
+	QsError err;
+
+	if(context_hdl.pQsBucket == NULL || context_hdl.pQsService == NULL){
         return;
     }
 
-    qs_delete_object_input_t input;
-    qs_delete_object_output_t output;
     init_delete_object_input (&input);
 
-	QsError err = qs_delete_object(objectkey, &input, &output, context_hdl);
+	err = qs_delete_object(objectkey, &input, &output, context_hdl);
     if(QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
         printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
@@ -275,6 +285,9 @@ int main()
     char *strConfigPath = getenv("QINGSTOR_CONFIG_PATH");
     char *strBucketName = getenv("QINGSTOR_BUCKET_NAME");
     char *strZone = getenv("QINGSTOR_ZONE_NAME");
+	char* objectkey = "QingStor_SDK_Test_File";
+	qs_context_handle context_hdl;
+
     if(!strConfigPath || !strBucketName || !strZone)
     {
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");
@@ -284,12 +297,10 @@ int main()
     printf("QINGSTOR_BUCKET_NAME: %s.\n",strBucketName);
     printf("QINGSTOR_ZONE_NAME: %s.\n",strZone);
 
-	char* objectkey = "QingStor_SDK_Test_File";
-
 	qs_init_sdk("/tmp/", Debug, 1);
 
 	// Global initialization only needs to be initialized once
-    qs_context_handle context_hdl = qs_create_service_with_configfile(strConfigPath, strBucketName, strZone);
+    context_hdl = qs_create_service_with_configfile(strConfigPath, strBucketName, strZone);
     // Valid log levels are "none","debug", "info", "warn", "error", and "fatal".(default value is "None")
 
     ShowHow2Do_ListObjects(context_hdl);  
@@ -306,9 +317,3 @@ int main()
 
     return 0;
 }
-
-
-
-
-
-

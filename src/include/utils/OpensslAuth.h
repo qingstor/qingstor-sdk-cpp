@@ -14,12 +14,6 @@
 // | limitations under the License.
 // +-------------------------------------------------------------------------
 #include <stdio.h>
-//#include <errno.h>
-#include <pthread.h>
-//#include <unistd.h>
-//#include <syslog.h>
-//#include <sys/types.h>
-//#include <sys/stat.h>
 #include <string.h>
 #include <openssl/bio.h>
 #include <openssl/buffer.h>
@@ -30,7 +24,11 @@
 #include <openssl/crypto.h>
 #include <openssl/err.h>
 #include <string>
-//#include <map>
+
+#ifdef _WIN32
+#else
+#include <pthread.h>
+#endif
 
 
 bool qingstor_init_crypt_mutex(void);
