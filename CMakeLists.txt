@@ -16,6 +16,7 @@ ELSE ()
 	FIND_PACKAGE(OpenSSL REQUIRED)
 	FIND_PACKAGE(Curl REQUIRED)	
 	OPTION (INSTALL_SDK_HEADERS "Request installation of headers." ON)
+	OPTION (OPTIMIZE_SPACE "Build with size-optimized options to reduce code size." OFF)
 ENDIF()  
 
 # add preprocesser macro
