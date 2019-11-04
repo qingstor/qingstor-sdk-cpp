@@ -1,4 +1,4 @@
-CMAKE_MINIMUM_REQUIRED(VERSION 2.8)
+CMAKE_MINIMUM_REQUIRED(VERSION 3.2.3)
 
 SET(libqingstor_VERSION_MAJOR 0)
 SET(libqingstor_VERSION_MINOR 0)
@@ -14,28 +14,28 @@ GET_FILENAME_COMPONENT(COMPILER_DIR ${CMAKE_CXX_COMPILER} DIRECTORY)
 GET_FILENAME_COMPONENT(VC_DIR ${COMPILER_DIR} DIRECTORY)
 
 IF(WIN32)
-    SET(WS2_LIBRARIES Ws2_32.lib)
-    SET(WINLDAP_LIBRARIES Wldap32.lib)
-    # force to compile with W0
-    SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
+	SET(WS2_LIBRARIES Ws2_32.lib)
+	SET(WINLDAP_LIBRARIES Wldap32.lib)
+	# force to compile with W0
+	SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W0")
 ELSE() 
-    SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wno-deprecated-declarations -g2 -ggdb")    
-    IF(OPTIMIZE_SPACE)
-	SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -Os -Wno-deprecated-declarations -flto -ffunction-sections -fdata-sections")
-	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -Os -Wno-deprecated-declarations -flto -fno-rtti -ffunction-sections -fdata-sections" )
-	SET(CMAKE_SHARED_LINKER_FLAGS "$ENV{LDFLAGS} -Wl,-S -Wl,-s -Wl,--gc-sections") # remove debug symbols
-    ELSE(OPTIMIZE_SPACE)
-	SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -O3 -Wno-deprecated-declarations")
-	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wno-deprecated-declarations")
-    ENDIF(OPTIMIZE_SPACE)
+	SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wno-deprecated-declarations -g2 -ggdb")
+	IF(OPTIMIZE_SPACE)
+		SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -Os -Wno-deprecated-declarations -flto -ffunction-sections -fdata-sections")
+		SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -Os -Wno-deprecated-declarations -flto -fno-rtti -ffunction-sections -fdata-sections" )
+		SET(CMAKE_SHARED_LINKER_FLAGS "$ENV{LDFLAGS} -Wl,-S -Wl,-s -Wl,--gc-sections") # remove debug symbols
+	ELSE(OPTIMIZE_SPACE)
+		SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -O3 -Wno-deprecated-declarations")
+		SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wno-deprecated-declarations")
+	ENDIF(OPTIMIZE_SPACE)
 ENDIF()
-     
+
 IF(APPLE)
-    SET(CMAKE_MACOSX_RPATH 1)
+	SET(CMAKE_MACOSX_RPATH 1)
 ENDIF()
 
 IF(ENABLE_DEBUG)
-    SET(libqingstor_VERSION_STRING "${libqingstor_VERSION_STRING}d")
+	SET(libqingstor_VERSION_STRING "${libqingstor_VERSION_STRING}d")
 ENDIF(ENABLE_DEBUG)
 
 
@@ -62,10 +62,9 @@ LIST(APPEND libqingstor_SOURCES ${files})
 AUTO_SOURCES(files "service/*.cpp" "${CMAKE_CURRENT_SOURCE_DIR}")
 LIST(APPEND libqingstor_SOURCES ${files})
 
-# if BUILD_C_STYLE_INTERFACE == ON, install header files with C style.
 IF(BUILD_C_STYLE_INTERFACE)
-AUTO_SOURCES(files "service/service_with_c_style/*.cpp" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}")
-LIST(APPEND libqingstor_SOURCES ${files})
+	AUTO_SOURCES(files "service/service_with_c_style/*.cpp" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}")
+	LIST(APPEND libqingstor_SOURCES ${files})
 ENDIF()
 
 AUTO_SOURCES(files "signer/*.cpp" "RECURSE" "${CMAKE_CURRENT_SOURCE_DIR}")
@@ -77,13 +76,11 @@ SET(HEADER ${files})
 AUTO_SOURCES(files "types/*.h" "${libqingstor_INCLUDE_DIR}")
 SET(HEADER_TYPES ${files})
 
-# if BUILD_C_STYLE_INTERFACE == ON, install header files with C style.
 IF(BUILD_C_STYLE_INTERFACE)
-AUTO_SOURCES(files "service_with_c_style/*.h" "${libqingstor_INCLUDE_DIR}")
-SET(HEADER_CStyle ${files})
-
-AUTO_SOURCES(files "service_with_c_style/types/*.h" "${libqingstor_INCLUDE_DIR}")
-SET(HEADER_TYPES_CStyle ${files})
+	AUTO_SOURCES(files "service_with_c_style/*.h" "${libqingstor_INCLUDE_DIR}")
+	SET(HEADER_CStyle ${files})
+	AUTO_SOURCES(files "service_with_c_style/types/*.h" "${libqingstor_INCLUDE_DIR}")
+	SET(HEADER_TYPES_CStyle ${files})
 ENDIF()
 
 INCLUDE_DIRECTORIES(${libqingstor_INCLUDE_DIR})
@@ -141,16 +138,16 @@ IF(BUILD_SHAREDLIB)
 ENDIF()
 
 IF (INSTALL_SDK_HEADERS)
-# install header files.
-INSTALL(FILES ${HEADER} DESTINATION include/qingstor)
-INSTALL(FILES ${HEADER_TYPES} DESTINATION include/qingstor/types)
+	# install header files.
+	INSTALL(FILES ${HEADER} DESTINATION include/qingstor)
+	INSTALL(FILES ${HEADER_TYPES} DESTINATION include/qingstor/types)
+	# if BUILD_C_STYLE_INTERFACE == ON, install header files with C style.
+	IF(BUILD_C_STYLE_INTERFACE)
+		INSTALL(FILES ${HEADER_CStyle} DESTINATION include/qingstor/service_with_c_style)
+		INSTALL(FILES ${HEADER_TYPES_CStyle} DESTINATION include/qingstor/service_with_c_style/types)
+	ENDIF()
 ENDIF()
 
-# if BUILD_C_STYLE_INTERFACE == ON, install header files with C style.
-IF(BUILD_C_STYLE_INTERFACE)
-INSTALL(FILES ${HEADER_CStyle} DESTINATION include/qingstor/service_with_c_style)
-INSTALL(FILES ${HEADER_TYPES_CStyle} DESTINATION include/qingstor/service_with_c_style/types)
-ENDIF()
 	
 SET(libqingstor_SOURCES ${libqingstor_SOURCES} PARENT_SCOPE)
 SET(libqingstor_PLATFORM_HEADER_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)

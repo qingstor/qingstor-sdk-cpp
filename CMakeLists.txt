@@ -10,34 +10,43 @@ INCLUDE(Functions)
 INCLUDE(Options)
 
 IF (WIN32)
-	set(WLIB_TARGET "Win32")
-	if (CMAKE_CL_64)
-		set(WLIB_TARGET "x64")
-	endif()
-	set(OPENSSL_SSL_LIBRARY
+	SET(WLIB_TARGET "Win32")
+	IF(CMAKE_CL_64)
+		SET(WLIB_TARGET "x64")
+	ENDIF()
+	SET(OPENSSL_SSL_LIBRARY
 		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/ssleay32.lib)
-	set(OPENSSL_CRYPTO_LIBRARY
+	SET(OPENSSL_CRYPTO_LIBRARY
 		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/libeay32.lib)
-	set(OPENSSL_INCLUDE_DIR
+	SET(OPENSSL_INCLUDE_DIR
 		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 
-	set(CURL_LIBRARIES
+	SET(CURL_LIBRARIES
 		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/libcurl.lib)
-	set(CURL_INCLUDE_DIRS
+	SET(CURL_INCLUDE_DIRS
 		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 	INCLUDE(ExternalProject)
 	ADD_DEFINITIONS(-DWIN32)
 ELSE ()
 	INCLUDE(FindCURL)
 	INCLUDE(FindOpenSSL)
-	if(NOT CURL_FOUND)
+	IF(NOT CURL_FOUND)
 		message(FATAL_ERROR "Could not find curl")
-	endif()
-	if(NOT OPENSSL_FOUND)
+	ENDIF()
+	IF(NOT OPENSSL_FOUND)
 		message(FATAL_ERROR "Could not find openssl")
-	endif()
-	OPTION (INSTALL_SDK_HEADERS "Request installation of headers." ON)
-	OPTION (OPTIMIZE_SPACE "Build with size-optimized options to reduce code size." OFF)
+	ENDIF()
+
+	IF(OPTIMIZE_SPACE)
+		IF(NOT CMAKE_BUILD_TYPE)
+			SET(CMAKE_BUILD_TYPE "Release" CACHE STRING
+				"Set the type of build to Release" FORCE)
+		ENDIF()
+		IF(NOT (CMAKE_BUILD_TYPE STREQUAL "Release" OR CMAKE_BUILD_TYPE STREQUAL "release"))
+			MESSAGE(WARNING "NOT allowed to optimize space for non-release build type.")
+		ENDIF()
+	ENDIF()
+
 ENDIF()
 
 # add preprocesser macro
