@@ -218,7 +218,10 @@ long long StringUtils::ConvertToInt64(const char* source)
     {
         return 0;
     }
-    return std::atoll(source);
+    std::istringstream iss(source);
+	long long num;
+	iss >> num;
+	return num;
 }
 
 
