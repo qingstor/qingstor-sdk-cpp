@@ -9,7 +9,22 @@ SET(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" ${CMAKE_MODULE_PATH})
 INCLUDE(Functions)
 INCLUDE(Options)
 
-IF (WIN32) 
+IF (WIN32)
+	set(WLIB_TARGET "Win32")
+	if (CMAKE_CL_64)
+		set(WLIB_TARGET "x64")
+	endif()
+	set(OPENSSL_SSL_LIBRARY
+		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/ssleay32.lib)
+	set(OPENSSL_CRYPTO_LIBRARY
+		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/libeay32.lib)
+	set(OPENSSL_INCLUDE_DIR
+		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
+
+	set(CURL_LIBRARIES
+		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/lib/${WLIB_TARGET}/libcurl.lib)
+	set(CURL_INCLUDE_DIRS
+		${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/include)
 	INCLUDE(ExternalProject)
 	ADD_DEFINITIONS(-DWIN32)
 ELSE ()
@@ -23,16 +38,13 @@ ELSE ()
 	endif()
 	OPTION (INSTALL_SDK_HEADERS "Request installation of headers." ON)
 	OPTION (OPTIMIZE_SPACE "Build with size-optimized options to reduce code size." OFF)
-ENDIF()  
+ENDIF()
 
 # add preprocesser macro
 ADD_DEFINITIONS(-DCURL_STATICLIB)
 ADD_DEFINITIONS(-DYAML_DECLARE_STATIC)
 
-IF (WIN32) 
-ADD_SUBDIRECTORY(3rdparty) 
-ENDIF() 
-ADD_SUBDIRECTORY(src lib)
+ADD_SUBDIRECTORY(src)
 
 
 

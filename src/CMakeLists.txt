@@ -21,12 +21,12 @@ IF(WIN32)
 ELSE() 
     SET(CMAKE_CXX_FLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wno-deprecated-declarations -g2 -ggdb")    
     IF(OPTIMIZE_SPACE)
-        SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -Os -Wno-deprecated-declarations -flto -ffunction-sections -fdata-sections")
-        SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -Os -Wno-deprecated-declarations -flto -fno-rtti -ffunction-sections -fdata-sections" )
-        SET(CMAKE_SHARED_LINKER_FLAGS "$ENV{LDFLAGS} -Wl,-S -Wl,-s -Wl,--gc-sections") # remove debug symbols
+	SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -Os -Wno-deprecated-declarations -flto -ffunction-sections -fdata-sections")
+	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -Os -Wno-deprecated-declarations -flto -fno-rtti -ffunction-sections -fdata-sections" )
+	SET(CMAKE_SHARED_LINKER_FLAGS "$ENV{LDFLAGS} -Wl,-S -Wl,-s -Wl,--gc-sections") # remove debug symbols
     ELSE(OPTIMIZE_SPACE)
-        SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -O3 -Wno-deprecated-declarations")
-        SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wno-deprecated-declarations")
+	SET(CMAKE_C_FLAGS_RELEASE "$ENV{CFLAGS} -O3 -Wno-deprecated-declarations")
+	SET(CMAKE_CXX_FLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wno-deprecated-declarations")
     ENDIF(OPTIMIZE_SPACE)
 ENDIF()
      
@@ -93,54 +93,51 @@ INCLUDE_DIRECTORIES(${CURL_INCLUDE_DIRS})
 INCLUDE_DIRECTORIES(${OPENSSL_INCLUDE_DIR})
 INCLUDE_DIRECTORIES(${VC_DIR}/include)
 
-# On windows, generate static library
-IF (WIN32)  
-    ADD_LIBRARY(libqingstor-shared SHARED  ${libqingstor_SOURCES})
-    SET_TARGET_PROPERTIES(libqingstor-shared PROPERTIES OUTPUT_NAME "qingstor")
-	ExternalProject_Get_Property(curl INSTALL_DIR) 
-	set(curl_install_dir ${INSTALL_DIR}) 
-	add_dependencies(libqingstor-shared curl) 
-	target_include_directories( libqingstor-shared
-	PRIVATE	${curl_install_dir}/include) 
-	TARGET_LINK_LIBRARIES( libqingstor-shared
-		Crypt32 
-		Ws2_32
-		debug ${curl_install_dir}/lib/libcurl-d.lib
-		optimized ${curl_install_dir}/lib/libcurl.lib
-		) 
-	link_directories(${curl_install_dir}/lib/)
-	link_libraries(${curl_install_dir}/lib/libcurl-d.lib)
-	target_compile_definitions( libqingstor-shared
-	 PRIVATE CURL_STATICLIB 
+#generate static library
+IF(BUILD_STATICLIB)
+	ADD_LIBRARY(libqingstor-static STATIC ${libqingstor_SOURCES})
+	TARGET_LINK_LIBRARIES(libqingstor-static ${CURL_LIBRARIES})
+	TARGET_LINK_LIBRARIES(libqingstor-static ${OPENSSL_SSL_LIBRARY})
+	TARGET_LINK_LIBRARIES(libqingstor-static ${OPENSSL_CRYPTO_LIBRARY})
+	SET_TARGET_PROPERTIES(libqingstor-static
+		PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		VERSION ${libqingstor_VERSION_MAJOR}.${libqingstor_VERSION_MINOR}.${libqingstor_VERSION_PATCH}
+		SOVERSION ${libqingstor_VERSION_API}
+		OUTPUT_NAME "qingstor")
+	# install lib files.
+	INSTALL(TARGETS libqingstor-static
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib)
+ENDIF()
+
+#generate dynamic library
+IF(BUILD_SHAREDLIB)
+	ADD_LIBRARY(libqingstor-shared SHARED ${libqingstor_SOURCES})
+	TARGET_LINK_LIBRARIES(libqingstor-shared ${CURL_LIBRARIES})
+	TARGET_LINK_LIBRARIES(libqingstor-shared ${OPENSSL_SSL_LIBRARY})
+	TARGET_LINK_LIBRARIES(libqingstor-shared ${OPENSSL_CRYPTO_LIBRARY})
+	IF (WIN32)
+		TARGET_LINK_LIBRARIES(libqingstor-shared Crypt32 Ws2_32)
+		TARGET_COMPILE_DEFINITIONS(libqingstor-shared
+			PRIVATE CURL_STATICLIB 
 			_CRT_SECURE_NO_WARNINGS
-			DLL_EXPORTS 
-			)
-ELSE() 
-#On other platform 
-    IF(BUILD_STATICLIB)     #generate static library
-    ADD_LIBRARY(libqingstor-static STATIC ${libqingstor_SOURCES})
-    SET_TARGET_PROPERTIES(libqingstor-static PROPERTIES OUTPUT_NAME "qingstor")
-    SET_TARGET_PROPERTIES(libqingstor-static PROPERTIES 
-    VERSION ${libqingstor_VERSION_MAJOR}.${libqingstor_VERSION_MINOR}.${libqingstor_VERSION_PATCH} 
-    SOVERSION ${libqingstor_VERSION_API})
-    # install lib files.
-    INSTALL(TARGETS libqingstor-static
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
-    ENDIF()    
-    #generate dynamic library
-    ADD_LIBRARY(libqingstor-shared SHARED ${libqingstor_SOURCES})
-    TARGET_LINK_LIBRARIES(libqingstor-shared ${CURL_LIBRARIES})
-    TARGET_LINK_LIBRARIES(libqingstor-shared ${OPENSSL_SSL_LIBRARY})
-    TARGET_LINK_LIBRARIES(libqingstor-shared ${OPENSSL_CRYPTO_LIBRARY})
-    SET_TARGET_PROPERTIES(libqingstor-shared PROPERTIES OUTPUT_NAME "qingstor")
-    SET_TARGET_PROPERTIES(libqingstor-shared PROPERTIES 
-    VERSION ${libqingstor_VERSION_MAJOR}.${libqingstor_VERSION_MINOR}.${libqingstor_VERSION_PATCH} 
-    SOVERSION ${libqingstor_VERSION_API})
-    # install lib files.
-    INSTALL(TARGETS libqingstor-shared
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib)
+			DLL_EXPORTS)
+	ENDIF()
+	SET_TARGET_PROPERTIES(libqingstor-shared
+		PROPERTIES
+		ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/lib
+		VERSION ${libqingstor_VERSION_MAJOR}.${libqingstor_VERSION_MINOR}.${libqingstor_VERSION_PATCH}
+		SOVERSION ${libqingstor_VERSION_API}
+		OUTPUT_NAME "qingstor")
+	# install lib files.
+	INSTALL(TARGETS libqingstor-shared
+		LIBRARY DESTINATION lib
+		ARCHIVE DESTINATION lib)
 ENDIF()
 
 IF (INSTALL_SDK_HEADERS)
@@ -154,7 +151,7 @@ IF(BUILD_C_STYLE_INTERFACE)
 INSTALL(FILES ${HEADER_CStyle} DESTINATION include/qingstor/service_with_c_style)
 INSTALL(FILES ${HEADER_TYPES_CStyle} DESTINATION include/qingstor/service_with_c_style/types)
 ENDIF()
-        
+	
 SET(libqingstor_SOURCES ${libqingstor_SOURCES} PARENT_SCOPE)
 SET(libqingstor_PLATFORM_HEADER_DIR ${CMAKE_CURRENT_BINARY_DIR} PARENT_SCOPE)
 SET(libqingstor_ROOT_SOURCES_DIR ${libqingstor_ROOT_SOURCES_DIR} PARENT_SCOPE)
