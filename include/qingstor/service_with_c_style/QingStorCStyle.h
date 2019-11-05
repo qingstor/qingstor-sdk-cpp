@@ -381,6 +381,26 @@ typedef struct
 // options_objectInput init function.
 QS_SDK_API  void init_options_object_input(qs_options_object_input_t * input);
 
+
+// append_objectInput presents input for append_object.
+typedef struct
+{
+    //Object content size
+    long *content_length;	// Required
+    //Object content type
+    char *content_type;
+    //Object append position
+    int64_t *position;
+
+    int64_t *bufLength;
+
+    void *bodybuf;
+
+} qs_append_object_input_t;
+
+// put_objectInput init function.
+QS_SDK_API  void init_append_object_input(qs_append_object_input_t * input);
+
 // put_objectInput presents input for put_object.
 typedef struct
 {
@@ -885,6 +905,20 @@ QS_SDK_API  void release_options_object_output(qs_options_object_output_t * outp
 
 typedef struct
 {
+    //Next append position
+    char *x_qs_next_append_position;;
+
+    int response_code;
+
+    qs_error_info_t error_info;
+
+} qs_append_object_output_t;
+
+// put_objectInput init function.
+QS_SDK_API  void release_append_object_output(qs_append_object_output_t * output);
+
+typedef struct
+{
     //MD5sum of the object
     char *etag;
     //Encryption algorithm of the object
@@ -1117,6 +1151,13 @@ QsError QS_SDK_API qs_options_object(char *objectKey,
                                      qs_options_object_input_t * input,
                                      qs_options_object_output_t * output,
                                      qs_context_handle context_hdl);
+
+// append_object does Upload the object.
+// Documentation URL: https://docs.qingcloud.com/qingstor/api/object/append.html
+QsError QS_SDK_API qs_append_object(char *objectKey,
+                                 qs_append_object_input_t * input,
+                                 qs_append_object_output_t * output,
+                                 qs_context_handle context_hdl);
 
 // put_object does Upload the object.
 // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/put.html

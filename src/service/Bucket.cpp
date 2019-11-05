@@ -26,11 +26,10 @@ using namespace QingStor;
 using namespace QingStor::Utils;
 
 #ifdef _WIN32
-#define GetObject  GetObject
+#define GetObject GetObject
 #endif
 
-Bucket::Bucket(const QsConfig & qsConfig, const std::string & strBucketName, const std::string & strZone):m_qsConfig
-    (qsConfig)
+Bucket::Bucket(const QsConfig &qsConfig, const std::string &strBucketName, const std::string &strZone) : m_qsConfig(qsConfig)
 {
     m_properties.BucketName = strBucketName;
     m_properties.Zone = strZone;
@@ -39,61 +38,54 @@ Bucket::Bucket(const QsConfig & qsConfig, const std::string & strBucketName, con
 // +--------------------------------------------------------------------
 // |           RequestBuilderSource and ResponseUnparkerSource
 // +--------------------------------------------------------------------
-typedef QsDefaultRequestBuilder < DeleteBucketInput > DeleteBucketBuilder;
+typedef QsDefaultRequestBuilder<DeleteBucketInput> DeleteBucketBuilder;
 
-typedef QsDefaultResponseUnparker < DeleteBucketOutput > DeleteBucketUnparker;
+typedef QsDefaultResponseUnparker<DeleteBucketOutput> DeleteBucketUnparker;
 
-typedef QsDefaultRequestBuilder < DeleteBucketCORSInput >
-DeleteBucketCORSBuilder;
+typedef QsDefaultRequestBuilder<DeleteBucketCORSInput>
+    DeleteBucketCORSBuilder;
 
-typedef QsDefaultResponseUnparker < DeleteBucketCORSOutput >
-DeleteBucketCORSUnparker;
+typedef QsDefaultResponseUnparker<DeleteBucketCORSOutput>
+    DeleteBucketCORSUnparker;
 
-typedef QsDefaultRequestBuilder < DeleteBucketExternalMirrorInput >
-DeleteBucketExternalMirrorBuilder;
+typedef QsDefaultRequestBuilder<DeleteBucketExternalMirrorInput>
+    DeleteBucketExternalMirrorBuilder;
 
-typedef QsDefaultResponseUnparker < DeleteBucketExternalMirrorOutput >
-DeleteBucketExternalMirrorUnparker;
+typedef QsDefaultResponseUnparker<DeleteBucketExternalMirrorOutput>
+    DeleteBucketExternalMirrorUnparker;
 
-typedef QsDefaultRequestBuilder < DeleteBucketPolicyInput >
-DeleteBucketPolicyBuilder;
+typedef QsDefaultRequestBuilder<DeleteBucketPolicyInput>
+    DeleteBucketPolicyBuilder;
 
-typedef QsDefaultResponseUnparker < DeleteBucketPolicyOutput >
-DeleteBucketPolicyUnparker;
+typedef QsDefaultResponseUnparker<DeleteBucketPolicyOutput>
+    DeleteBucketPolicyUnparker;
 
-class DeleteMultipleObjectsBuilder:public QsDefaultRequestBuilder <
-    DeleteMultipleObjectsInput >
+class DeleteMultipleObjectsBuilder : public QsDefaultRequestBuilder<
+                                         DeleteMultipleObjectsInput>
 {
 public:
     DeleteMultipleObjectsBuilder(DeleteMultipleObjectsInput *
-                                 input):QsDefaultRequestBuilder <
-        DeleteMultipleObjectsInput > (input)
-    {
-    };
+                                     input) : QsDefaultRequestBuilder<DeleteMultipleObjectsInput>(input){};
 
-    virtual ~ DeleteMultipleObjectsBuilder()
-    {
-    };
+    virtual ~DeleteMultipleObjectsBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
     virtual Http::HeaderValueCollection GetHeaderValueCollection();
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // DeleteMultipleObjectsRequest GetRequestSpecificHeaders.
 Http::HeaderValueCollection DeleteMultipleObjectsBuilder::
-GetHeaderValueCollection()
+    GetHeaderValueCollection()
 {
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_CONTENT_MD5_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_CONTENT_MD5_FLAG))
     {
         ss << m_input->GetContentMD5();
         headers.insert(Http::HeaderValuePair("Content-MD5", ss.str()));
@@ -103,18 +95,17 @@ GetHeaderValueCollection()
 }
 
 // DeleteMultipleObjectsRequest GetRequestBody.
-std::iostream * DeleteMultipleObjectsBuilder::GetRequestBody()
+std::iostream *DeleteMultipleObjectsBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
     Json::Value jsonContent;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_OBJECTS_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_OBJECTS_FLAG))
     {
         Json::Value arrayObjects;
-        std::vector < KeyType > objects = m_input->GetObjects();
-        for (std::vector < KeyType >::iterator it = objects.begin();
-                it != objects.end(); it++)
+        std::vector<KeyType> objects = m_input->GetObjects();
+        for (std::vector<KeyType>::iterator it = objects.begin();
+             it != objects.end(); it++)
         {
             Json::Reader jsonReader;
             Json::Value itemJsonValue;
@@ -123,8 +114,7 @@ std::iostream * DeleteMultipleObjectsBuilder::GetRequestBody()
         }
         jsonContent["objects"] = arrayObjects;
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_QUIET_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_QUIET_FLAG))
     {
         jsonContent["quiet"] = m_input->GetQuiet();
     }
@@ -132,19 +122,14 @@ std::iostream * DeleteMultipleObjectsBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-class DeleteMultipleObjectsUnparker:public QsDefaultResponseUnparker <
-    DeleteMultipleObjectsOutput >
+class DeleteMultipleObjectsUnparker : public QsDefaultResponseUnparker<
+                                          DeleteMultipleObjectsOutput>
 {
 public:
     DeleteMultipleObjectsUnparker(DeleteMultipleObjectsOutput *
-                                  output):QsDefaultResponseUnparker <
-        DeleteMultipleObjectsOutput > (output)
-    {
-    };
+                                      output) : QsDefaultResponseUnparker<DeleteMultipleObjectsOutput>(output){};
 
-    virtual ~ DeleteMultipleObjectsUnparker()
-    {
-    };
+    virtual ~DeleteMultipleObjectsUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -155,7 +140,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -167,11 +154,11 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 void DeleteMultipleObjectsUnparker::ParseResponseBody(std::iostream *
-        responseBody)
+                                                          responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -179,7 +166,7 @@ void DeleteMultipleObjectsUnparker::ParseResponseBody(std::iostream *
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("deleted"))
     {
-        std::vector < KeyType > vecDeleted;
+        std::vector<KeyType> vecDeleted;
         for (unsigned i = 0; i < jsonContent["deleted"].size(); ++i)
         {
             vecDeleted.push_back(jsonContent["deleted"][i].toStyledString());
@@ -188,7 +175,7 @@ void DeleteMultipleObjectsUnparker::ParseResponseBody(std::iostream *
     }
     if (jsonContent.isMember("errors"))
     {
-        std::vector < KeyDeleteErrorType > vecErrors;
+        std::vector<KeyDeleteErrorType> vecErrors;
         for (unsigned i = 0; i < jsonContent["errors"].size(); ++i)
         {
             vecErrors.push_back(jsonContent["errors"][i].toStyledString());
@@ -198,21 +185,16 @@ void DeleteMultipleObjectsUnparker::ParseResponseBody(std::iostream *
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < GetBucketACLInput > GetBucketACLBuilder;
+typedef QsDefaultRequestBuilder<GetBucketACLInput> GetBucketACLBuilder;
 
-class GetBucketACLUnparker:public QsDefaultResponseUnparker <
-    GetBucketACLOutput >
+class GetBucketACLUnparker : public QsDefaultResponseUnparker<
+                                 GetBucketACLOutput>
 {
 public:
     GetBucketACLUnparker(GetBucketACLOutput *
-                         output):QsDefaultResponseUnparker <
-        GetBucketACLOutput > (output)
-    {
-    };
+                             output) : QsDefaultResponseUnparker<GetBucketACLOutput>(output){};
 
-    virtual ~ GetBucketACLUnparker()
-    {
-    };
+    virtual ~GetBucketACLUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -223,7 +205,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -235,10 +219,10 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
-void GetBucketACLUnparker::ParseResponseBody(std::iostream * responseBody)
+void GetBucketACLUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -246,7 +230,7 @@ void GetBucketACLUnparker::ParseResponseBody(std::iostream * responseBody)
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("acl"))
     {
-        std::vector < ACLType > vecACL;
+        std::vector<ACLType> vecACL;
         for (unsigned i = 0; i < jsonContent["acl"].size(); ++i)
         {
             vecACL.push_back(jsonContent["acl"][i].toStyledString());
@@ -260,21 +244,16 @@ void GetBucketACLUnparker::ParseResponseBody(std::iostream * responseBody)
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < GetBucketCORSInput > GetBucketCORSBuilder;
+typedef QsDefaultRequestBuilder<GetBucketCORSInput> GetBucketCORSBuilder;
 
-class GetBucketCORSUnparker:public QsDefaultResponseUnparker <
-    GetBucketCORSOutput >
+class GetBucketCORSUnparker : public QsDefaultResponseUnparker<
+                                  GetBucketCORSOutput>
 {
 public:
     GetBucketCORSUnparker(GetBucketCORSOutput *
-                          output):QsDefaultResponseUnparker <
-        GetBucketCORSOutput > (output)
-    {
-    };
+                              output) : QsDefaultResponseUnparker<GetBucketCORSOutput>(output){};
 
-    virtual ~ GetBucketCORSUnparker()
-    {
-    };
+    virtual ~GetBucketCORSUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -285,7 +264,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -297,10 +278,10 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
-void GetBucketCORSUnparker::ParseResponseBody(std::iostream * responseBody)
+void GetBucketCORSUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -308,33 +289,27 @@ void GetBucketCORSUnparker::ParseResponseBody(std::iostream * responseBody)
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("cors_rules"))
     {
-        std::vector < CORSRuleType > vecCORSRules;
+        std::vector<CORSRuleType> vecCORSRules;
         for (unsigned i = 0; i < jsonContent["cors_rules"].size(); ++i)
         {
-            vecCORSRules.push_back(jsonContent["cors_rules"][i].
-                                   toStyledString());
+            vecCORSRules.push_back(jsonContent["cors_rules"][i].toStyledString());
         }
         m_output->SetCORSRules(vecCORSRules);
     }
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < GetBucketExternalMirrorInput >
-GetBucketExternalMirrorBuilder;
+typedef QsDefaultRequestBuilder<GetBucketExternalMirrorInput>
+    GetBucketExternalMirrorBuilder;
 
-class GetBucketExternalMirrorUnparker:public QsDefaultResponseUnparker <
-    GetBucketExternalMirrorOutput >
+class GetBucketExternalMirrorUnparker : public QsDefaultResponseUnparker<
+                                            GetBucketExternalMirrorOutput>
 {
 public:
     GetBucketExternalMirrorUnparker(GetBucketExternalMirrorOutput *
-                                    output):QsDefaultResponseUnparker <
-        GetBucketExternalMirrorOutput > (output)
-    {
-    };
+                                        output) : QsDefaultResponseUnparker<GetBucketExternalMirrorOutput>(output){};
 
-    virtual ~ GetBucketExternalMirrorUnparker()
-    {
-    };
+    virtual ~GetBucketExternalMirrorUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -345,7 +320,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -357,11 +334,11 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 void GetBucketExternalMirrorUnparker::ParseResponseBody(std::iostream *
-        responseBody)
+                                                            responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -374,21 +351,16 @@ void GetBucketExternalMirrorUnparker::ParseResponseBody(std::iostream *
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < GetBucketPolicyInput > GetBucketPolicyBuilder;
+typedef QsDefaultRequestBuilder<GetBucketPolicyInput> GetBucketPolicyBuilder;
 
-class GetBucketPolicyUnparker:public QsDefaultResponseUnparker <
-    GetBucketPolicyOutput >
+class GetBucketPolicyUnparker : public QsDefaultResponseUnparker<
+                                    GetBucketPolicyOutput>
 {
 public:
     GetBucketPolicyUnparker(GetBucketPolicyOutput *
-                            output):QsDefaultResponseUnparker <
-        GetBucketPolicyOutput > (output)
-    {
-    };
+                                output) : QsDefaultResponseUnparker<GetBucketPolicyOutput>(output){};
 
-    virtual ~ GetBucketPolicyUnparker()
-    {
-    };
+    virtual ~GetBucketPolicyUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -399,7 +371,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -411,10 +385,10 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
-void GetBucketPolicyUnparker::ParseResponseBody(std::iostream * responseBody)
+void GetBucketPolicyUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -422,33 +396,27 @@ void GetBucketPolicyUnparker::ParseResponseBody(std::iostream * responseBody)
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("statement"))
     {
-        std::vector < StatementType > vecStatement;
+        std::vector<StatementType> vecStatement;
         for (unsigned i = 0; i < jsonContent["statement"].size(); ++i)
         {
-            vecStatement.push_back(jsonContent["statement"][i].
-                                   toStyledString());
+            vecStatement.push_back(jsonContent["statement"][i].toStyledString());
         }
         m_output->SetStatement(vecStatement);
     }
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < GetBucketStatisticsInput >
-GetBucketStatisticsBuilder;
+typedef QsDefaultRequestBuilder<GetBucketStatisticsInput>
+    GetBucketStatisticsBuilder;
 
-class GetBucketStatisticsUnparker:public QsDefaultResponseUnparker <
-    GetBucketStatisticsOutput >
+class GetBucketStatisticsUnparker : public QsDefaultResponseUnparker<
+                                        GetBucketStatisticsOutput>
 {
 public:
     GetBucketStatisticsUnparker(GetBucketStatisticsOutput *
-                                output):QsDefaultResponseUnparker <
-        GetBucketStatisticsOutput > (output)
-    {
-    };
+                                    output) : QsDefaultResponseUnparker<GetBucketStatisticsOutput>(output){};
 
-    virtual ~ GetBucketStatisticsUnparker()
-    {
-    };
+    virtual ~GetBucketStatisticsUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -459,7 +427,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -471,11 +441,11 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 void GetBucketStatisticsUnparker::ParseResponseBody(std::iostream *
-        responseBody)
+                                                        responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -512,23 +482,18 @@ void GetBucketStatisticsUnparker::ParseResponseBody(std::iostream *
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < HeadBucketInput > HeadBucketBuilder;
+typedef QsDefaultRequestBuilder<HeadBucketInput> HeadBucketBuilder;
 
-typedef QsDefaultResponseUnparker < HeadBucketOutput > HeadBucketUnparker;
+typedef QsDefaultResponseUnparker<HeadBucketOutput> HeadBucketUnparker;
 
-class ListMultipartUploadsBuilder:public QsDefaultRequestBuilder <
-    ListMultipartUploadsInput >
+class ListMultipartUploadsBuilder : public QsDefaultRequestBuilder<
+                                        ListMultipartUploadsInput>
 {
 public:
     ListMultipartUploadsBuilder(ListMultipartUploadsInput *
-                                input):QsDefaultRequestBuilder <
-        ListMultipartUploadsInput > (input)
-    {
-    };
+                                    input) : QsDefaultRequestBuilder<ListMultipartUploadsInput>(input){};
 
-    virtual ~ ListMultipartUploadsBuilder()
-    {
-    };
+    virtual ~ListMultipartUploadsBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -539,64 +504,52 @@ public:
 
 // ListMultipartUploadsRequest AddQueryStringParameters.
 Http::QueryParamCollection ListMultipartUploadsBuilder::
-GetQueryParamCollection()
+    GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_DELIMITER_FLAG))
     {
         ss << m_input->GetDelimiter();
         queryParameters.insert(Http::HeaderValuePair("delimiter", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_KEY_MARKER_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_KEY_MARKER_FLAG))
     {
         ss << m_input->GetKeyMarker();
         queryParameters.insert(Http::HeaderValuePair("key_marker", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_LIMIT_FLAG))
     {
         ss << m_input->GetLimit();
         queryParameters.insert(Http::HeaderValuePair("limit", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_PREFIX_FLAG))
     {
         ss << m_input->GetPrefix();
         queryParameters.insert(Http::HeaderValuePair("prefix", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOADS_UPLOAD_ID_MARKER_FLAG))
     {
         ss << m_input->GetUploadIDMarker();
-        queryParameters.
-        insert(Http::HeaderValuePair("upload_id_marker", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("upload_id_marker", ss.str()));
         ss.str("");
     }
     return queryParameters;
 }
 
-class ListMultipartUploadsUnparker:public QsDefaultResponseUnparker <
-    ListMultipartUploadsOutput >
+class ListMultipartUploadsUnparker : public QsDefaultResponseUnparker<
+                                         ListMultipartUploadsOutput>
 {
 public:
     ListMultipartUploadsUnparker(ListMultipartUploadsOutput *
-                                 output):QsDefaultResponseUnparker <
-        ListMultipartUploadsOutput > (output)
-    {
-    };
+                                     output) : QsDefaultResponseUnparker<ListMultipartUploadsOutput>(output){};
 
-    virtual ~ ListMultipartUploadsUnparker()
-    {
-    };
+    virtual ~ListMultipartUploadsUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -607,7 +560,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -619,11 +574,11 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 void ListMultipartUploadsUnparker::ParseResponseBody(std::iostream *
-        responseBody)
+                                                         responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -631,11 +586,10 @@ void ListMultipartUploadsUnparker::ParseResponseBody(std::iostream *
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("common_prefixes"))
     {
-        std::vector < std::string > vecCommonPrefixes;
+        std::vector<std::string> vecCommonPrefixes;
         for (unsigned i = 0; i < jsonContent["common_prefixes"].size(); ++i)
         {
-            vecCommonPrefixes.push_back(jsonContent["common_prefixes"][i].
-                                        asString());
+            vecCommonPrefixes.push_back(jsonContent["common_prefixes"][i].asString());
         }
         m_output->SetCommonPrefixes(vecCommonPrefixes);
     }
@@ -661,8 +615,7 @@ void ListMultipartUploadsUnparker::ParseResponseBody(std::iostream *
     }
     if (jsonContent.isMember("next_upload_id_marker"))
     {
-        m_output->SetNextUploadIDMarker(jsonContent["next_upload_id_marker"].
-                                        asString());
+        m_output->SetNextUploadIDMarker(jsonContent["next_upload_id_marker"].asString());
     }
     if (jsonContent.isMember("prefix"))
     {
@@ -670,7 +623,7 @@ void ListMultipartUploadsUnparker::ParseResponseBody(std::iostream *
     }
     if (jsonContent.isMember("uploads"))
     {
-        std::vector < UploadsType > vecUploads;
+        std::vector<UploadsType> vecUploads;
         for (unsigned i = 0; i < jsonContent["uploads"].size(); ++i)
         {
             vecUploads.push_back(jsonContent["uploads"][i].toStyledString());
@@ -680,17 +633,13 @@ void ListMultipartUploadsUnparker::ParseResponseBody(std::iostream *
     m_bNeedReleaseBody = true;
 }
 
-class ListObjectsBuilder:public QsDefaultRequestBuilder < ListObjectsInput >
+class ListObjectsBuilder : public QsDefaultRequestBuilder<ListObjectsInput>
 {
 public:
-    ListObjectsBuilder(ListObjectsInput * input):QsDefaultRequestBuilder <
-        ListObjectsInput > (input)
-    {
-    };
+    ListObjectsBuilder(ListObjectsInput *input) : QsDefaultRequestBuilder<
+                                                      ListObjectsInput>(input){};
 
-    virtual ~ ListObjectsBuilder()
-    {
-    };
+    virtual ~ListObjectsBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -704,7 +653,7 @@ Http::QueryParamCollection ListObjectsBuilder::GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_OBJECTS_DELIMITER_FLAG))
     {
         ss << m_input->GetDelimiter();
@@ -732,17 +681,13 @@ Http::QueryParamCollection ListObjectsBuilder::GetQueryParamCollection()
     return queryParameters;
 }
 
-class ListObjectsUnparker:public QsDefaultResponseUnparker < ListObjectsOutput >
+class ListObjectsUnparker : public QsDefaultResponseUnparker<ListObjectsOutput>
 {
 public:
-    ListObjectsUnparker(ListObjectsOutput * output):QsDefaultResponseUnparker <
-        ListObjectsOutput > (output)
-    {
-    };
+    ListObjectsUnparker(ListObjectsOutput *output) : QsDefaultResponseUnparker<
+                                                         ListObjectsOutput>(output){};
 
-    virtual ~ ListObjectsUnparker()
-    {
-    };
+    virtual ~ListObjectsUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -753,7 +698,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -765,10 +712,10 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
-void ListObjectsUnparker::ParseResponseBody(std::iostream * responseBody)
+void ListObjectsUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -776,11 +723,10 @@ void ListObjectsUnparker::ParseResponseBody(std::iostream * responseBody)
     jsonReader.parse(*responseBody, jsonContent);
     if (jsonContent.isMember("common_prefixes"))
     {
-        std::vector < std::string > vecCommonPrefixes;
+        std::vector<std::string> vecCommonPrefixes;
         for (unsigned i = 0; i < jsonContent["common_prefixes"].size(); ++i)
         {
-            vecCommonPrefixes.push_back(jsonContent["common_prefixes"][i].
-                                        asString());
+            vecCommonPrefixes.push_back(jsonContent["common_prefixes"][i].asString());
         }
         m_output->SetCommonPrefixes(vecCommonPrefixes);
     }
@@ -790,7 +736,7 @@ void ListObjectsUnparker::ParseResponseBody(std::iostream * responseBody)
     }
     if (jsonContent.isMember("keys"))
     {
-        std::vector < KeyType > vecKeys;
+        std::vector<KeyType> vecKeys;
         for (unsigned i = 0; i < jsonContent["keys"].size(); ++i)
         {
             vecKeys.push_back(jsonContent["keys"][i].toStyledString());
@@ -824,31 +770,27 @@ void ListObjectsUnparker::ParseResponseBody(std::iostream * responseBody)
     m_bNeedReleaseBody = true;
 }
 
-typedef QsDefaultRequestBuilder < PutBucketInput > PutBucketBuilder;
+typedef QsDefaultRequestBuilder<PutBucketInput> PutBucketBuilder;
 
-typedef QsDefaultResponseUnparker < PutBucketOutput > PutBucketUnparker;
+typedef QsDefaultResponseUnparker<PutBucketOutput> PutBucketUnparker;
 
-class PutBucketACLBuilder:public QsDefaultRequestBuilder < PutBucketACLInput >
+class PutBucketACLBuilder : public QsDefaultRequestBuilder<PutBucketACLInput>
 {
 public:
-    PutBucketACLBuilder(PutBucketACLInput * input):QsDefaultRequestBuilder <
-        PutBucketACLInput > (input)
-    {
-    };
+    PutBucketACLBuilder(PutBucketACLInput *input) : QsDefaultRequestBuilder<
+                                                        PutBucketACLInput>(input){};
 
-    virtual ~ PutBucketACLBuilder()
-    {
-    };
+    virtual ~PutBucketACLBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // PutBucketACLRequest GetRequestBody.
-std::iostream * PutBucketACLBuilder::GetRequestBody()
+std::iostream *PutBucketACLBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
@@ -856,9 +798,9 @@ std::iostream * PutBucketACLBuilder::GetRequestBody()
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_ACL_ACL_FLAG))
     {
         Json::Value arrayACL;
-        std::vector < ACLType > acl = m_input->GetACL();
-        for (std::vector < ACLType >::iterator it = acl.begin();
-                it != acl.end(); it++)
+        std::vector<ACLType> acl = m_input->GetACL();
+        for (std::vector<ACLType>::iterator it = acl.begin();
+             it != acl.end(); it++)
         {
             Json::Reader jsonReader;
             Json::Value itemJsonValue;
@@ -871,40 +813,35 @@ std::iostream * PutBucketACLBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-typedef QsDefaultResponseUnparker < PutBucketACLOutput > PutBucketACLUnparker;
+typedef QsDefaultResponseUnparker<PutBucketACLOutput> PutBucketACLUnparker;
 
-class PutBucketCORSBuilder:public QsDefaultRequestBuilder < PutBucketCORSInput >
+class PutBucketCORSBuilder : public QsDefaultRequestBuilder<PutBucketCORSInput>
 {
 public:
-    PutBucketCORSBuilder(PutBucketCORSInput * input):QsDefaultRequestBuilder <
-        PutBucketCORSInput > (input)
-    {
-    };
+    PutBucketCORSBuilder(PutBucketCORSInput *input) : QsDefaultRequestBuilder<
+                                                          PutBucketCORSInput>(input){};
 
-    virtual ~ PutBucketCORSBuilder()
-    {
-    };
+    virtual ~PutBucketCORSBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // PutBucketCORSRequest GetRequestBody.
-std::iostream * PutBucketCORSBuilder::GetRequestBody()
+std::iostream *PutBucketCORSBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
     Json::Value jsonContent;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_CORS_CORS_RULES_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_CORS_CORS_RULES_FLAG))
     {
         Json::Value arrayCORSRules;
-        std::vector < CORSRuleType > corsRules = m_input->GetCORSRules();
-        for (std::vector < CORSRuleType >::iterator it = corsRules.begin();
-                it != corsRules.end(); it++)
+        std::vector<CORSRuleType> corsRules = m_input->GetCORSRules();
+        for (std::vector<CORSRuleType>::iterator it = corsRules.begin();
+             it != corsRules.end(); it++)
         {
             Json::Reader jsonReader;
             Json::Value itemJsonValue;
@@ -917,38 +854,31 @@ std::iostream * PutBucketCORSBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-typedef QsDefaultResponseUnparker < PutBucketCORSOutput > PutBucketCORSUnparker;
+typedef QsDefaultResponseUnparker<PutBucketCORSOutput> PutBucketCORSUnparker;
 
-class PutBucketExternalMirrorBuilder:public QsDefaultRequestBuilder <
-    PutBucketExternalMirrorInput >
+class PutBucketExternalMirrorBuilder : public QsDefaultRequestBuilder<
+                                           PutBucketExternalMirrorInput>
 {
 public:
     PutBucketExternalMirrorBuilder(PutBucketExternalMirrorInput *
-                                   input):QsDefaultRequestBuilder <
-        PutBucketExternalMirrorInput > (input)
-    {
-    };
+                                       input) : QsDefaultRequestBuilder<PutBucketExternalMirrorInput>(input){};
 
-    virtual ~ PutBucketExternalMirrorBuilder()
-    {
-    };
+    virtual ~PutBucketExternalMirrorBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // PutBucketExternalMirrorRequest GetRequestBody.
-std::iostream * PutBucketExternalMirrorBuilder::GetRequestBody()
+std::iostream *PutBucketExternalMirrorBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
     Json::Value jsonContent;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_BUCKET_EXTERNAL_MIRROR_SOURCE_SITE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_EXTERNAL_MIRROR_SOURCE_SITE_FLAG))
     {
         jsonContent["source_site"] = m_input->GetSourceSite();
     }
@@ -956,43 +886,37 @@ std::iostream * PutBucketExternalMirrorBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-typedef QsDefaultResponseUnparker < PutBucketExternalMirrorOutput >
-PutBucketExternalMirrorUnparker;
+typedef QsDefaultResponseUnparker<PutBucketExternalMirrorOutput>
+    PutBucketExternalMirrorUnparker;
 
-class PutBucketPolicyBuilder:public QsDefaultRequestBuilder <
-    PutBucketPolicyInput >
+class PutBucketPolicyBuilder : public QsDefaultRequestBuilder<
+                                   PutBucketPolicyInput>
 {
 public:
     PutBucketPolicyBuilder(PutBucketPolicyInput *
-                           input):QsDefaultRequestBuilder <
-        PutBucketPolicyInput > (input)
-    {
-    };
+                               input) : QsDefaultRequestBuilder<PutBucketPolicyInput>(input){};
 
-    virtual ~ PutBucketPolicyBuilder()
-    {
-    };
+    virtual ~PutBucketPolicyBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // PutBucketPolicyRequest GetRequestBody.
-std::iostream * PutBucketPolicyBuilder::GetRequestBody()
+std::iostream *PutBucketPolicyBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
     Json::Value jsonContent;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_POLICY_STATEMENT_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_BUCKET_POLICY_STATEMENT_FLAG))
     {
         Json::Value arrayStatement;
-        std::vector < StatementType > statement = m_input->GetStatement();
-        for (std::vector < StatementType >::iterator it = statement.begin();
-                it != statement.end(); it++)
+        std::vector<StatementType> statement = m_input->GetStatement();
+        for (std::vector<StatementType>::iterator it = statement.begin();
+             it != statement.end(); it++)
         {
             Json::Reader jsonReader;
             Json::Value itemJsonValue;
@@ -1005,25 +929,20 @@ std::iostream * PutBucketPolicyBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-typedef QsDefaultResponseUnparker < PutBucketPolicyOutput >
-PutBucketPolicyUnparker;
+typedef QsDefaultResponseUnparker<PutBucketPolicyOutput>
+    PutBucketPolicyUnparker;
 
 // +--------------------------------------------------------------------
 // |           RequestBuilderSource and ResponseUnparkerSource
 // +--------------------------------------------------------------------
-class AbortMultipartUploadBuilder:public QsDefaultRequestBuilder <
-    AbortMultipartUploadInput >
+class AbortMultipartUploadBuilder : public QsDefaultRequestBuilder<
+                                        AbortMultipartUploadInput>
 {
 public:
     AbortMultipartUploadBuilder(AbortMultipartUploadInput *
-                                input):QsDefaultRequestBuilder <
-        AbortMultipartUploadInput > (input)
-    {
-    };
+                                    input) : QsDefaultRequestBuilder<AbortMultipartUploadInput>(input){};
 
-    virtual ~ AbortMultipartUploadBuilder()
-    {
-    };
+    virtual ~AbortMultipartUploadBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1034,13 +953,12 @@ public:
 
 // AbortMultipartUploadRequest AddQueryStringParameters.
 Http::QueryParamCollection AbortMultipartUploadBuilder::
-GetQueryParamCollection()
+    GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_ABORT_MULTIPART_UPLOAD_UPLOAD_ID_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_ABORT_MULTIPART_UPLOAD_UPLOAD_ID_FLAG))
     {
         ss << m_input->GetUploadID();
         queryParameters.insert(Http::HeaderValuePair("upload_id", ss.str()));
@@ -1049,22 +967,17 @@ GetQueryParamCollection()
     return queryParameters;
 }
 
-typedef QsDefaultResponseUnparker < AbortMultipartUploadOutput >
-AbortMultipartUploadUnparker;
+typedef QsDefaultResponseUnparker<AbortMultipartUploadOutput>
+    AbortMultipartUploadUnparker;
 
-class CompleteMultipartUploadBuilder:public QsDefaultRequestBuilder <
-    CompleteMultipartUploadInput >
+class CompleteMultipartUploadBuilder : public QsDefaultRequestBuilder<
+                                           CompleteMultipartUploadInput>
 {
 public:
     CompleteMultipartUploadBuilder(CompleteMultipartUploadInput *
-                                   input):QsDefaultRequestBuilder <
-        CompleteMultipartUploadInput > (input)
-    {
-    };
+                                       input) : QsDefaultRequestBuilder<CompleteMultipartUploadInput>(input){};
 
-    virtual ~ CompleteMultipartUploadBuilder()
-    {
-    };
+    virtual ~CompleteMultipartUploadBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1072,54 +985,44 @@ public:
     };
     virtual Http::HeaderValueCollection GetHeaderValueCollection();
     virtual Http::QueryParamCollection GetQueryParamCollection();
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // CompleteMultipartUploadRequest GetRequestSpecificHeaders.
 Http::HeaderValueCollection CompleteMultipartUploadBuilder::
-GetHeaderValueCollection()
+    GetHeaderValueCollection()
 {
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_ETAG_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_ETAG_FLAG))
     {
         ss << m_input->GetETag();
         headers.insert(Http::HeaderValuePair("ETag", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
     return headers;
@@ -1127,14 +1030,12 @@ GetHeaderValueCollection()
 
 // CompleteMultipartUploadRequest AddQueryStringParameters.
 Http::QueryParamCollection CompleteMultipartUploadBuilder::
-GetQueryParamCollection()
+    GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_UPLOAD_ID_FLAG))
     {
         ss << m_input->GetUploadID();
         queryParameters.insert(Http::HeaderValuePair("upload_id", ss.str()));
@@ -1144,19 +1045,17 @@ GetQueryParamCollection()
 }
 
 // CompleteMultipartUploadRequest GetRequestBody.
-std::iostream * CompleteMultipartUploadBuilder::GetRequestBody()
+std::iostream *CompleteMultipartUploadBuilder::GetRequestBody()
 {
     //TO DO;
     Json::FastWriter jsonWriter;
     Json::Value jsonContent;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_OBJECT_PARTS_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_OBJECT_PARTS_FLAG))
     {
         Json::Value arrayObjectParts;
-        std::vector < ObjectPartType > objectParts = m_input->GetObjectParts();
-        for (std::vector < ObjectPartType >::iterator it = objectParts.begin();
-                it != objectParts.end(); it++)
+        std::vector<ObjectPartType> objectParts = m_input->GetObjectParts();
+        for (std::vector<ObjectPartType>::iterator it = objectParts.begin();
+             it != objectParts.end(); it++)
         {
             Json::Reader jsonReader;
             Json::Value itemJsonValue;
@@ -1169,19 +1068,14 @@ std::iostream * CompleteMultipartUploadBuilder::GetRequestBody()
     return new std::stringstream(jsonWriter.write(jsonContent));
 }
 
-class CompleteMultipartUploadUnparker:public QsDefaultResponseUnparker <
-    CompleteMultipartUploadOutput >
+class CompleteMultipartUploadUnparker : public QsDefaultResponseUnparker<
+                                            CompleteMultipartUploadOutput>
 {
 public:
     CompleteMultipartUploadUnparker(CompleteMultipartUploadOutput *
-                                    output):QsDefaultResponseUnparker <
-        CompleteMultipartUploadOutput > (output)
-    {
-    };
+                                        output) : QsDefaultResponseUnparker<CompleteMultipartUploadOutput>(output){};
 
-    virtual ~ CompleteMultipartUploadUnparker()
-    {
-    };
+    virtual ~CompleteMultipartUploadUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -1192,7 +1086,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 201, };
+        int expectedRespCode[1] = {
+            201,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -1205,42 +1101,36 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
 };
 
 // CompleteMultipartUploadRequest ParseResponseHeaders.
 void CompleteMultipartUploadUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection
-        &
-        headerValueCollection)
+                                                               HeaderValueCollection
+                                                                   &
+                                                                       headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator XQSEncryptionCustomerAlgorithmIter =
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
-typedef QsDefaultRequestBuilder < DeleteObjectInput > DeleteObjectBuilder;
+typedef QsDefaultRequestBuilder<DeleteObjectInput> DeleteObjectBuilder;
 
-typedef QsDefaultResponseUnparker < DeleteObjectOutput > DeleteObjectUnparker;
+typedef QsDefaultResponseUnparker<DeleteObjectOutput> DeleteObjectUnparker;
 
-class GetObjectBuilder:public QsDefaultRequestBuilder < GetObjectInput >
+class GetObjectBuilder : public QsDefaultRequestBuilder<GetObjectInput>
 {
 public:
-    GetObjectBuilder(GetObjectInput * input):QsDefaultRequestBuilder <
-        GetObjectInput > (input)
-    {
-    };
+    GetObjectBuilder(GetObjectInput *input) : QsDefaultRequestBuilder<
+                                                  GetObjectInput>(input){};
 
-    virtual ~ GetObjectBuilder()
-    {
-    };
+    virtual ~GetObjectBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1256,15 +1146,14 @@ Http::HeaderValueCollection GetObjectBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_IF_MATCH_FLAG))
     {
         ss << m_input->GetIfMatch();
         headers.insert(Http::HeaderValuePair("If-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_IF_MODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetIfModifiedSince();
         headers.insert(Http::HeaderValuePair("If-Modified-Since", ss.str()));
@@ -1276,8 +1165,7 @@ Http::HeaderValueCollection GetObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("If-None-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_IF_UNMODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetIfUnmodifiedSince();
         headers.insert(Http::HeaderValuePair("If-Unmodified-Since", ss.str()));
@@ -1289,36 +1177,27 @@ Http::HeaderValueCollection GetObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("Range", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
     return headers;
@@ -1329,75 +1208,56 @@ Http::QueryParamCollection GetObjectBuilder::GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CACHE_CONTROL_FLAG))
     {
         ss << m_input->GetResponseCacheControl();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-cache-control", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-cache-control", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG))
     {
         ss << m_input->GetResponseContentDisposition();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-disposition", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-disposition", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG))
     {
         ss << m_input->GetResponseContentEncoding();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-encoding", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-encoding", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG))
     {
         ss << m_input->GetResponseContentLanguage();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-language", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-language", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_TYPE_FLAG))
     {
         ss << m_input->GetResponseContentType();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-content-type", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-content-type", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_GET_OBJECT_RESPONSE_EXPIRES_FLAG))
     {
         ss << m_input->GetResponseExpires();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-expires", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-expires", ss.str()));
         ss.str("");
     }
     return queryParameters;
 }
 
-class GetObjectUnparker:public QsDefaultResponseUnparker < GetObjectOutput >
+class GetObjectUnparker : public QsDefaultResponseUnparker<GetObjectOutput>
 {
 public:
-    GetObjectUnparker(GetObjectOutput * output):QsDefaultResponseUnparker <
-        GetObjectOutput > (output)
-    {
-    };
+    GetObjectUnparker(GetObjectOutput *output) : QsDefaultResponseUnparker<
+                                                     GetObjectOutput>(output){};
 
-    virtual ~ GetObjectUnparker()
-    {
-    };
+    virtual ~GetObjectUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -1408,7 +1268,12 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[4] = { 200, 206, 304, 412, };
+        int expectedRespCode[4] = {
+            200,
+            206,
+            304,
+            412,
+        };
         bool isExpected = false;
         for (int i = 0; i < 4; i++)
         {
@@ -1421,18 +1286,17 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
-    virtual void ParseResponseBody(std::iostream * responseBody);
-
+                                          HeaderValueCollection &
+                                              headerValueCollection);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 // GetObjectRequest ParseResponseHeaders.
 void GetObjectUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                 HeaderValueCollection &
+                                                     headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator CacheControlIter =
         headers.find("cache-control");
     if (CacheControlIter != headers.end())
@@ -1461,9 +1325,8 @@ void GetObjectUnparker::ParseResponseHeaders(const Http::
         headers.find("content-length");
     if (ContentLengthIter != headers.end())
     {
-        m_output->
-        SetContentLength(StringUtils::
-                         ConvertToInt64(ContentLengthIter->second.c_str()));
+        m_output->SetContentLength(StringUtils::
+                                       ConvertToInt64(ContentLengthIter->second.c_str()));
     }
     HeaderValueCollection::const_iterator ContentRangeIter =
         headers.find("content-range");
@@ -1497,28 +1360,22 @@ void GetObjectUnparker::ParseResponseHeaders(const Http::
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
-void GetObjectUnparker::ParseResponseBody(std::iostream * responseBody)
+void GetObjectUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     m_output->SetBody(responseBody);
 }
 
-class HeadObjectBuilder:public QsDefaultRequestBuilder < HeadObjectInput >
+class HeadObjectBuilder : public QsDefaultRequestBuilder<HeadObjectInput>
 {
 public:
-    HeadObjectBuilder(HeadObjectInput * input):QsDefaultRequestBuilder <
-        HeadObjectInput > (input)
-    {
-    };
+    HeadObjectBuilder(HeadObjectInput *input) : QsDefaultRequestBuilder<
+                                                    HeadObjectInput>(input){};
 
-    virtual ~ HeadObjectBuilder()
-    {
-    };
+    virtual ~HeadObjectBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1533,15 +1390,14 @@ Http::HeaderValueCollection HeadObjectBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_IF_MATCH_FLAG))
     {
         ss << m_input->GetIfMatch();
         headers.insert(Http::HeaderValuePair("If-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_IF_MODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetIfModifiedSince();
         headers.insert(Http::HeaderValuePair("If-Modified-Since", ss.str()));
@@ -1553,59 +1409,45 @@ Http::HeaderValueCollection HeadObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("If-None-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_IF_UNMODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetIfUnmodifiedSince();
         headers.insert(Http::HeaderValuePair("If-Unmodified-Since", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
     return headers;
 }
 
-class HeadObjectUnparker:public QsDefaultResponseUnparker < HeadObjectOutput >
+class HeadObjectUnparker : public QsDefaultResponseUnparker<HeadObjectOutput>
 {
 public:
-    HeadObjectUnparker(HeadObjectOutput * output):QsDefaultResponseUnparker <
-        HeadObjectOutput > (output)
-    {
-    };
+    HeadObjectUnparker(HeadObjectOutput *output) : QsDefaultResponseUnparker<
+                                                       HeadObjectOutput>(output){};
 
-    virtual ~ HeadObjectUnparker()
-    {
-    };
+    virtual ~HeadObjectUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -1616,7 +1458,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -1629,23 +1473,22 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
 };
 
 // HeadObjectRequest ParseResponseHeaders.
 void HeadObjectUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                  HeaderValueCollection &
+                                                      headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator ContentLengthIter =
         headers.find("content-length");
     if (ContentLengthIter != headers.end())
     {
-        m_output->
-        SetContentLength(StringUtils::
-                         ConvertToInt64(ContentLengthIter->second.c_str()));
+        m_output->SetContentLength(StringUtils::
+                                       ConvertToInt64(ContentLengthIter->second.c_str()));
     }
     HeaderValueCollection::const_iterator ContentTypeIter =
         headers.find("content-type");
@@ -1668,23 +1511,17 @@ void HeadObjectUnparker::ParseResponseHeaders(const Http::
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
-class ImageProcessBuilder:public QsDefaultRequestBuilder < ImageProcessInput >
+class ImageProcessBuilder : public QsDefaultRequestBuilder<ImageProcessInput>
 {
 public:
-    ImageProcessBuilder(ImageProcessInput * input):QsDefaultRequestBuilder <
-        ImageProcessInput > (input)
-    {
-    };
+    ImageProcessBuilder(ImageProcessInput *input) : QsDefaultRequestBuilder<
+                                                        ImageProcessInput>(input){};
 
-    virtual ~ ImageProcessBuilder()
-    {
-    };
+    virtual ~ImageProcessBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1700,9 +1537,8 @@ Http::HeaderValueCollection ImageProcessBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_IF_MODIFIED_SINCE_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_IF_MODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetIfModifiedSince();
         headers.insert(Http::HeaderValuePair("If-Modified-Since", ss.str()));
@@ -1716,85 +1552,63 @@ Http::QueryParamCollection ImageProcessBuilder::GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_ACTION_FLAG))
     {
         ss << m_input->GetAction();
         queryParameters.insert(Http::HeaderValuePair("action", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CACHE_CONTROL_FLAG))
     {
         ss << m_input->GetResponseCacheControl();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-cache-control", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-cache-control", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG))
     {
         ss << m_input->GetResponseContentDisposition();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-disposition", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-disposition", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG))
     {
         ss << m_input->GetResponseContentEncoding();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-encoding", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-encoding", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG))
     {
         ss << m_input->GetResponseContentLanguage();
-        queryParameters.
-        insert(Http::
-               HeaderValuePair("response-content-language", ss.str()));
+        queryParameters.insert(Http::
+                                   HeaderValuePair("response-content-language", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_TYPE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_TYPE_FLAG))
     {
         ss << m_input->GetResponseContentType();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-content-type", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-content-type", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_IMAGE_PROCESS_RESPONSE_EXPIRES_FLAG))
     {
         ss << m_input->GetResponseExpires();
-        queryParameters.
-        insert(Http::HeaderValuePair("response-expires", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("response-expires", ss.str()));
         ss.str("");
     }
     return queryParameters;
 }
 
-class ImageProcessUnparker:public QsDefaultResponseUnparker <
-    ImageProcessOutput >
+class ImageProcessUnparker : public QsDefaultResponseUnparker<
+                                 ImageProcessOutput>
 {
 public:
     ImageProcessUnparker(ImageProcessOutput *
-                         output):QsDefaultResponseUnparker <
-        ImageProcessOutput > (output)
-    {
-    };
+                             output) : QsDefaultResponseUnparker<ImageProcessOutput>(output){};
 
-    virtual ~ ImageProcessUnparker()
-    {
-    };
+    virtual ~ImageProcessUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -1805,7 +1619,10 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[2] = { 200, 304, };
+        int expectedRespCode[2] = {
+            200,
+            304,
+        };
         bool isExpected = false;
         for (int i = 0; i < 2; i++)
         {
@@ -1818,46 +1635,39 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
-    virtual void ParseResponseBody(std::iostream * responseBody);
-
+                                          HeaderValueCollection &
+                                              headerValueCollection);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 // ImageProcessRequest ParseResponseHeaders.
 void ImageProcessUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                    HeaderValueCollection &
+                                                        headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator ContentLengthIter =
         headers.find("content-length");
     if (ContentLengthIter != headers.end())
     {
-        m_output->
-        SetContentLength(StringUtils::
-                         ConvertToInt64(ContentLengthIter->second.c_str()));
+        m_output->SetContentLength(StringUtils::
+                                       ConvertToInt64(ContentLengthIter->second.c_str()));
     }
 }
 
-void ImageProcessUnparker::ParseResponseBody(std::iostream * responseBody)
+void ImageProcessUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     m_output->SetBody(responseBody);
 }
 
-class InitiateMultipartUploadBuilder:public QsDefaultRequestBuilder <
-    InitiateMultipartUploadInput >
+class InitiateMultipartUploadBuilder : public QsDefaultRequestBuilder<
+                                           InitiateMultipartUploadInput>
 {
 public:
     InitiateMultipartUploadBuilder(InitiateMultipartUploadInput *
-                                   input):QsDefaultRequestBuilder <
-        InitiateMultipartUploadInput > (input)
-    {
-    };
+                                       input) : QsDefaultRequestBuilder<InitiateMultipartUploadInput>(input){};
 
-    virtual ~ InitiateMultipartUploadBuilder()
-    {
-    };
+    virtual ~InitiateMultipartUploadBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -1868,68 +1678,52 @@ public:
 
 // InitiateMultipartUploadRequest GetRequestSpecificHeaders.
 Http::HeaderValueCollection InitiateMultipartUploadBuilder::
-GetHeaderValueCollection()
+    GetHeaderValueCollection()
 {
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_CONTENT_TYPE_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_CONTENT_TYPE_FLAG))
     {
         ss << m_input->GetContentType();
         headers.insert(Http::HeaderValuePair("Content-Type", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
     return headers;
 }
 
-class InitiateMultipartUploadUnparker:public QsDefaultResponseUnparker <
-    InitiateMultipartUploadOutput >
+class InitiateMultipartUploadUnparker : public QsDefaultResponseUnparker<
+                                            InitiateMultipartUploadOutput>
 {
 public:
     InitiateMultipartUploadUnparker(InitiateMultipartUploadOutput *
-                                    output):QsDefaultResponseUnparker <
-        InitiateMultipartUploadOutput > (output)
-    {
-    };
+                                        output) : QsDefaultResponseUnparker<InitiateMultipartUploadOutput>(output){};
 
-    virtual ~ InitiateMultipartUploadUnparker()
-    {
-    };
+    virtual ~InitiateMultipartUploadUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -1940,7 +1734,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -1953,30 +1749,28 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
-    virtual void ParseResponseBody(std::iostream * responseBody);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
 // InitiateMultipartUploadRequest ParseResponseHeaders.
 void InitiateMultipartUploadUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection
-        &
-        headerValueCollection)
+                                                               HeaderValueCollection
+                                                                   &
+                                                                       headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator XQSEncryptionCustomerAlgorithmIter =
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
 void InitiateMultipartUploadUnparker::ParseResponseBody(std::iostream *
-        responseBody)
+                                                            responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -1997,17 +1791,13 @@ void InitiateMultipartUploadUnparker::ParseResponseBody(std::iostream *
     m_bNeedReleaseBody = true;
 }
 
-class ListMultipartBuilder:public QsDefaultRequestBuilder < ListMultipartInput >
+class ListMultipartBuilder : public QsDefaultRequestBuilder<ListMultipartInput>
 {
 public:
-    ListMultipartBuilder(ListMultipartInput * input):QsDefaultRequestBuilder <
-        ListMultipartInput > (input)
-    {
-    };
+    ListMultipartBuilder(ListMultipartInput *input) : QsDefaultRequestBuilder<
+                                                          ListMultipartInput>(input){};
 
-    virtual ~ ListMultipartBuilder()
-    {
-    };
+    virtual ~ListMultipartBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -2021,19 +1811,17 @@ Http::QueryParamCollection ListMultipartBuilder::GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_LIMIT_FLAG))
     {
         ss << m_input->GetLimit();
         queryParameters.insert(Http::HeaderValuePair("limit", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_PART_NUMBER_MARKER_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_PART_NUMBER_MARKER_FLAG))
     {
         ss << m_input->GetPartNumberMarker();
-        queryParameters.
-        insert(Http::HeaderValuePair("part_number_marker", ss.str()));
+        queryParameters.insert(Http::HeaderValuePair("part_number_marker", ss.str()));
         ss.str("");
     }
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_LIST_MULTIPART_UPLOAD_ID_FLAG))
@@ -2045,19 +1833,14 @@ Http::QueryParamCollection ListMultipartBuilder::GetQueryParamCollection()
     return queryParameters;
 }
 
-class ListMultipartUnparker:public QsDefaultResponseUnparker <
-    ListMultipartOutput >
+class ListMultipartUnparker : public QsDefaultResponseUnparker<
+                                  ListMultipartOutput>
 {
 public:
     ListMultipartUnparker(ListMultipartOutput *
-                          output):QsDefaultResponseUnparker <
-        ListMultipartOutput > (output)
-    {
-    };
+                              output) : QsDefaultResponseUnparker<ListMultipartOutput>(output){};
 
-    virtual ~ ListMultipartUnparker()
-    {
-    };
+    virtual ~ListMultipartUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -2068,7 +1851,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -2080,10 +1865,10 @@ public:
         }
         return isExpected;
     };
-    virtual void ParseResponseBody(std::iostream * responseBody);
+    virtual void ParseResponseBody(std::iostream *responseBody);
 };
 
-void ListMultipartUnparker::ParseResponseBody(std::iostream * responseBody)
+void ListMultipartUnparker::ParseResponseBody(std::iostream *responseBody)
 {
     // parse json content
     Json::Reader jsonReader;
@@ -2095,28 +1880,23 @@ void ListMultipartUnparker::ParseResponseBody(std::iostream * responseBody)
     }
     if (jsonContent.isMember("object_parts"))
     {
-        std::vector < ObjectPartType > vecObjectParts;
+        std::vector<ObjectPartType> vecObjectParts;
         for (unsigned i = 0; i < jsonContent["object_parts"].size(); ++i)
         {
-            vecObjectParts.push_back(jsonContent["object_parts"][i].
-                                     toStyledString());
+            vecObjectParts.push_back(jsonContent["object_parts"][i].toStyledString());
         }
         m_output->SetObjectParts(vecObjectParts);
     }
     m_bNeedReleaseBody = true;
 }
 
-class OptionsObjectBuilder:public QsDefaultRequestBuilder < OptionsObjectInput >
+class OptionsObjectBuilder : public QsDefaultRequestBuilder<OptionsObjectInput>
 {
 public:
-    OptionsObjectBuilder(OptionsObjectInput * input):QsDefaultRequestBuilder <
-        OptionsObjectInput > (input)
-    {
-    };
+    OptionsObjectBuilder(OptionsObjectInput *input) : QsDefaultRequestBuilder<
+                                                          OptionsObjectInput>(input){};
 
-    virtual ~ OptionsObjectBuilder()
-    {
-    };
+    virtual ~OptionsObjectBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -2131,25 +1911,19 @@ Http::HeaderValueCollection OptionsObjectBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG))
     {
         ss << m_input->GetAccessControlRequestHeaders();
-        headers.
-        insert(Http::
-               HeaderValuePair("Access-Control-Request-Headers", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("Access-Control-Request-Headers", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG))
     {
         ss << m_input->GetAccessControlRequestMethod();
-        headers.
-        insert(Http::
-               HeaderValuePair("Access-Control-Request-Method", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("Access-Control-Request-Method", ss.str()));
         ss.str("");
     }
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG))
@@ -2161,19 +1935,14 @@ Http::HeaderValueCollection OptionsObjectBuilder::GetHeaderValueCollection()
     return headers;
 }
 
-class OptionsObjectUnparker:public QsDefaultResponseUnparker <
-    OptionsObjectOutput >
+class OptionsObjectUnparker : public QsDefaultResponseUnparker<
+                                  OptionsObjectOutput>
 {
 public:
     OptionsObjectUnparker(OptionsObjectOutput *
-                          output):QsDefaultResponseUnparker <
-        OptionsObjectOutput > (output)
-    {
-    };
+                              output) : QsDefaultResponseUnparker<OptionsObjectOutput>(output){};
 
-    virtual ~ OptionsObjectUnparker()
-    {
-    };
+    virtual ~OptionsObjectUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -2184,7 +1953,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 200, };
+        int expectedRespCode[1] = {
+            200,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -2197,43 +1968,39 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
 };
 
 // OptionsObjectRequest ParseResponseHeaders.
 void OptionsObjectUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                     HeaderValueCollection &
+                                                         headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator AccessControlAllowHeadersIter =
         headers.find("access-control-allow-headers");
     if (AccessControlAllowHeadersIter != headers.end())
     {
-        m_output->SetAccessControlAllowHeaders(AccessControlAllowHeadersIter->
-                                               second);
+        m_output->SetAccessControlAllowHeaders(AccessControlAllowHeadersIter->second);
     }
     HeaderValueCollection::const_iterator AccessControlAllowMethodsIter =
         headers.find("access-control-allow-methods");
     if (AccessControlAllowMethodsIter != headers.end())
     {
-        m_output->SetAccessControlAllowMethods(AccessControlAllowMethodsIter->
-                                               second);
+        m_output->SetAccessControlAllowMethods(AccessControlAllowMethodsIter->second);
     }
     HeaderValueCollection::const_iterator AccessControlAllowOriginIter =
         headers.find("access-control-allow-origin");
     if (AccessControlAllowOriginIter != headers.end())
     {
-        m_output->SetAccessControlAllowOrigin(AccessControlAllowOriginIter->
-                                              second);
+        m_output->SetAccessControlAllowOrigin(AccessControlAllowOriginIter->second);
     }
     HeaderValueCollection::const_iterator AccessControlExposeHeadersIter =
         headers.find("access-control-expose-headers");
     if (AccessControlExposeHeadersIter != headers.end())
     {
-        m_output->SetAccessControlExposeHeaders(AccessControlExposeHeadersIter->
-                                                second);
+        m_output->SetAccessControlExposeHeaders(AccessControlExposeHeadersIter->second);
     }
     HeaderValueCollection::const_iterator AccessControlMaxAgeIter =
         headers.find("access-control-max-age");
@@ -2243,24 +2010,80 @@ void OptionsObjectUnparker::ParseResponseHeaders(const Http::
     }
 }
 
-class PutObjectBuilder:public QsDefaultRequestBuilder < PutObjectInput >
+class AppendObjectBuilder : public QsDefaultRequestBuilder<AppendObjectInput>
 {
 public:
-    PutObjectBuilder(PutObjectInput * input):QsDefaultRequestBuilder <
-        PutObjectInput > (input)
-    {
-    };
+    AppendObjectBuilder(AppendObjectInput *input) : QsDefaultRequestBuilder<
+                                                        AppendObjectInput>(input){};
 
-    virtual ~ PutObjectBuilder()
-    {
-    };
+    virtual ~AppendObjectBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
         return m_input->CheckIfInputIsVaild();
     };
     virtual Http::HeaderValueCollection GetHeaderValueCollection();
-    virtual std::iostream * GetRequestBody();
+    virtual Http::QueryParamCollection GetQueryParamCollection();
+    virtual std::iostream *GetRequestBody();
+};
+
+Http::QueryParamCollection AppendObjectBuilder::GetQueryParamCollection()
+{
+    Http::QueryParamCollection queryParameters;
+    std::stringstream ss;
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_APPEND_OBJECT_POSITION_FLAG))
+    {
+        ss << m_input->GetPosition();
+        queryParameters.insert(Http::HeaderValuePair("position", ss.str()));
+        ss.str("");
+    }
+    return queryParameters;
+}
+
+// PutObjectRequest GetRequestSpecificHeaders.
+Http::HeaderValueCollection AppendObjectBuilder::GetHeaderValueCollection()
+{
+    //TO DO;
+    Http::HeaderValueCollection headers;
+    std::stringstream ss;
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG))
+    {
+        ss << m_input->GetContentLength();
+        headers.insert(Http::HeaderValuePair("Content-Length", ss.str()));
+        ss.str("");
+    }
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CONTENT_TYPE_FLAG))
+    {
+        ss << m_input->GetContentType();
+        headers.insert(Http::HeaderValuePair("Content-Type", ss.str()));
+        ss.str("");
+    }
+
+    return headers;
+}
+
+// AppendObjectRequest GetRequestBody.
+std::iostream *AppendObjectBuilder::GetRequestBody()
+{
+    return m_input->GetBody();
+}
+
+class PutObjectBuilder : public QsDefaultRequestBuilder<PutObjectInput>
+{
+public:
+    PutObjectBuilder(PutObjectInput *input) : QsDefaultRequestBuilder<
+                                                  PutObjectInput>(input){};
+
+    virtual ~PutObjectBuilder(){};
+
+    virtual bool CkeckIfInputIsVaild()
+    {
+        return m_input->CheckIfInputIsVaild();
+    };
+    virtual Http::HeaderValueCollection GetHeaderValueCollection();
+    virtual std::iostream *GetRequestBody();
 };
 
 // PutObjectRequest GetRequestSpecificHeaders.
@@ -2269,7 +2092,7 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
+    std::vector<std::string>::iterator it;
     if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_CONTENT_LENGTH_FLAG))
     {
         ss << m_input->GetContentLength();
@@ -2294,140 +2117,102 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
         headers.insert(Http::HeaderValuePair("Expect", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_FLAG))
     {
         ss << m_input->GetXQSCopySource();
         headers.insert(Http::HeaderValuePair("X-QS-Copy-Source", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair
-               ("X-QS-Copy-Source-Encryption-Customer-Algorithm",
-                ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair
-               ("X-QS-Copy-Source-Encryption-Customer-Key-MD5", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key-MD5", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MATCH_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfMatch();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Match", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfModifiedSince();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Modified-Since",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Modified-Since",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfNoneMatch();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-None-Match", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-None-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfUnmodifiedSince();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Unmodified-Since",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Unmodified-Since",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetXQSFetchIfUnmodifiedSince();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Fetch-If-Unmodified-Since", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Fetch-If-Unmodified-Since", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_SOURCE_FLAG))
     {
         ss << m_input->GetXQSFetchSource();
         headers.insert(Http::HeaderValuePair("X-QS-Fetch-Source", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_PUT_OBJECT_X_QS_MOVE_SOURCE_FLAG))
     {
         ss << m_input->GetXQSMoveSource();
         headers.insert(Http::HeaderValuePair("X-QS-Move-Source", ss.str()));
@@ -2437,22 +2222,18 @@ Http::HeaderValueCollection PutObjectBuilder::GetHeaderValueCollection()
 }
 
 // PutObjectRequest GetRequestBody.
-std::iostream * PutObjectBuilder::GetRequestBody()
+std::iostream *PutObjectBuilder::GetRequestBody()
 {
     return m_input->GetBody();
 }
 
-class PutObjectUnparker:public QsDefaultResponseUnparker < PutObjectOutput >
+class AppendObjectUnparker : public QsDefaultResponseUnparker<AppendObjectOutput>
 {
 public:
-    PutObjectUnparker(PutObjectOutput * output):QsDefaultResponseUnparker <
-        PutObjectOutput > (output)
-    {
-    };
+    AppendObjectUnparker(AppendObjectOutput *output) : QsDefaultResponseUnparker<
+                                                           AppendObjectOutput>(output){};
 
-    virtual ~ PutObjectUnparker()
-    {
-    };
+    virtual ~AppendObjectUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -2463,7 +2244,57 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 201, };
+        int expectedRespCode[1] = {
+            200,
+        };
+        bool isExpected = false;
+        for (int i = 0; i < 1; i++)
+        {
+            if (expectedRespCode[i] == responseCode)
+            {
+                isExpected = true;
+                break;
+            }
+        }
+        return isExpected;
+    };
+
+    virtual void ParseResponseHeaders(const Http::HeaderValueCollection &headerValueCollection);
+};
+
+// AppendObjectRequest ParseResponseHeaders.
+void AppendObjectUnparker::ParseResponseHeaders(const Http::
+                                                    HeaderValueCollection &
+                                                        headerValueCollection)
+{
+    const HeaderValueCollection &headers = headerValueCollection;
+    HeaderValueCollection::const_iterator XQSNextAppendPositionIter =
+        headers.find("x-qs-next-append-position");
+    if (XQSNextAppendPositionIter != headers.end())
+    {
+        m_output->SetXQSNextAppendPosition(XQSNextAppendPositionIter->second);
+    }
+}
+class PutObjectUnparker : public QsDefaultResponseUnparker<PutObjectOutput>
+{
+public:
+    PutObjectUnparker(PutObjectOutput *output) : QsDefaultResponseUnparker<
+                                                     PutObjectOutput>(output){};
+
+    virtual ~PutObjectUnparker(){};
+
+    virtual bool CkeckIfOutputIsVaild()
+    {
+        return m_output->IsVaild();
+    };
+
+    virtual bool CheckIfResponseExpected(Http::HttpResponseCode responseCode)
+    {
+        m_output->SetResponseCode(responseCode);
+        // Expected response codes.
+        int expectedRespCode[1] = {
+            201,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -2476,16 +2307,16 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
 };
 
 // PutObjectRequest ParseResponseHeaders.
 void PutObjectUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                 HeaderValueCollection &
+                                                     headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator ETagIter = headers.find("etag");
     if (ETagIter != headers.end())
     {
@@ -2495,25 +2326,18 @@ void PutObjectUnparker::ParseResponseHeaders(const Http::
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
-class UploadMultipartBuilder:public QsDefaultRequestBuilder <
-    UploadMultipartInput >
+class UploadMultipartBuilder : public QsDefaultRequestBuilder<
+                                   UploadMultipartInput>
 {
 public:
     UploadMultipartBuilder(UploadMultipartInput *
-                           input):QsDefaultRequestBuilder <
-        UploadMultipartInput > (input)
-    {
-    };
+                               input) : QsDefaultRequestBuilder<UploadMultipartInput>(input){};
 
-    virtual ~ UploadMultipartBuilder()
-    {
-    };
+    virtual ~UploadMultipartBuilder(){};
 
     virtual bool CkeckIfInputIsVaild()
     {
@@ -2521,7 +2345,7 @@ public:
     };
     virtual Http::HeaderValueCollection GetHeaderValueCollection();
     virtual Http::QueryParamCollection GetQueryParamCollection();
-    virtual std::iostream * GetRequestBody();
+    virtual std::iostream *GetRequestBody();
 };
 
 // UploadMultipartRequest GetRequestSpecificHeaders.
@@ -2530,141 +2354,105 @@ Http::HeaderValueCollection UploadMultipartBuilder::GetHeaderValueCollection()
     //TO DO;
     Http::HeaderValueCollection headers;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_LENGTH_FLAG))
     {
         ss << m_input->GetContentLength();
         headers.insert(Http::HeaderValuePair("Content-Length", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_CONTENT_MD5_FLAG))
     {
         ss << m_input->GetContentMD5();
         headers.insert(Http::HeaderValuePair("Content-MD5", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_RANGE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_RANGE_FLAG))
     {
         ss << m_input->GetXQSCopyRange();
         headers.insert(Http::HeaderValuePair("X-QS-Copy-Range", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_FLAG))
     {
         ss << m_input->GetXQSCopySource();
         headers.insert(Http::HeaderValuePair("X-QS-Copy-Source", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair
-               ("X-QS-Copy-Source-Encryption-Customer-Algorithm",
-                ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSCopySourceEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair
-               ("X-QS-Copy-Source-Encryption-Customer-Key-MD5", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-Encryption-Customer-Key-MD5", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MATCH_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfMatch();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Match", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfModifiedSince();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Modified-Since",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Modified-Since",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfNoneMatch();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-None-Match", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-None-Match", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG))
     {
         ss << m_input->GetXQSCopySourceIfUnmodifiedSince();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Copy-Source-If-Unmodified-Since",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Copy-Source-If-Unmodified-Since",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerAlgorithm();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Algorithm",
+                                           ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKey();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet
-            (SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG))
     {
         ss << m_input->GetXQSEncryptionCustomerKeyMD5();
-        headers.
-        insert(Http::
-               HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
-                               ss.str()));
+        headers.insert(Http::
+                           HeaderValuePair("X-QS-Encryption-Customer-Key-MD5",
+                                           ss.str()));
         ss.str("");
     }
     return headers;
@@ -2675,16 +2463,14 @@ Http::QueryParamCollection UploadMultipartBuilder::GetQueryParamCollection()
 {
     Http::QueryParamCollection queryParameters;
     std::stringstream ss;
-    std::vector < std::string >::iterator it;
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_PART_NUMBER_FLAG))
+    std::vector<std::string>::iterator it;
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_PART_NUMBER_FLAG))
     {
         ss << m_input->GetPartNumber();
         queryParameters.insert(Http::HeaderValuePair("part_number", ss.str()));
         ss.str("");
     }
-    if (m_input->
-            IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_UPLOAD_ID_FLAG))
+    if (m_input->IsPropHasBeenSet(SETTING_INPUT_UPLOAD_MULTIPART_UPLOAD_ID_FLAG))
     {
         ss << m_input->GetUploadID();
         queryParameters.insert(Http::HeaderValuePair("upload_id", ss.str()));
@@ -2694,24 +2480,19 @@ Http::QueryParamCollection UploadMultipartBuilder::GetQueryParamCollection()
 }
 
 // UploadMultipartRequest GetRequestBody.
-std::iostream * UploadMultipartBuilder::GetRequestBody()
+std::iostream *UploadMultipartBuilder::GetRequestBody()
 {
     return m_input->GetBody();
 }
 
-class UploadMultipartUnparker:public QsDefaultResponseUnparker <
-    UploadMultipartOutput >
+class UploadMultipartUnparker : public QsDefaultResponseUnparker<
+                                    UploadMultipartOutput>
 {
 public:
     UploadMultipartUnparker(UploadMultipartOutput *
-                            output):QsDefaultResponseUnparker <
-        UploadMultipartOutput > (output)
-    {
-    };
+                                output) : QsDefaultResponseUnparker<UploadMultipartOutput>(output){};
 
-    virtual ~ UploadMultipartUnparker()
-    {
-    };
+    virtual ~UploadMultipartUnparker(){};
 
     virtual bool CkeckIfOutputIsVaild()
     {
@@ -2722,7 +2503,9 @@ public:
     {
         m_output->SetResponseCode(responseCode);
         // Expected response codes.
-        int expectedRespCode[1] = { 201, };
+        int expectedRespCode[1] = {
+            201,
+        };
         bool isExpected = false;
         for (int i = 0; i < 1; i++)
         {
@@ -2735,16 +2518,16 @@ public:
         return isExpected;
     };
     virtual void ParseResponseHeaders(const Http::
-                                      HeaderValueCollection &
-                                      headerValueCollection);
+                                          HeaderValueCollection &
+                                              headerValueCollection);
 };
 
 // UploadMultipartRequest ParseResponseHeaders.
 void UploadMultipartUnparker::ParseResponseHeaders(const Http::
-        HeaderValueCollection &
-        headerValueCollection)
+                                                       HeaderValueCollection &
+                                                           headerValueCollection)
 {
-    const HeaderValueCollection & headers = headerValueCollection;
+    const HeaderValueCollection &headers = headerValueCollection;
     HeaderValueCollection::const_iterator ETagIter = headers.find("etag");
     if (ETagIter != headers.end())
     {
@@ -2760,9 +2543,7 @@ void UploadMultipartUnparker::ParseResponseHeaders(const Http::
         headers.find("x-qs-encryption-customer-algorithm");
     if (XQSEncryptionCustomerAlgorithmIter != headers.end())
     {
-        m_output->
-        SetXQSEncryptionCustomerAlgorithm
-        (XQSEncryptionCustomerAlgorithmIter->second);
+        m_output->SetXQSEncryptionCustomerAlgorithm(XQSEncryptionCustomerAlgorithmIter->second);
     }
 }
 
@@ -2770,8 +2551,8 @@ void UploadMultipartUnparker::ParseResponseHeaders(const Http::
 // |           SDK API Operation Source
 // +--------------------------------------------------------------------
 
-QsError Bucket::DeleteBucket(DeleteBucketInput & input,
-                             DeleteBucketOutput & output)
+QsError Bucket::DeleteBucket(DeleteBucketInput &input,
+                             DeleteBucketOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2782,8 +2563,8 @@ QsError Bucket::DeleteBucket(DeleteBucketInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::DeleteBucketCORS(DeleteBucketCORSInput & input,
-                                 DeleteBucketCORSOutput & output)
+QsError Bucket::DeleteBucketCORS(DeleteBucketCORSInput &input,
+                                 DeleteBucketCORSOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2796,8 +2577,8 @@ QsError Bucket::DeleteBucketCORS(DeleteBucketCORSInput & input,
 }
 
 QsError Bucket::
-DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput & input,
-                           DeleteBucketExternalMirrorOutput & output)
+    DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput &input,
+                               DeleteBucketExternalMirrorOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2809,8 +2590,8 @@ DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::DeleteBucketPolicy(DeleteBucketPolicyInput & input,
-                                   DeleteBucketPolicyOutput & output)
+QsError Bucket::DeleteBucketPolicy(DeleteBucketPolicyInput &input,
+                                   DeleteBucketPolicyOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2822,8 +2603,8 @@ QsError Bucket::DeleteBucketPolicy(DeleteBucketPolicyInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::DeleteMultipleObjects(DeleteMultipleObjectsInput & input,
-                                      DeleteMultipleObjectsOutput & output)
+QsError Bucket::DeleteMultipleObjects(DeleteMultipleObjectsInput &input,
+                                      DeleteMultipleObjectsOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2835,8 +2616,8 @@ QsError Bucket::DeleteMultipleObjects(DeleteMultipleObjectsInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetBucketACL(GetBucketACLInput & input,
-                             GetBucketACLOutput & output)
+QsError Bucket::GetBucketACL(GetBucketACLInput &input,
+                             GetBucketACLOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2847,8 +2628,8 @@ QsError Bucket::GetBucketACL(GetBucketACLInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetBucketCORS(GetBucketCORSInput & input,
-                              GetBucketCORSOutput & output)
+QsError Bucket::GetBucketCORS(GetBucketCORSInput &input,
+                              GetBucketCORSOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2859,8 +2640,8 @@ QsError Bucket::GetBucketCORS(GetBucketCORSInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
-                                        GetBucketExternalMirrorOutput & output)
+QsError Bucket::GetBucketExternalMirror(GetBucketExternalMirrorInput &input,
+                                        GetBucketExternalMirrorOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2872,8 +2653,8 @@ QsError Bucket::GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetBucketPolicy(GetBucketPolicyInput & input,
-                                GetBucketPolicyOutput & output)
+QsError Bucket::GetBucketPolicy(GetBucketPolicyInput &input,
+                                GetBucketPolicyOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2884,8 +2665,8 @@ QsError Bucket::GetBucketPolicy(GetBucketPolicyInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetBucketStatistics(GetBucketStatisticsInput & input,
-                                    GetBucketStatisticsOutput & output)
+QsError Bucket::GetBucketStatistics(GetBucketStatisticsInput &input,
+                                    GetBucketStatisticsOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2897,7 +2678,7 @@ QsError Bucket::GetBucketStatistics(GetBucketStatisticsInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::HeadBucket(HeadBucketInput & input, HeadBucketOutput & output)
+QsError Bucket::HeadBucket(HeadBucketInput &input, HeadBucketOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2908,8 +2689,8 @@ QsError Bucket::HeadBucket(HeadBucketInput & input, HeadBucketOutput & output)
     return request.GetResponse();
 }
 
-QsError Bucket::ListMultipartUploads(ListMultipartUploadsInput & input,
-                                     ListMultipartUploadsOutput & output)
+QsError Bucket::ListMultipartUploads(ListMultipartUploadsInput &input,
+                                     ListMultipartUploadsOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2921,8 +2702,8 @@ QsError Bucket::ListMultipartUploads(ListMultipartUploadsInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::ListObjects(ListObjectsInput & input,
-                            ListObjectsOutput & output)
+QsError Bucket::ListObjects(ListObjectsInput &input,
+                            ListObjectsOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2934,7 +2715,7 @@ QsError Bucket::ListObjects(ListObjectsInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::PutBucket(PutBucketInput & input, PutBucketOutput & output)
+QsError Bucket::PutBucket(PutBucketInput &input, PutBucketOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2945,8 +2726,8 @@ QsError Bucket::PutBucket(PutBucketInput & input, PutBucketOutput & output)
     return request.GetResponse();
 }
 
-QsError Bucket::PutBucketACL(PutBucketACLInput & input,
-                             PutBucketACLOutput & output)
+QsError Bucket::PutBucketACL(PutBucketACLInput &input,
+                             PutBucketACLOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2957,8 +2738,8 @@ QsError Bucket::PutBucketACL(PutBucketACLInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::PutBucketCORS(PutBucketCORSInput & input,
-                              PutBucketCORSOutput & output)
+QsError Bucket::PutBucketCORS(PutBucketCORSInput &input,
+                              PutBucketCORSOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2969,8 +2750,8 @@ QsError Bucket::PutBucketCORS(PutBucketCORSInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
-                                        PutBucketExternalMirrorOutput & output)
+QsError Bucket::PutBucketExternalMirror(PutBucketExternalMirrorInput &input,
+                                        PutBucketExternalMirrorOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2982,8 +2763,8 @@ QsError Bucket::PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::PutBucketPolicy(PutBucketPolicyInput & input,
-                                PutBucketPolicyOutput & output)
+QsError Bucket::PutBucketPolicy(PutBucketPolicyInput &input,
+                                PutBucketPolicyOutput &output)
 {
     Properties properties(m_properties);
     Operation operation(&m_qsConfig, properties,
@@ -2999,8 +2780,8 @@ QsError Bucket::PutBucketPolicy(PutBucketPolicyInput & input,
 // +--------------------------------------------------------------------
 
 QsError Bucket::AbortMultipartUpload(std::string objectKey,
-                                     AbortMultipartUploadInput & input,
-                                     AbortMultipartUploadOutput & output)
+                                     AbortMultipartUploadInput &input,
+                                     AbortMultipartUploadOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3014,8 +2795,8 @@ QsError Bucket::AbortMultipartUpload(std::string objectKey,
 }
 
 QsError Bucket::CompleteMultipartUpload(std::string objectKey,
-                                        CompleteMultipartUploadInput & input,
-                                        CompleteMultipartUploadOutput & output)
+                                        CompleteMultipartUploadInput &input,
+                                        CompleteMultipartUploadOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3028,8 +2809,8 @@ QsError Bucket::CompleteMultipartUpload(std::string objectKey,
     return request.GetResponse();
 }
 
-QsError Bucket::DeleteObject(std::string objectKey, DeleteObjectInput & input,
-                             DeleteObjectOutput & output)
+QsError Bucket::DeleteObject(std::string objectKey, DeleteObjectInput &input,
+                             DeleteObjectOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3042,8 +2823,8 @@ QsError Bucket::DeleteObject(std::string objectKey, DeleteObjectInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::GetObject(std::string objectKey, GetObjectInput & input,
-                          GetObjectOutput & output)
+QsError Bucket::GetObject(std::string objectKey, GetObjectInput &input,
+                          GetObjectOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3055,8 +2836,8 @@ QsError Bucket::GetObject(std::string objectKey, GetObjectInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::HeadObject(std::string objectKey, HeadObjectInput & input,
-                           HeadObjectOutput & output)
+QsError Bucket::HeadObject(std::string objectKey, HeadObjectInput &input,
+                           HeadObjectOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3069,8 +2850,8 @@ QsError Bucket::HeadObject(std::string objectKey, HeadObjectInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::ImageProcess(std::string objectKey, ImageProcessInput & input,
-                             ImageProcessOutput & output)
+QsError Bucket::ImageProcess(std::string objectKey, ImageProcessInput &input,
+                             ImageProcessOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3084,8 +2865,8 @@ QsError Bucket::ImageProcess(std::string objectKey, ImageProcessInput & input,
 }
 
 QsError Bucket::InitiateMultipartUpload(std::string objectKey,
-                                        InitiateMultipartUploadInput & input,
-                                        InitiateMultipartUploadOutput & output)
+                                        InitiateMultipartUploadInput &input,
+                                        InitiateMultipartUploadOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3098,8 +2879,8 @@ QsError Bucket::InitiateMultipartUpload(std::string objectKey,
     return request.GetResponse();
 }
 
-QsError Bucket::ListMultipart(std::string objectKey, ListMultipartInput & input,
-                              ListMultipartOutput & output)
+QsError Bucket::ListMultipart(std::string objectKey, ListMultipartInput &input,
+                              ListMultipartOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3112,8 +2893,8 @@ QsError Bucket::ListMultipart(std::string objectKey, ListMultipartInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::OptionsObject(std::string objectKey, OptionsObjectInput & input,
-                              OptionsObjectOutput & output)
+QsError Bucket::OptionsObject(std::string objectKey, OptionsObjectInput &input,
+                              OptionsObjectOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3126,8 +2907,23 @@ QsError Bucket::OptionsObject(std::string objectKey, OptionsObjectInput & input,
     return request.GetResponse();
 }
 
-QsError Bucket::PutObject(std::string objectKey, PutObjectInput & input,
-                          PutObjectOutput & output)
+QsError Bucket::AppendObject(std::string objectKey,
+                             AppendObjectInput &input,
+                             AppendObjectOutput &output)
+{
+    Properties properties(m_properties);
+    properties.ObjectKey = objectKey;
+    Operation operation(&m_qsConfig, properties,
+                        "Append Object",
+                        HTTP_POST, "/<bucket-name>/<object-key>?append");
+    AppendObjectBuilder bulider(&input);
+    AppendObjectUnparker unparker(&output);
+    QsRequest request(operation, &bulider, &unparker);
+    return request.GetResponse();
+}
+
+QsError Bucket::PutObject(std::string objectKey, PutObjectInput &input,
+                          PutObjectOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;
@@ -3140,8 +2936,8 @@ QsError Bucket::PutObject(std::string objectKey, PutObjectInput & input,
 }
 
 QsError Bucket::UploadMultipart(std::string objectKey,
-                                UploadMultipartInput & input,
-                                UploadMultipartOutput & output)
+                                UploadMultipartInput &input,
+                                UploadMultipartOutput &output)
 {
     Properties properties(m_properties);
     properties.ObjectKey = objectKey;

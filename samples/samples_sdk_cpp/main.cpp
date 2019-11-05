@@ -32,7 +32,7 @@
 
 using namespace QingStor;
 
-static std::iostream* Create5MbStream4UploadPart(const std::string partTag)
+static std::iostream *Create5MbStream4UploadPart(const std::string partTag)
 {
     size_t fiveMbSize = 5 * 1024 * 1024;
     std::stringstream patternStream;
@@ -41,75 +41,93 @@ static std::iostream* Create5MbStream4UploadPart(const std::string partTag)
     std::string scratchString;
     scratchString.reserve(fiveMbSize);
     // 5MB is a hard minimum for multi part uploads; make sure the final string is at least that long
-    size_t patternCopyCount = static_cast< size_t >( fiveMbSize / pattern.size() + 1 );
-    for(size_t i = 0; i < patternCopyCount; ++i)
+    size_t patternCopyCount = static_cast<size_t>(fiveMbSize / pattern.size() + 1);
+    for (size_t i = 0; i < patternCopyCount; ++i)
     {
         scratchString.append(pattern);
     }
-    std::iostream* streamPtr = new std::stringstream(scratchString);
+    std::iostream *streamPtr = new std::stringstream(scratchString);
     streamPtr->seekg(0);
     streamPtr->seekp(0, std::ios_base::end);
     return streamPtr;
 }
 
-
-void ShowHow2Do_InitiateMultipartUpload(Bucket * qsBucket, std::string &objectkey, std::string &uploadID)
+static std::iostream *Create1MbStream4Append(const std::string partTag)
 {
-    if(!qsBucket)
+    size_t fiveMbSize = 1 * 1024 * 1024;
+    std::stringstream patternStream;
+    patternStream << "Appended Part Postion." << partTag << ":" << std::endl;
+    std::string pattern = patternStream.str();
+    std::string scratchString;
+    scratchString.reserve(fiveMbSize);
+    // 5MB is a hard minimum for multi part uploads; make sure the final string is at least that long
+    size_t patternCopyCount = static_cast<size_t>(fiveMbSize / pattern.size() + 1);
+    for (size_t i = 0; i < patternCopyCount; ++i)
+    {
+        scratchString.append(pattern);
+    }
+    std::iostream *streamPtr = new std::stringstream(scratchString);
+    streamPtr->seekg(0);
+    streamPtr->seekp(0, std::ios_base::end);
+    return streamPtr;
+}
+
+void ShowHow2Do_InitiateMultipartUpload(Bucket *qsBucket, std::string &objectkey, std::string &uploadID)
+{
+    if (!qsBucket)
     {
         return;
     }
     InitiateMultipartUploadInput input;
     InitiateMultipartUploadOutput output;
-    QsError err = qsBucket->InitiateMultipartUpload (objectkey, input, output);
+    QsError err = qsBucket->InitiateMultipartUpload(objectkey, input, output);
     if (QS_ERR_NO_ERROR == err)
     {
         // If Success.
         uploadID = output.GetUploadID();
     }
-    else if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    else if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
     return;
 }
 
-
-void ShowHow2Do_UploadMultipart(Bucket * qsBucket, std::string &objectkey, std::string &uploadID ,int partNumber)
+void ShowHow2Do_UploadMultipart(Bucket *qsBucket, std::string &objectkey, std::string &uploadID, int partNumber)
 {
-    if(!qsBucket)
+    if (!qsBucket)
     {
         return;
     }
     UploadMultipartInput input;
     UploadMultipartOutput output;
     // objectStream can be filestream or stringstream.
-    std::iostream* objectStream = Create5MbStream4UploadPart("1");
+    std::iostream *objectStream = Create5MbStream4UploadPart("1");
     objectStream->seekg(0, objectStream->end);
     size_t streamSize = objectStream->tellg();
     objectStream->seekg(0, objectStream->beg);
     // The content length must be set.
     input.SetContentLength(streamSize);
-    input.SetBody (objectStream);
-    input.SetPartNumber (partNumber);
-    input.SetUploadID (uploadID);
-    QsError err = qsBucket->UploadMultipart (objectkey, input, output);
-    if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    input.SetBody(objectStream);
+    input.SetPartNumber(partNumber);
+    input.SetUploadID(uploadID);
+    QsError err = qsBucket->UploadMultipart(objectkey, input, output);
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
-    
-    if(QS_ERR_NO_ERROR == err)
+
+    if (QS_ERR_NO_ERROR == err)
     {
         printf("Part %d is finished.\n", partNumber);
     }
@@ -119,34 +137,32 @@ void ShowHow2Do_UploadMultipart(Bucket * qsBucket, std::string &objectkey, std::
     return;
 }
 
-
-void ShowHow2Do_CompleteMultipartUpload(Bucket * qsBucket, std::string &objectkey, std::string &uploadID, std::vector<ObjectPartType> &objectParts)
+void ShowHow2Do_CompleteMultipartUpload(Bucket *qsBucket, std::string &objectkey, std::string &uploadID, std::vector<ObjectPartType> &objectParts)
 {
-    if(!qsBucket)
+    if (!qsBucket)
     {
         return;
     }
     CompleteMultipartUploadInput input;
     CompleteMultipartUploadOutput output;
-    input.SetUploadID (uploadID);
+    input.SetUploadID(uploadID);
     input.SetObjectParts(objectParts);
-    QsError err = qsBucket->CompleteMultipartUpload (objectkey, input, output);
-    if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    QsError err = qsBucket->CompleteMultipartUpload(objectkey, input, output);
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
     return;
 }
 
-
-void ShowHow2Do_ListObjects(Bucket * qsBucket)
+void ShowHow2Do_ListObjects(Bucket *qsBucket)
 {
-    if(!qsBucket)
+    if (!qsBucket)
     {
         return;
     }
@@ -155,18 +171,18 @@ void ShowHow2Do_ListObjects(Bucket * qsBucket)
     ListObjectsOutput output;
     // if you want limit the maximum number of object in response, you can set "Limit" paramter.
     // the default value is 200, maximum allowable set 1000
-    input.SetLimit(100);//
+    input.SetLimit(100); //
     QsError err = qsBucket->ListObjects(input, output);
-    if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
-    if(QS_ERR_SIGN_WITH_INVAILD_KEY == err)
+    if (QS_ERR_SIGN_WITH_INVAILD_KEY == err)
     {
         printf("The Access Key ID or Secret Access Key is invaild (maybe empty).\n");
     }
@@ -177,22 +193,22 @@ void ShowHow2Do_ListObjects(Bucket * qsBucket)
         return;
     }
     std::vector<KeyType> keys = output.GetKeys();
-    printf("Got %ld objects\n" ,keys.size());
+    printf("Got %ld objects\n", keys.size());
     return;
 }
 
-void ShowHow2Do_MultipartUploadObject(Bucket * qsBucket, std::string &objectkey)
+void ShowHow2Do_MultipartUploadObject(Bucket *qsBucket, std::string &objectkey)
 {
-    if(!qsBucket)
+    if (!qsBucket)
     {
         return;
     }
     std::string uploadID = "";
     ShowHow2Do_InitiateMultipartUpload(qsBucket, objectkey, uploadID);
-    ShowHow2Do_UploadMultipart(qsBucket, objectkey, uploadID ,1);
-    ShowHow2Do_UploadMultipart(qsBucket, objectkey, uploadID ,2);
+    ShowHow2Do_UploadMultipart(qsBucket, objectkey, uploadID, 1);
+    ShowHow2Do_UploadMultipart(qsBucket, objectkey, uploadID, 2);
     std::vector<ObjectPartType> objectParts;
-    ObjectPartType part1,part2;
+    ObjectPartType part1, part2;
     part1.SetPartNumber(1);
     part2.SetPartNumber(2);
     objectParts.push_back(part1);
@@ -201,80 +217,133 @@ void ShowHow2Do_MultipartUploadObject(Bucket * qsBucket, std::string &objectkey)
     return;
 }
 
-void ShowHow2Do_GetObject(Bucket * qsBucket, std::string &objectkey)
+void ShowHow2Do_AppendObject(Bucket *qsBucket, std::string &objectkey, std::string &position)
 {
-    if(!qsBucket)
+    if (!qsBucket)
+    {
+        return;
+    }
+    AppendObjectInput input;
+    AppendObjectOutput output;
+    // objectStream can be filestream or stringstream.
+    std::iostream *objectStream = Create1MbStream4Append(position);
+    objectStream->seekg(0, objectStream->end);
+    size_t streamSize = objectStream->tellg();
+    objectStream->seekg(0, objectStream->beg);
+    // The content length must be set.
+    input.SetContentLength(streamSize);
+    input.SetBody(objectStream);
+    input.SetPosition(atoi(position.c_str()));
+
+    QsError err = qsBucket->AppendObject(objectkey, input, output);
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
+    {
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
+    }
+    else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
+    {
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
+    }
+
+    if (QS_ERR_NO_ERROR == err)
+    {
+        printf("Append object finished.\n");
+    }
+
+    position = output.GetXQSNextAppendPosition();
+
+    // when api finish, you should release resource.
+    delete objectStream;
+    return;
+}
+
+void ShowHow2Do_AppendOneAppendableObject(Bucket *qsBucket, std::string &objectkey)
+{
+    if (!qsBucket)
+    {
+        return;
+    }
+    std::string opstion = "0";
+    ShowHow2Do_AppendObject(qsBucket, objectkey, opstion);
+    ShowHow2Do_AppendObject(qsBucket, objectkey, opstion);
+    return;
+}
+
+void ShowHow2Do_GetObject(Bucket *qsBucket, std::string &objectkey)
+{
+    if (!qsBucket)
     {
         return;
     }
     GetObjectInput input;
     GetObjectOutput output;
     QsError err = qsBucket->GetObject(objectkey, input, output);
-    if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
     if (QS_ERR_NO_ERROR != err)
     {
         return;
     }
     size_t streamSize = 0;
-    std::iostream* objectStream = output.GetBody();
-    if(objectStream)
+    std::iostream *objectStream = output.GetBody();
+    if (objectStream)
     {
         objectStream->seekg(0, objectStream->end);
         streamSize = objectStream->tellg();
     }
     delete objectStream;
-    printf("The length of object is : %ld\n" , streamSize);
+    printf("The length of object is : %ld\n", streamSize);
     return;
 }
 
-void ShowHow2Do_DeleteObject(Bucket * qsBucket, std::string &objectkey)
+void ShowHow2Do_DeleteObject(Bucket *qsBucket, std::string &objectkey)
 {
-    if(!qsBucket)
+    if (!qsBucket)
     {
         return;
     }
     DeleteObjectInput input;
     DeleteObjectOutput output;
     QsError err = qsBucket->DeleteObject(objectkey, input, output);
-    if(QS_ERR_NO_REQUIRED_PARAMETER == err)
+    if (QS_ERR_NO_REQUIRED_PARAMETER == err)
     {
-        printf("%s\n" , "The input object lacks some of the parameters that must be filled in.");
+        printf("%s\n", "The input object lacks some of the parameters that must be filled in.");
     }
     else if (QS_ERR_UNEXCEPTED_RESPONSE == err)
     {
-        ResponseErrorInfo  errorInfo = output.GetResponseErrInfo();
-        printf("request_id = %s , with detail message : %s\n" , errorInfo.requestID.c_str(), errorInfo.message.c_str());
+        ResponseErrorInfo errorInfo = output.GetResponseErrInfo();
+        printf("request_id = %s , with detail message : %s\n", errorInfo.requestID.c_str(), errorInfo.message.c_str());
     }
     if (QS_ERR_NO_ERROR != err)
     {
         return;
     }
-    printf("object(%s) has been deleted.\n" , objectkey.c_str());
+    printf("object(%s) has been deleted.\n", objectkey.c_str());
     return;
 }
 
 int main()
 {
     // Read necessary information from environment variables.
-    char *strConfigPath = "/etc/qingstor/config.yaml";//getenv("QINGSTOR_CONFIG_PATH");
-    char *strBucketName = "huang-stor";//getenv("QINGSTOR_BUCKET_NAME");
-    char *strZone = "pek3a";//getenv("QINGSTOR_ZONE_NAME");
-    if(!strConfigPath || !strBucketName || !strZone)
+    char *strConfigPath = "/etc/qingstor/config.yaml"; //getenv("QINGSTOR_CONFIG_PATH");
+    char *strBucketName = "test-append-object-2";      //getenv("QINGSTOR_BUCKET_NAME");
+    char *strZone = "example2";                        //getenv("QINGSTOR_ZONE_NAME");
+    if (!strConfigPath || !strBucketName || !strZone)
     {
         printf("Envionment variables are missing : QINGSTOR_CONFIG_PATH or QINGSTOR_BUCKET_NAME or QINGSTOR_ZONE_NAME.\n");
         return 1;
     }
-    printf("QINGSTOR_CONFIG_PATH: %s.\n",strConfigPath);
-    printf("QINGSTOR_BUCKET_NAME: %s.\n",strBucketName);
-    printf("QINGSTOR_ZONE_NAME: %s.\n",strZone);
+    printf("QINGSTOR_CONFIG_PATH: %s.\n", strConfigPath);
+    printf("QINGSTOR_BUCKET_NAME: %s.\n", strBucketName);
+    printf("QINGSTOR_ZONE_NAME: %s.\n", strZone);
     // Global initialization only needs to be initialized once
     // Valid log levels are "none","debug", "info", "warn", "error", and "fatal".(default value is "None")
     QingStor::SDKOptions sdkOptions;
@@ -285,28 +354,30 @@ int main()
     // You can also set up the config configuration item separately.
     QingStor::QsConfig qsConfig;
     QsError err = qsConfig.LoadConfigFile(strConfigPath);
-    if(QS_ERR_INVAILD_CONFIG_FILE == err)
+    if (QS_ERR_INVAILD_CONFIG_FILE == err)
     {
         printf("The config file is invaild, please check it again.\n");
         //return 1;
     }
     // Create Bucket object.
-    Bucket * qsBucket = new Bucket(qsConfig, strBucketName, strZone);
+    Bucket *qsBucket = new Bucket(qsConfig, strBucketName, strZone);
     ShowHow2Do_ListObjects(qsBucket);
     std::string objectkey = "QingStor_SDK_Test_File";
     ShowHow2Do_MultipartUploadObject(qsBucket, objectkey);
     ShowHow2Do_GetObject(qsBucket, objectkey);
+    ShowHow2Do_AppendOneAppendableObject(qsBucket, objectkey);
+    ShowHow2Do_GetObject(qsBucket, objectkey);
+    ShowHow2Do_DeleteObject(qsBucket, objectkey);
+
+    // Apend a unexist object
+    objectkey = "QingStor_SDK_Test_File_APPEND";
+    ShowHow2Do_AppendOneAppendableObject(qsBucket, objectkey);
+    ShowHow2Do_GetObject(qsBucket, objectkey);
     ShowHow2Do_DeleteObject(qsBucket, objectkey);
     ShutdownSDK(sdkOptions);
-    if(qsBucket)
+    if (qsBucket)
     {
         delete qsBucket;
     }
     return 0;
 }
-
-
-
-
-
-

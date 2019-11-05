@@ -26,7 +26,7 @@
 
 #ifdef BUILD_C_STYLE_INTERFACE
 #include "service_with_c_style/QingStorCStyle.h"
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
 #define BASIC_FLAG 0x0
 // Limits results to buckets that in the location'flag
@@ -406,6 +406,15 @@
 // Max age'flag
 #define SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_MAX_AGE_FLAG 0x10
 
+// Append Object position'flag
+#define SETTING_INPUT_APPEND_OBJECT_POSITION_FLAG 0x1
+
+#define SETTING_INPUT_APPEND_OBJECT_CONTENT_TYPE_FLAG 0x2
+
+#define SETTING_INPUT_APPEND_OBJECT_CONTENT_LENGTH_FLAG 0x4
+
+#define SETTING_OUTPUT_APPEND_OBJECT_X_QS_NEXT_POSITION_FLAG 0x2
+
 // Encryption algorithm of the object'flag
 #define SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG 0x1
 
@@ -537,12 +546,10 @@ typedef QsInput DeleteBucketExternalMirrorInput;
 // DeleteBucketPolicyInput presents input for DeleteBucketPolicy.
 typedef QsInput DeleteBucketPolicyInput;
 // DeleteMultipleObjectsInput presents input for DeleteMultipleObjects.
-class QS_SDK_API DeleteMultipleObjectsInput:public QsInput
+class QS_SDK_API DeleteMultipleObjectsInput : public QsInput
 {
 public:
-    DeleteMultipleObjectsInput()
-    {
-    };
+    DeleteMultipleObjectsInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -566,9 +573,9 @@ public:
         return m_ContentMD5;
     };
 
-    // A list of keys to delete
+        // A list of keys to delete
 #ifdef BUILD_C_STYLE_INTERFACE
-    inline void SetObjects(qs_list_t * objects)
+    inline void SetObjects(qs_list_t *objects)
     {
         qs_key_item_t *item;
         qs_list_for_each_entry(qs_key_item_t, item, objects)
@@ -576,25 +583,25 @@ public:
             m_Objects.push_back(*item->content);
         }
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
-    inline void SetObjects(std::vector < KeyType > Objects)
+    inline void SetObjects(std::vector<KeyType> Objects)
     {
         m_settingFlag |= SETTING_INPUT_DELETE_MULTIPLE_OBJECTS_OBJECTS_FLAG;
         m_Objects = Objects;
     };
 
-    inline std::vector < KeyType > GetObjects()
+    inline std::vector<KeyType> GetObjects()
     {
         return m_Objects;
     };
-    // Whether to return the list of deleted objects
+        // Whether to return the list of deleted objects
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetQuiet(int *quiet)
     {
         m_Quiet = quiet;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetQuiet(bool Quiet)
     {
@@ -609,15 +616,14 @@ public:
 
 private:
     // Object MD5sum
-    std::string m_ContentMD5;	// Required
+    std::string m_ContentMD5; // Required
 
     // A list of keys to delete
 
-    std::vector < KeyType > m_Objects;	// Required
+    std::vector<KeyType> m_Objects; // Required
 
     // Whether to return the list of deleted objects
     bool m_Quiet;
-
 };
 // GetBucketACLInput presents input for GetBucketACL.
 typedef QsInput GetBucketACLInput;
@@ -632,12 +638,10 @@ typedef QsInput GetBucketStatisticsInput;
 // HeadBucketInput presents input for HeadBucket.
 typedef QsInput HeadBucketInput;
 // ListMultipartUploadsInput presents input for ListMultipartUploads.
-class QS_SDK_API ListMultipartUploadsInput:public QsInput
+class QS_SDK_API ListMultipartUploadsInput : public QsInput
 {
 public:
-    ListMultipartUploadsInput()
-    {
-    };
+    ListMultipartUploadsInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -709,7 +713,6 @@ public:
     };
 
 private:
-
     // Put all keys that share a common prefix into a list
     std::string m_Delimiter;
 
@@ -724,15 +727,12 @@ private:
 
     // Limit results returned from the first uploading segment after upload_id_marker sorted by the time of upload_id
     std::string m_UploadIDMarker;
-
 };
 // ListObjectsInput presents input for ListObjects.
-class QS_SDK_API ListObjectsInput:public QsInput
+class QS_SDK_API ListObjectsInput : public QsInput
 {
 public:
-    ListObjectsInput()
-    {
-    };
+    ListObjectsInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -789,7 +789,6 @@ public:
     };
 
 private:
-
     // Put all keys that share a common prefix into a list
     std::string m_Delimiter;
 
@@ -801,26 +800,23 @@ private:
 
     // Limits results to keys that begin with the prefix
     std::string m_Prefix;
-
 };
 // PutBucketInput presents input for PutBucket.
 typedef QsInput PutBucketInput;
 // PutBucketACLInput presents input for PutBucketACL.
-class QS_SDK_API PutBucketACLInput:public QsInput
+class QS_SDK_API PutBucketACLInput : public QsInput
 {
 public:
-    PutBucketACLInput()
-    {
-    };
+    PutBucketACLInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
         int tmpFlag = BASIC_FLAG | SETTING_INPUT_PUT_BUCKET_ACL_ACL_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
     };
-    // Bucket ACL rules
+        // Bucket ACL rules
 #ifdef BUILD_C_STYLE_INTERFACE
-    inline void SetACL(qs_list_t * acl)
+    inline void SetACL(qs_list_t *acl)
     {
         qs_acl_item_t *item;
         qs_list_for_each_entry(qs_acl_item_t, item, acl)
@@ -828,15 +824,15 @@ public:
             m_ACL.push_back(*item->content);
         }
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
-    inline void SetACL(std::vector < ACLType > ACL)
+    inline void SetACL(std::vector<ACLType> ACL)
     {
         m_settingFlag |= SETTING_INPUT_PUT_BUCKET_ACL_ACL_FLAG;
         m_ACL = ACL;
     };
 
-    inline std::vector < ACLType > GetACL()
+    inline std::vector<ACLType> GetACL()
     {
         return m_ACL;
     };
@@ -844,16 +840,13 @@ public:
 private:
     // Bucket ACL rules
 
-    std::vector < ACLType > m_ACL;	// Required
-
+    std::vector<ACLType> m_ACL; // Required
 };
 // PutBucketCORSInput presents input for PutBucketCORS.
-class QS_SDK_API PutBucketCORSInput:public QsInput
+class QS_SDK_API PutBucketCORSInput : public QsInput
 {
 public:
-    PutBucketCORSInput()
-    {
-    };
+    PutBucketCORSInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -861,9 +854,9 @@ public:
             BASIC_FLAG | SETTING_INPUT_PUT_BUCKET_CORS_CORS_RULES_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
     };
-    // Bucket CORS rules
+        // Bucket CORS rules
 #ifdef BUILD_C_STYLE_INTERFACE
-    inline void SetCORSRules(qs_list_t * cors_rules)
+    inline void SetCORSRules(qs_list_t *cors_rules)
     {
         qs_cors_rule_item_t *item;
         qs_list_for_each_entry(qs_cors_rule_item_t, item, cors_rules)
@@ -871,15 +864,15 @@ public:
             m_CORSRules.push_back(*item->content);
         }
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
-    inline void SetCORSRules(std::vector < CORSRuleType > CORSRules)
+    inline void SetCORSRules(std::vector<CORSRuleType> CORSRules)
     {
         m_settingFlag |= SETTING_INPUT_PUT_BUCKET_CORS_CORS_RULES_FLAG;
         m_CORSRules = CORSRules;
     };
 
-    inline std::vector < CORSRuleType > GetCORSRules()
+    inline std::vector<CORSRuleType> GetCORSRules()
     {
         return m_CORSRules;
     };
@@ -887,16 +880,13 @@ public:
 private:
     // Bucket CORS rules
 
-    std::vector < CORSRuleType > m_CORSRules;	// Required
-
+    std::vector<CORSRuleType> m_CORSRules; // Required
 };
 // PutBucketExternalMirrorInput presents input for PutBucketExternalMirror.
-class QS_SDK_API PutBucketExternalMirrorInput:public QsInput
+class QS_SDK_API PutBucketExternalMirrorInput : public QsInput
 {
 public:
-    PutBucketExternalMirrorInput()
-    {
-    };
+    PutBucketExternalMirrorInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -921,16 +911,13 @@ public:
 
 private:
     // Source site url
-    std::string m_SourceSite;	// Required
-
+    std::string m_SourceSite; // Required
 };
 // PutBucketPolicyInput presents input for PutBucketPolicy.
-class QS_SDK_API PutBucketPolicyInput:public QsInput
+class QS_SDK_API PutBucketPolicyInput : public QsInput
 {
 public:
-    PutBucketPolicyInput()
-    {
-    };
+    PutBucketPolicyInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -938,9 +925,9 @@ public:
             BASIC_FLAG | SETTING_INPUT_PUT_BUCKET_POLICY_STATEMENT_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
     };
-    // Bucket policy statement
+        // Bucket policy statement
 #ifdef BUILD_C_STYLE_INTERFACE
-    inline void SetStatement(qs_list_t * statement)
+    inline void SetStatement(qs_list_t *statement)
     {
         qs_statement_item_t *item;
         qs_list_for_each_entry(qs_statement_item_t, item, statement)
@@ -948,15 +935,15 @@ public:
             m_Statement.push_back(*item->content);
         }
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
-    inline void SetStatement(std::vector < StatementType > Statement)
+    inline void SetStatement(std::vector<StatementType> Statement)
     {
         m_settingFlag |= SETTING_INPUT_PUT_BUCKET_POLICY_STATEMENT_FLAG;
         m_Statement = Statement;
     };
 
-    inline std::vector < StatementType > GetStatement()
+    inline std::vector<StatementType> GetStatement()
     {
         return m_Statement;
     };
@@ -964,19 +951,16 @@ public:
 private:
     // Bucket policy statement
 
-    std::vector < StatementType > m_Statement;	// Required
-
+    std::vector<StatementType> m_Statement; // Required
 };
 // +--------------------------------------------------------------------
 // |                     InputClassHeader
 // +--------------------------------------------------------------------
 // AbortMultipartUploadInput presents input for AbortMultipartUpload.
-class QS_SDK_API AbortMultipartUploadInput:public QsInput
+class QS_SDK_API AbortMultipartUploadInput : public QsInput
 {
 public:
-    AbortMultipartUploadInput()
-    {
-    };
+    AbortMultipartUploadInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1000,18 +984,14 @@ public:
     };
 
 private:
-
     // Object multipart upload ID
-    std::string m_UploadID;	// Required
-
+    std::string m_UploadID; // Required
 };
 // CompleteMultipartUploadInput presents input for CompleteMultipartUpload.
-class QS_SDK_API CompleteMultipartUploadInput:public QsInput
+class QS_SDK_API CompleteMultipartUploadInput : public QsInput
 {
 public:
-    CompleteMultipartUploadInput()
-    {
-    };
+    CompleteMultipartUploadInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1049,8 +1029,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -1064,7 +1044,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -1078,8 +1058,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -1091,9 +1071,9 @@ public:
         return m_XQSEncryptionCustomerKeyMD5;
     };
 
-    // Object parts
+        // Object parts
 #ifdef BUILD_C_STYLE_INTERFACE
-    inline void SetObjectParts(qs_list_t * object_parts)
+    inline void SetObjectParts(qs_list_t *object_parts)
     {
         qs_object_part_item_t *item;
         qs_list_for_each_entry(qs_object_part_item_t, item, object_parts)
@@ -1101,24 +1081,23 @@ public:
             m_ObjectParts.push_back(*item->content);
         }
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
-    inline void SetObjectParts(std::vector < ObjectPartType > ObjectParts)
+    inline void SetObjectParts(std::vector<ObjectPartType> ObjectParts)
     {
         m_settingFlag |=
             SETTING_INPUT_COMPLETE_MULTIPART_UPLOAD_OBJECT_PARTS_FLAG;
         m_ObjectParts = ObjectParts;
     };
 
-    inline std::vector < ObjectPartType > GetObjectParts()
+    inline std::vector<ObjectPartType> GetObjectParts()
     {
         return m_ObjectParts;
     };
 
 private:
-
     // Object multipart upload ID
-    std::string m_UploadID;	// Required
+    std::string m_UploadID; // Required
 
     // MD5sum of the object part
     std::string m_ETag;
@@ -1134,18 +1113,15 @@ private:
 
     // Object parts
 
-    std::vector < ObjectPartType > m_ObjectParts;
-
+    std::vector<ObjectPartType> m_ObjectParts;
 };
 // DeleteObjectInput presents input for DeleteObject.
 typedef QsInput DeleteObjectInput;
 // GetObjectInput presents input for GetObject.
-class QS_SDK_API GetObjectInput:public QsInput
+class QS_SDK_API GetObjectInput : public QsInput
 {
 public:
-    GetObjectInput()
-    {
-    };
+    GetObjectInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1168,8 +1144,8 @@ public:
     // Specified the Content-Disposition response header
 
     inline void SetResponseContentDisposition(std::
-            string
-            ResponseContentDisposition)
+                                                  string
+                                                      ResponseContentDisposition)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_DISPOSITION_FLAG;
@@ -1183,7 +1159,7 @@ public:
     // Specified the Content-Encoding response header
 
     inline void SetResponseContentEncoding(std::
-                                           string ResponseContentEncoding)
+                                               string ResponseContentEncoding)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_ENCODING_FLAG;
@@ -1197,7 +1173,7 @@ public:
     // Specified the Content-Language response header
 
     inline void SetResponseContentLanguage(std::
-                                           string ResponseContentLanguage)
+                                               string ResponseContentLanguage)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_RESPONSE_CONTENT_LANGUAGE_FLAG;
@@ -1246,13 +1222,13 @@ public:
     {
         return m_IfMatch;
     };
-    // Check whether the object has been modified
+        // Check whether the object has been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetIfModifiedSince(char *if_modified_since)
     {
         m_IfModifiedSince = if_modified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetIfModifiedSince(std::string IfModifiedSince)
     {
@@ -1276,13 +1252,13 @@ public:
     {
         return m_IfNoneMatch;
     };
-    // Check whether the object has not been modified
+        // Check whether the object has not been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetIfUnmodifiedSince(char *if_unmodified_since)
     {
         m_IfUnmodifiedSince = if_unmodified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetIfUnmodifiedSince(std::string IfUnmodifiedSince)
     {
@@ -1309,8 +1285,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -1324,7 +1300,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -1338,8 +1314,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -1352,7 +1328,6 @@ public:
     };
 
 private:
-
     // Specified the Cache-Control response header
     std::string m_ResponseCacheControl;
 
@@ -1394,15 +1369,12 @@ private:
 
     // MD5sum of encryption key
     std::string m_XQSEncryptionCustomerKeyMD5;
-
 };
 // HeadObjectInput presents input for HeadObject.
-class QS_SDK_API HeadObjectInput:public QsInput
+class QS_SDK_API HeadObjectInput : public QsInput
 {
 public:
-    HeadObjectInput()
-    {
-    };
+    HeadObjectInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1421,13 +1393,13 @@ public:
     {
         return m_IfMatch;
     };
-    // Check whether the object has been modified
+        // Check whether the object has been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetIfModifiedSince(char *if_modified_since)
     {
         m_IfModifiedSince = if_modified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetIfModifiedSince(std::string IfModifiedSince)
     {
@@ -1451,13 +1423,13 @@ public:
     {
         return m_IfNoneMatch;
     };
-    // Check whether the object has not been modified
+        // Check whether the object has not been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetIfUnmodifiedSince(char *if_unmodified_since)
     {
         m_IfUnmodifiedSince = if_unmodified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetIfUnmodifiedSince(std::string IfUnmodifiedSince)
     {
@@ -1472,8 +1444,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -1487,7 +1459,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -1501,8 +1473,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -1535,15 +1507,12 @@ private:
 
     // MD5sum of encryption key
     std::string m_XQSEncryptionCustomerKeyMD5;
-
 };
 // ImageProcessInput presents input for ImageProcess.
-class QS_SDK_API ImageProcessInput:public QsInput
+class QS_SDK_API ImageProcessInput : public QsInput
 {
 public:
-    ImageProcessInput()
-    {
-    };
+    ImageProcessInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1578,8 +1547,8 @@ public:
     // Specified the Content-Disposition response header
 
     inline void SetResponseContentDisposition(std::
-            string
-            ResponseContentDisposition)
+                                                  string
+                                                      ResponseContentDisposition)
     {
         m_settingFlag |=
             SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_DISPOSITION_FLAG;
@@ -1593,7 +1562,7 @@ public:
     // Specified the Content-Encoding response header
 
     inline void SetResponseContentEncoding(std::
-                                           string ResponseContentEncoding)
+                                               string ResponseContentEncoding)
     {
         m_settingFlag |=
             SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_ENCODING_FLAG;
@@ -1607,7 +1576,7 @@ public:
     // Specified the Content-Language response header
 
     inline void SetResponseContentLanguage(std::
-                                           string ResponseContentLanguage)
+                                               string ResponseContentLanguage)
     {
         m_settingFlag |=
             SETTING_INPUT_IMAGE_PROCESS_RESPONSE_CONTENT_LANGUAGE_FLAG;
@@ -1644,13 +1613,13 @@ public:
         return m_ResponseExpires;
     };
 
-    // Check whether the object has been modified
+        // Check whether the object has been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetIfModifiedSince(char *if_modified_since)
     {
         m_IfModifiedSince = if_modified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetIfModifiedSince(std::string IfModifiedSince)
     {
@@ -1664,9 +1633,8 @@ public:
     };
 
 private:
-
     // Image process action
-    std::string m_Action;	// Required
+    std::string m_Action; // Required
 
     // Specified the Cache-Control response header
     std::string m_ResponseCacheControl;
@@ -1688,15 +1656,12 @@ private:
 
     // Check whether the object has been modified
     std::string m_IfModifiedSince;
-
 };
 // InitiateMultipartUploadInput presents input for InitiateMultipartUpload.
-class QS_SDK_API InitiateMultipartUploadInput:public QsInput
+class QS_SDK_API InitiateMultipartUploadInput : public QsInput
 {
 public:
-    InitiateMultipartUploadInput()
-    {
-    };
+    InitiateMultipartUploadInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1719,8 +1684,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -1734,7 +1699,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -1748,8 +1713,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -1773,15 +1738,12 @@ private:
 
     // MD5sum of encryption key
     std::string m_XQSEncryptionCustomerKeyMD5;
-
 };
 // ListMultipartInput presents input for ListMultipart.
-class QS_SDK_API ListMultipartInput:public QsInput
+class QS_SDK_API ListMultipartInput : public QsInput
 {
 public:
-    ListMultipartInput()
-    {
-    };
+    ListMultipartInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1828,7 +1790,6 @@ public:
     };
 
 private:
-
     // Limit results count
     int m_Limit;
 
@@ -1836,30 +1797,26 @@ private:
     int m_PartNumberMarker;
 
     // Object multipart upload ID
-    std::string m_UploadID;	// Required
-
+    std::string m_UploadID; // Required
 };
 // OptionsObjectInput presents input for OptionsObject.
-class QS_SDK_API OptionsObjectInput:public QsInput
+class QS_SDK_API OptionsObjectInput : public QsInput
 {
 public:
-    OptionsObjectInput()
-    {
-    };
+    OptionsObjectInput(){};
 
     inline bool CheckIfInputIsVaild()
     {
         int tmpFlag =
             BASIC_FLAG |
-            SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG
-            | SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG;
+            SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG | SETTING_INPUT_OPTIONS_OBJECT_ORIGIN_FLAG;
         return (tmpFlag == (tmpFlag & m_settingFlag));
     };
     // Request headers
 
     inline void SetAccessControlRequestHeaders(std::
-            string
-            AccessControlRequestHeaders)
+                                                   string
+                                                       AccessControlRequestHeaders)
     {
         m_settingFlag |=
             SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_HEADERS_FLAG;
@@ -1873,8 +1830,8 @@ public:
     // Request method
 
     inline void SetAccessControlRequestMethod(std::
-            string
-            AccessControlRequestMethod)
+                                                  string
+                                                      AccessControlRequestMethod)
     {
         m_settingFlag |=
             SETTING_INPUT_OPTIONS_OBJECT_ACCESS_CONTROL_REQUEST_METHOD_FLAG;
@@ -1903,19 +1860,89 @@ private:
     std::string m_AccessControlRequestHeaders;
 
     // Request method
-    std::string m_AccessControlRequestMethod;	// Required
+    std::string m_AccessControlRequestMethod; // Required
 
     // Request origin
-    std::string m_Origin;	// Required
-
+    std::string m_Origin; // Required
 };
-// PutObjectInput presents input for PutObject.
-class QS_SDK_API PutObjectInput:public QsInput
+
+// AppendObjectInput presents input for PutObject.
+class QS_SDK_API AppendObjectInput : public QsInput
 {
 public:
-    PutObjectInput():m_streambody(NULL)
+    AppendObjectInput() : m_streambody(NULL){};
+
+    inline bool CheckIfInputIsVaild()
     {
+        int tmpFlag =
+            BASIC_FLAG | SETTING_INPUT_APPEND_OBJECT_CONTENT_LENGTH_FLAG |
+            SETTING_INPUT_APPEND_OBJECT_POSITION_FLAG;
+        return (tmpFlag == (tmpFlag & m_settingFlag));
     };
+    // Object content size
+
+    inline void SetContentLength(int64_t ContentLength)
+    {
+        m_settingFlag |= SETTING_INPUT_APPEND_OBJECT_CONTENT_LENGTH_FLAG;
+        m_ContentLength = ContentLength;
+    };
+
+    inline int64_t GetContentLength()
+    {
+        return m_ContentLength;
+    };
+
+    inline void SetContentType(std::string ContentType)
+    {
+        m_settingFlag |= SETTING_INPUT_APPEND_OBJECT_CONTENT_TYPE_FLAG;
+        m_ContentType = ContentType;
+    };
+
+    inline std::string GetContentType()
+    {
+        return m_ContentType;
+    };
+
+    inline void SetPosition(int64_t Position)
+    {
+        m_settingFlag |= SETTING_INPUT_APPEND_OBJECT_POSITION_FLAG;
+        m_Position = Position;
+    };
+
+    inline int64_t GetPosition()
+    {
+        return m_Position;
+    };
+
+    std::iostream *GetBody()
+    {
+        return m_streambody;
+    };
+    void SetBody(std::iostream *streambody)
+    {
+        m_streambody = streambody;
+    };
+
+private:
+    // Object content size
+    int64_t m_ContentLength; // Required
+
+    int64_t m_Position; // Required
+
+    // Object content type
+    std::string m_ContentType;
+
+    // Used to indicate that particular server behaviors are required by the client
+    // std::string m_Expect;
+
+    std::iostream *m_streambody;
+};
+
+// PutObjectInput presents input for PutObject.
+class QS_SDK_API PutObjectInput : public QsInput
+{
+public:
+    PutObjectInput() : m_streambody(NULL){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -1986,8 +2013,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSCopySourceEncryptionCustomerAlgorithm(std::
-            string
-            XQSCopySourceEncryptionCustomerAlgorithm)
+                                                                string
+                                                                    XQSCopySourceEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -2002,8 +2029,8 @@ public:
     // Encryption key of the object
 
     inline void SetXQSCopySourceEncryptionCustomerKey(std::
-            string
-            XQSCopySourceEncryptionCustomerKey)
+                                                          string
+                                                              XQSCopySourceEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -2018,8 +2045,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSCopySourceEncryptionCustomerKeyMD5(std::
-            string
-            XQSCopySourceEncryptionCustomerKeyMD5)
+                                                             string
+                                                                 XQSCopySourceEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -2044,18 +2071,18 @@ public:
     {
         return m_XQSCopySourceIfMatch;
     };
-    // Check whether the copy source has been modified
+        // Check whether the copy source has been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetXQSCopySourceIfModifiedSince(char
-            *x_qs_copy_source_if_modified_since)
+                                                    *x_qs_copy_source_if_modified_since)
     {
         m_XQSCopySourceIfModifiedSince = x_qs_copy_source_if_modified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetXQSCopySourceIfModifiedSince(std::
-            string
-            XQSCopySourceIfModifiedSince)
+                                                    string
+                                                        XQSCopySourceIfModifiedSince)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG;
@@ -2069,7 +2096,7 @@ public:
     // Check whether the copy source does not match
 
     inline void SetXQSCopySourceIfNoneMatch(std::
-                                            string XQSCopySourceIfNoneMatch)
+                                                string XQSCopySourceIfNoneMatch)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG;
@@ -2080,19 +2107,19 @@ public:
     {
         return m_XQSCopySourceIfNoneMatch;
     };
-    // Check whether the copy source has not been modified
+        // Check whether the copy source has not been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetXQSCopySourceIfUnmodifiedSince(char
-            *x_qs_copy_source_if_unmodified_since)
+                                                      *x_qs_copy_source_if_unmodified_since)
     {
         m_XQSCopySourceIfUnmodifiedSince =
             x_qs_copy_source_if_unmodified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetXQSCopySourceIfUnmodifiedSince(std::
-            string
-            XQSCopySourceIfUnmodifiedSince)
+                                                      string
+                                                          XQSCopySourceIfUnmodifiedSince)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG;
@@ -2106,8 +2133,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -2121,7 +2148,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -2135,8 +2162,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -2147,18 +2174,18 @@ public:
     {
         return m_XQSEncryptionCustomerKeyMD5;
     };
-    // Check whether fetch target object has not been modified
+        // Check whether fetch target object has not been modified
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetXQSFetchIfUnmodifiedSince(char
-            *x_qs_fetch_if_unmodified_since)
+                                                 *x_qs_fetch_if_unmodified_since)
     {
         m_XQSFetchIfUnmodifiedSince = x_qs_fetch_if_unmodified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetXQSFetchIfUnmodifiedSince(std::
-            string
-            XQSFetchIfUnmodifiedSince)
+                                                 string
+                                                     XQSFetchIfUnmodifiedSince)
     {
         m_settingFlag |=
             SETTING_INPUT_PUT_OBJECT_X_QS_FETCH_IF_UNMODIFIED_SINCE_FLAG;
@@ -2194,17 +2221,18 @@ public:
         return m_XQSMoveSource;
     };
 
-    std::iostream * GetBody()
+    std::iostream *GetBody()
     {
         return m_streambody;
     };
-    void SetBody(std::iostream * streambody)
+    void SetBody(std::iostream *streambody)
     {
         m_streambody = streambody;
     };
+
 private:
     // Object content size
-    int64_t m_ContentLength;	// Required
+    int64_t m_ContentLength; // Required
 
     // Object MD5sum
     std::string m_ContentMD5;
@@ -2257,15 +2285,13 @@ private:
     // Move source, format (/<bucket-name>/<object-key>)
     std::string m_XQSMoveSource;
 
-    std::iostream * m_streambody;
+    std::iostream *m_streambody;
 };
 // UploadMultipartInput presents input for UploadMultipart.
-class QS_SDK_API UploadMultipartInput:public QsInput
+class QS_SDK_API UploadMultipartInput : public QsInput
 {
 public:
-    UploadMultipartInput():m_streambody(NULL)
-    {
-    };
+    UploadMultipartInput() : m_streambody(NULL){};
 
     inline bool CheckIfInputIsVaild()
     {
@@ -2352,8 +2378,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSCopySourceEncryptionCustomerAlgorithm(std::
-            string
-            XQSCopySourceEncryptionCustomerAlgorithm)
+                                                                string
+                                                                    XQSCopySourceEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -2368,8 +2394,8 @@ public:
     // Encryption key of the object
 
     inline void SetXQSCopySourceEncryptionCustomerKey(std::
-            string
-            XQSCopySourceEncryptionCustomerKey)
+                                                          string
+                                                              XQSCopySourceEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -2384,8 +2410,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSCopySourceEncryptionCustomerKeyMD5(std::
-            string
-            XQSCopySourceEncryptionCustomerKeyMD5)
+                                                             string
+                                                                 XQSCopySourceEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -2410,18 +2436,18 @@ public:
     {
         return m_XQSCopySourceIfMatch;
     };
-    // Check whether the copy source has been modified since the specified date
+        // Check whether the copy source has been modified since the specified date
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetXQSCopySourceIfModifiedSince(char
-            *x_qs_copy_source_if_modified_since)
+                                                    *x_qs_copy_source_if_modified_since)
     {
         m_XQSCopySourceIfModifiedSince = x_qs_copy_source_if_modified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetXQSCopySourceIfModifiedSince(std::
-            string
-            XQSCopySourceIfModifiedSince)
+                                                    string
+                                                        XQSCopySourceIfModifiedSince)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_MODIFIED_SINCE_FLAG;
@@ -2435,7 +2461,7 @@ public:
     // Check whether the Etag of copy source does not matches the specified value
 
     inline void SetXQSCopySourceIfNoneMatch(std::
-                                            string XQSCopySourceIfNoneMatch)
+                                                string XQSCopySourceIfNoneMatch)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_NONE_MATCH_FLAG;
@@ -2446,19 +2472,19 @@ public:
     {
         return m_XQSCopySourceIfNoneMatch;
     };
-    // Check whether the copy source has not been unmodified since the specified date
+        // Check whether the copy source has not been unmodified since the specified date
 #ifdef BUILD_C_STYLE_INTERFACE
     inline void SetXQSCopySourceIfUnmodifiedSince(char
-            *x_qs_copy_source_if_unmodified_since)
+                                                      *x_qs_copy_source_if_unmodified_since)
     {
         m_XQSCopySourceIfUnmodifiedSince =
             x_qs_copy_source_if_unmodified_since;
     };
-#endif							// BUILD_C_STYLE_INTERFACE
+#endif // BUILD_C_STYLE_INTERFACE
 
     inline void SetXQSCopySourceIfUnmodifiedSince(std::
-            string
-            XQSCopySourceIfUnmodifiedSince)
+                                                      string
+                                                          XQSCopySourceIfUnmodifiedSince)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_COPY_SOURCE_IF_UNMODIFIED_SINCE_FLAG;
@@ -2472,8 +2498,8 @@ public:
     // Encryption algorithm of the object
 
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -2487,7 +2513,7 @@ public:
     // Encryption key of the object
 
     inline void SetXQSEncryptionCustomerKey(std::
-                                            string XQSEncryptionCustomerKey)
+                                                string XQSEncryptionCustomerKey)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_FLAG;
@@ -2501,8 +2527,8 @@ public:
     // MD5sum of encryption key
 
     inline void SetXQSEncryptionCustomerKeyMD5(std::
-            string
-            XQSEncryptionCustomerKeyMD5)
+                                                   string
+                                                       XQSEncryptionCustomerKeyMD5)
     {
         m_settingFlag |=
             SETTING_INPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_KEY_MD5_FLAG;
@@ -2514,21 +2540,21 @@ public:
         return m_XQSEncryptionCustomerKeyMD5;
     };
 
-    std::iostream * GetBody()
+    std::iostream *GetBody()
     {
         return m_streambody;
     };
-    void SetBody(std::iostream * streambody)
+    void SetBody(std::iostream *streambody)
     {
         m_streambody = streambody;
     };
-private:
 
+private:
     // Object multipart upload part number
-    int m_PartNumber;		// Required
+    int m_PartNumber; // Required
 
     // Object multipart upload ID
-    std::string m_UploadID;	// Required
+    std::string m_UploadID; // Required
 
     // Object multipart content length
     int64_t m_ContentLength;
@@ -2572,7 +2598,7 @@ private:
     // MD5sum of encryption key
     std::string m_XQSEncryptionCustomerKeyMD5;
 
-    std::iostream * m_streambody;
+    std::iostream *m_streambody;
 };
 // +--------------------------------------------------------------------
 // |                     OutputClassHeader
@@ -2587,41 +2613,37 @@ typedef QsOutput DeleteBucketExternalMirrorOutput;
 typedef QsOutput DeleteBucketPolicyOutput;
 
 // DeleteMultipleObjectsOutput presents input for DeleteMultipleObjects.
-class QS_SDK_API DeleteMultipleObjectsOutput:public QsOutput
+class QS_SDK_API DeleteMultipleObjectsOutput : public QsOutput
 {
 
 public:
     DeleteMultipleObjectsOutput(QsError err,
                                 Http::
-                                HttpResponseCode responseCode):QsOutput(err,
-                                            responseCode)
-    {
-    };
-    DeleteMultipleObjectsOutput()
-    {
-    };
+                                    HttpResponseCode responseCode) : QsOutput(err,
+                                                                              responseCode){};
+    DeleteMultipleObjectsOutput(){};
 
     // List of deleted objects
-    inline void SetDeleted(std::vector < KeyType > Deleted)
+    inline void SetDeleted(std::vector<KeyType> Deleted)
     {
         m_settingFlag |=
             SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_DELETED_FLAG;
         m_Deleted = Deleted;
     };
 
-    inline std::vector < KeyType > GetDeleted()
+    inline std::vector<KeyType> GetDeleted()
     {
         return m_Deleted;
     };
 
     // Error messages
-    inline void SetErrors(std::vector < KeyDeleteErrorType > Errors)
+    inline void SetErrors(std::vector<KeyDeleteErrorType> Errors)
     {
         m_settingFlag |= SETTING_OUTPUT_DELETE_MULTIPLE_OBJECTS_ERRORS_FLAG;
         m_Errors = Errors;
     };
 
-    inline std::vector < KeyDeleteErrorType > GetErrors()
+    inline std::vector<KeyDeleteErrorType> GetErrors()
     {
         return m_Errors;
     };
@@ -2629,36 +2651,31 @@ public:
 private:
     // List of deleted objects
 
-    std::vector < KeyType > m_Deleted;
+    std::vector<KeyType> m_Deleted;
 
     // Error messages
 
-    std::vector < KeyDeleteErrorType > m_Errors;
-
+    std::vector<KeyDeleteErrorType> m_Errors;
 };
 
 // GetBucketACLOutput presents input for GetBucketACL.
-class QS_SDK_API GetBucketACLOutput:public QsOutput
+class QS_SDK_API GetBucketACLOutput : public QsOutput
 {
 
 public:
     GetBucketACLOutput(QsError err,
-                       Http::HttpResponseCode responseCode):QsOutput(err,
-                                   responseCode)
-    {
-    };
-    GetBucketACLOutput()
-    {
-    };
+                       Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                       responseCode){};
+    GetBucketACLOutput(){};
 
     // Bucket ACL rules
-    inline void SetACL(std::vector < ACLType > ACL)
+    inline void SetACL(std::vector<ACLType> ACL)
     {
         m_settingFlag |= SETTING_OUTPUT_GET_BUCKET_ACL_ACL_FLAG;
         m_ACL = ACL;
     };
 
-    inline std::vector < ACLType > GetACL()
+    inline std::vector<ACLType> GetACL()
     {
         return m_ACL;
     };
@@ -2678,36 +2695,31 @@ public:
 private:
     // Bucket ACL rules
 
-    std::vector < ACLType > m_ACL;
+    std::vector<ACLType> m_ACL;
 
     // Bucket owner
 
     OwnerType m_Owner;
-
 };
 
 // GetBucketCORSOutput presents input for GetBucketCORS.
-class QS_SDK_API GetBucketCORSOutput:public QsOutput
+class QS_SDK_API GetBucketCORSOutput : public QsOutput
 {
 
 public:
     GetBucketCORSOutput(QsError err,
-                        Http::HttpResponseCode responseCode):QsOutput(err,
-                                    responseCode)
-    {
-    };
-    GetBucketCORSOutput()
-    {
-    };
+                        Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                        responseCode){};
+    GetBucketCORSOutput(){};
 
     // Bucket CORS rules
-    inline void SetCORSRules(std::vector < CORSRuleType > CORSRules)
+    inline void SetCORSRules(std::vector<CORSRuleType> CORSRules)
     {
         m_settingFlag |= SETTING_OUTPUT_GET_BUCKET_CORS_CORS_RULES_FLAG;
         m_CORSRules = CORSRules;
     };
 
-    inline std::vector < CORSRuleType > GetCORSRules()
+    inline std::vector<CORSRuleType> GetCORSRules()
     {
         return m_CORSRules;
     };
@@ -2715,25 +2727,20 @@ public:
 private:
     // Bucket CORS rules
 
-    std::vector < CORSRuleType > m_CORSRules;
-
+    std::vector<CORSRuleType> m_CORSRules;
 };
 
 // GetBucketExternalMirrorOutput presents input for GetBucketExternalMirror.
-class QS_SDK_API GetBucketExternalMirrorOutput:public QsOutput
+class QS_SDK_API GetBucketExternalMirrorOutput : public QsOutput
 {
 
 public:
     GetBucketExternalMirrorOutput(QsError err,
                                   Http::
-                                  HttpResponseCode
-                                  responseCode):QsOutput(err,
-                                              responseCode)
-    {
-    };
-    GetBucketExternalMirrorOutput()
-    {
-    };
+                                      HttpResponseCode
+                                          responseCode) : QsOutput(err,
+                                                                   responseCode){};
+    GetBucketExternalMirrorOutput(){};
 
     // Source site url
     inline void SetSourceSite(std::string SourceSite)
@@ -2751,31 +2758,26 @@ public:
 private:
     // Source site url
     std::string m_SourceSite;
-
 };
 
 // GetBucketPolicyOutput presents input for GetBucketPolicy.
-class QS_SDK_API GetBucketPolicyOutput:public QsOutput
+class QS_SDK_API GetBucketPolicyOutput : public QsOutput
 {
 
 public:
     GetBucketPolicyOutput(QsError err,
-                          Http::HttpResponseCode responseCode):QsOutput(err,
-                                      responseCode)
-    {
-    };
-    GetBucketPolicyOutput()
-    {
-    };
+                          Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                          responseCode){};
+    GetBucketPolicyOutput(){};
 
     // Bucket policy statement
-    inline void SetStatement(std::vector < StatementType > Statement)
+    inline void SetStatement(std::vector<StatementType> Statement)
     {
         m_settingFlag |= SETTING_OUTPUT_GET_BUCKET_POLICY_STATEMENT_FLAG;
         m_Statement = Statement;
     };
 
-    inline std::vector < StatementType > GetStatement()
+    inline std::vector<StatementType> GetStatement()
     {
         return m_Statement;
     };
@@ -2783,24 +2785,19 @@ public:
 private:
     // Bucket policy statement
 
-    std::vector < StatementType > m_Statement;
-
+    std::vector<StatementType> m_Statement;
 };
 
 // GetBucketStatisticsOutput presents input for GetBucketStatistics.
-class QS_SDK_API GetBucketStatisticsOutput:public QsOutput
+class QS_SDK_API GetBucketStatisticsOutput : public QsOutput
 {
 
 public:
     GetBucketStatisticsOutput(QsError err,
                               Http::
-                              HttpResponseCode responseCode):QsOutput(err,
-                                          responseCode)
-    {
-    };
-    GetBucketStatisticsOutput()
-    {
-    };
+                                  HttpResponseCode responseCode) : QsOutput(err,
+                                                                            responseCode){};
+    GetBucketStatisticsOutput(){};
 
     // Objects count in the bucket
     inline void SetCount(int64_t Count)
@@ -2908,36 +2905,31 @@ private:
 
     // URL to access the bucket
     std::string m_URL;
-
 };
 
 typedef QsOutput HeadBucketOutput;
 
 // ListMultipartUploadsOutput presents input for ListMultipartUploads.
-class QS_SDK_API ListMultipartUploadsOutput:public QsOutput
+class QS_SDK_API ListMultipartUploadsOutput : public QsOutput
 {
 
 public:
     ListMultipartUploadsOutput(QsError err,
                                Http::
-                               HttpResponseCode responseCode):QsOutput(err,
-                                           responseCode)
-    {
-    };
-    ListMultipartUploadsOutput()
-    {
-    };
+                                   HttpResponseCode responseCode) : QsOutput(err,
+                                                                             responseCode){};
+    ListMultipartUploadsOutput(){};
 
     // Other object keys that share common prefixes
-    inline void SetCommonPrefixes(std::vector < std::string >
-                                  CommonPrefixes)
+    inline void SetCommonPrefixes(std::vector<std::string>
+                                      CommonPrefixes)
     {
         m_settingFlag |=
             SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_COMMON_PREFIXES_FLAG;
         m_CommonPrefixes = CommonPrefixes;
     };
 
-    inline std::vector < std::string > GetCommonPrefixes()
+    inline std::vector<std::string> GetCommonPrefixes()
     {
         return m_CommonPrefixes;
     };
@@ -3030,13 +3022,13 @@ public:
     };
 
     // Multipart uploads
-    inline void SetUploads(std::vector < UploadsType > Uploads)
+    inline void SetUploads(std::vector<UploadsType> Uploads)
     {
         m_settingFlag |= SETTING_OUTPUT_LIST_MULTIPART_UPLOADS_UPLOADS_FLAG;
         m_Uploads = Uploads;
     };
 
-    inline std::vector < UploadsType > GetUploads()
+    inline std::vector<UploadsType> GetUploads()
     {
         return m_Uploads;
     };
@@ -3044,7 +3036,7 @@ public:
 private:
     // Other object keys that share common prefixes
 
-    std::vector < std::string > m_CommonPrefixes;
+    std::vector<std::string> m_CommonPrefixes;
 
     // Delimiter that specified in request parameters
     std::string m_Delimiter;
@@ -3069,33 +3061,28 @@ private:
 
     // Multipart uploads
 
-    std::vector < UploadsType > m_Uploads;
-
+    std::vector<UploadsType> m_Uploads;
 };
 
 // ListObjectsOutput presents input for ListObjects.
-class QS_SDK_API ListObjectsOutput:public QsOutput
+class QS_SDK_API ListObjectsOutput : public QsOutput
 {
 
 public:
     ListObjectsOutput(QsError err,
-                      Http::HttpResponseCode responseCode):QsOutput(err,
-                                  responseCode)
-    {
-    };
-    ListObjectsOutput()
-    {
-    };
+                      Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                      responseCode){};
+    ListObjectsOutput(){};
 
     // Other object keys that share common prefixes
-    inline void SetCommonPrefixes(std::vector < std::string >
-                                  CommonPrefixes)
+    inline void SetCommonPrefixes(std::vector<std::string>
+                                      CommonPrefixes)
     {
         m_settingFlag |= SETTING_OUTPUT_LIST_OBJECTS_COMMON_PREFIXES_FLAG;
         m_CommonPrefixes = CommonPrefixes;
     };
 
-    inline std::vector < std::string > GetCommonPrefixes()
+    inline std::vector<std::string> GetCommonPrefixes()
     {
         return m_CommonPrefixes;
     };
@@ -3113,13 +3100,13 @@ public:
     };
 
     // Object keys
-    inline void SetKeys(std::vector < KeyType > Keys)
+    inline void SetKeys(std::vector<KeyType> Keys)
     {
         m_settingFlag |= SETTING_OUTPUT_LIST_OBJECTS_KEYS_FLAG;
         m_Keys = Keys;
     };
 
-    inline std::vector < KeyType > GetKeys()
+    inline std::vector<KeyType> GetKeys()
     {
         return m_Keys;
     };
@@ -3199,14 +3186,14 @@ public:
 private:
     // Other object keys that share common prefixes
 
-    std::vector < std::string > m_CommonPrefixes;
+    std::vector<std::string> m_CommonPrefixes;
 
     // Delimiter that specified in request parameters
     std::string m_Delimiter;
 
     // Object keys
 
-    std::vector < KeyType > m_Keys;
+    std::vector<KeyType> m_Keys;
 
     // Limit that specified in request parameters
     int m_Limit;
@@ -3226,7 +3213,6 @@ private:
 
     // Prefix that specified in request parameters
     std::string m_Prefix;
-
 };
 
 typedef QsOutput PutBucketOutput;
@@ -3245,25 +3231,21 @@ typedef QsOutput PutBucketPolicyOutput;
 typedef QsOutput AbortMultipartUploadOutput;
 
 // CompleteMultipartUploadOutput presents input for CompleteMultipartUpload.
-class QS_SDK_API CompleteMultipartUploadOutput:public QsOutput
+class QS_SDK_API CompleteMultipartUploadOutput : public QsOutput
 {
 
 public:
     CompleteMultipartUploadOutput(QsError err,
                                   Http::
-                                  HttpResponseCode
-                                  responseCode):QsOutput(err,
-                                              responseCode)
-    {
-    };
-    CompleteMultipartUploadOutput()
-    {
-    };
+                                      HttpResponseCode
+                                          responseCode) : QsOutput(err,
+                                                                   responseCode){};
+    CompleteMultipartUploadOutput(){};
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_COMPLETE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3278,24 +3260,19 @@ public:
 private:
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
-
 };
 
 typedef QsOutput DeleteObjectOutput;
 
 // GetObjectOutput presents input for GetObject.
-class QS_SDK_API GetObjectOutput:public QsOutput
+class QS_SDK_API GetObjectOutput : public QsOutput
 {
 
 public:
     GetObjectOutput(QsError err,
-                    Http::HttpResponseCode responseCode):QsOutput(err,
-                                responseCode)
-    {
-    };
-    GetObjectOutput()
-    {
-    };
+                    Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                    responseCode){};
+    GetObjectOutput(){};
 
     // The Cache-Control general-header field is used to specify directives for caching mechanisms in both requests and responses.
     inline void SetCacheControl(std::string CacheControl)
@@ -3418,8 +3395,8 @@ public:
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_GET_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3431,11 +3408,11 @@ public:
         return m_XQSEncryptionCustomerAlgorithm;
     };
 
-    std::iostream * GetBody()
+    std::iostream *GetBody()
     {
         return m_streambody;
     };
-    void SetBody(std::iostream * streambody)
+    void SetBody(std::iostream *streambody)
     {
         m_streambody = streambody;
     };
@@ -3473,23 +3450,18 @@ private:
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
 
-    std::iostream * m_streambody;
-
+    std::iostream *m_streambody;
 };
 
 // HeadObjectOutput presents input for HeadObject.
-class QS_SDK_API HeadObjectOutput:public QsOutput
+class QS_SDK_API HeadObjectOutput : public QsOutput
 {
 
 public:
     HeadObjectOutput(QsError err,
-                     Http::HttpResponseCode responseCode):QsOutput(err,
-                                 responseCode)
-    {
-    };
-    HeadObjectOutput()
-    {
-    };
+                     Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                     responseCode){};
+    HeadObjectOutput(){};
 
     // Object content length
     inline void SetContentLength(int64_t ContentLength)
@@ -3540,8 +3512,8 @@ public:
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_HEAD_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3567,22 +3539,17 @@ private:
 
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
-
 };
 
 // ImageProcessOutput presents input for ImageProcess.
-class QS_SDK_API ImageProcessOutput:public QsOutput
+class QS_SDK_API ImageProcessOutput : public QsOutput
 {
 
 public:
     ImageProcessOutput(QsError err,
-                       Http::HttpResponseCode responseCode):QsOutput(err,
-                                   responseCode)
-    {
-    };
-    ImageProcessOutput()
-    {
-    };
+                       Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                       responseCode){};
+    ImageProcessOutput(){};
 
     // Object content length
     inline void SetContentLength(int64_t ContentLength)
@@ -3596,11 +3563,11 @@ public:
         return m_ContentLength;
     };
 
-    std::iostream * GetBody()
+    std::iostream *GetBody()
     {
         return m_streambody;
     };
-    void SetBody(std::iostream * streambody)
+    void SetBody(std::iostream *streambody)
     {
         m_streambody = streambody;
     };
@@ -3609,30 +3576,25 @@ private:
     // Object content length
     int64_t m_ContentLength;
 
-    std::iostream * m_streambody;
-
+    std::iostream *m_streambody;
 };
 
 // InitiateMultipartUploadOutput presents input for InitiateMultipartUpload.
-class QS_SDK_API InitiateMultipartUploadOutput:public QsOutput
+class QS_SDK_API InitiateMultipartUploadOutput : public QsOutput
 {
 
 public:
     InitiateMultipartUploadOutput(QsError err,
                                   Http::
-                                  HttpResponseCode
-                                  responseCode):QsOutput(err,
-                                              responseCode)
-    {
-    };
-    InitiateMultipartUploadOutput()
-    {
-    };
+                                      HttpResponseCode
+                                          responseCode) : QsOutput(err,
+                                                                   responseCode){};
+    InitiateMultipartUploadOutput(){};
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_INITIATE_MULTIPART_UPLOAD_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3694,22 +3656,17 @@ private:
 
     // Object multipart upload ID
     std::string m_UploadID;
-
 };
 
 // ListMultipartOutput presents input for ListMultipart.
-class QS_SDK_API ListMultipartOutput:public QsOutput
+class QS_SDK_API ListMultipartOutput : public QsOutput
 {
 
 public:
     ListMultipartOutput(QsError err,
-                        Http::HttpResponseCode responseCode):QsOutput(err,
-                                    responseCode)
-    {
-    };
-    ListMultipartOutput()
-    {
-    };
+                        Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                        responseCode){};
+    ListMultipartOutput(){};
 
     // Object multipart count
     inline void SetCount(int Count)
@@ -3724,13 +3681,13 @@ public:
     };
 
     // Object parts
-    inline void SetObjectParts(std::vector < ObjectPartType > ObjectParts)
+    inline void SetObjectParts(std::vector<ObjectPartType> ObjectParts)
     {
         m_settingFlag |= SETTING_OUTPUT_LIST_MULTIPART_OBJECT_PARTS_FLAG;
         m_ObjectParts = ObjectParts;
     };
 
-    inline std::vector < ObjectPartType > GetObjectParts()
+    inline std::vector<ObjectPartType> GetObjectParts()
     {
         return m_ObjectParts;
     };
@@ -3741,28 +3698,23 @@ private:
 
     // Object parts
 
-    std::vector < ObjectPartType > m_ObjectParts;
-
+    std::vector<ObjectPartType> m_ObjectParts;
 };
 
 // OptionsObjectOutput presents input for OptionsObject.
-class QS_SDK_API OptionsObjectOutput:public QsOutput
+class QS_SDK_API OptionsObjectOutput : public QsOutput
 {
 
 public:
     OptionsObjectOutput(QsError err,
-                        Http::HttpResponseCode responseCode):QsOutput(err,
-                                    responseCode)
-    {
-    };
-    OptionsObjectOutput()
-    {
-    };
+                        Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                        responseCode){};
+    OptionsObjectOutput(){};
 
     // Allowed headers
     inline void SetAccessControlAllowHeaders(std::
-            string
-            AccessControlAllowHeaders)
+                                                 string
+                                                     AccessControlAllowHeaders)
     {
         m_settingFlag |=
             SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_HEADERS_FLAG;
@@ -3776,8 +3728,8 @@ public:
 
     // Allowed methods
     inline void SetAccessControlAllowMethods(std::
-            string
-            AccessControlAllowMethods)
+                                                 string
+                                                     AccessControlAllowMethods)
     {
         m_settingFlag |=
             SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_METHODS_FLAG;
@@ -3791,7 +3743,7 @@ public:
 
     // Allowed origin
     inline void SetAccessControlAllowOrigin(std::
-                                            string AccessControlAllowOrigin)
+                                                string AccessControlAllowOrigin)
     {
         m_settingFlag |=
             SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_ALLOW_ORIGIN_FLAG;
@@ -3805,8 +3757,8 @@ public:
 
     // Expose headers
     inline void SetAccessControlExposeHeaders(std::
-            string
-            AccessControlExposeHeaders)
+                                                  string
+                                                      AccessControlExposeHeaders)
     {
         m_settingFlag |=
             SETTING_OUTPUT_OPTIONS_OBJECT_ACCESS_CONTROL_EXPOSE_HEADERS_FLAG;
@@ -3846,22 +3798,41 @@ private:
 
     // Max age
     std::string m_AccessControlMaxAge;
+};
 
+class QS_SDK_API AppendObjectOutput : public QsOutput
+{
+public:
+    AppendObjectOutput(QsError err,
+                       Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                       responseCode){};
+    AppendObjectOutput(){};
+
+    inline void SetXQSNextAppendPosition(std::string XQSNextAppendPosition)
+    {
+        m_settingFlag |= SETTING_OUTPUT_APPEND_OBJECT_X_QS_NEXT_POSITION_FLAG;
+        m_XQSNextAppendPosition = XQSNextAppendPosition;
+    };
+
+    inline std::string GetXQSNextAppendPosition()
+    {
+        return m_XQSNextAppendPosition;
+    };
+
+private:
+    // append position of the object
+    std::string m_XQSNextAppendPosition;
 };
 
 // PutObjectOutput presents input for PutObject.
-class QS_SDK_API PutObjectOutput:public QsOutput
+class QS_SDK_API PutObjectOutput : public QsOutput
 {
 
 public:
     PutObjectOutput(QsError err,
-                    Http::HttpResponseCode responseCode):QsOutput(err,
-                                responseCode)
-    {
-    };
-    PutObjectOutput()
-    {
-    };
+                    Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                    responseCode){};
+    PutObjectOutput(){};
 
     // MD5sum of the object
     inline void SetETag(std::string ETag)
@@ -3877,8 +3848,8 @@ public:
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_PUT_OBJECT_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3896,22 +3867,17 @@ private:
 
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
-
 };
 
 // UploadMultipartOutput presents input for UploadMultipart.
-class QS_SDK_API UploadMultipartOutput:public QsOutput
+class QS_SDK_API UploadMultipartOutput : public QsOutput
 {
 
 public:
     UploadMultipartOutput(QsError err,
-                          Http::HttpResponseCode responseCode):QsOutput(err,
-                                      responseCode)
-    {
-    };
-    UploadMultipartOutput()
-    {
-    };
+                          Http::HttpResponseCode responseCode) : QsOutput(err,
+                                                                          responseCode){};
+    UploadMultipartOutput(){};
 
     // MD5sum of the object
     inline void SetETag(std::string ETag)
@@ -3940,8 +3906,8 @@ public:
 
     // Encryption algorithm of the object
     inline void SetXQSEncryptionCustomerAlgorithm(std::
-            string
-            XQSEncryptionCustomerAlgorithm)
+                                                      string
+                                                          XQSEncryptionCustomerAlgorithm)
     {
         m_settingFlag |=
             SETTING_OUTPUT_UPLOAD_MULTIPART_X_QS_ENCRYPTION_CUSTOMER_ALGORITHM_FLAG;
@@ -3962,7 +3928,6 @@ private:
 
     // Encryption algorithm of the object
     std::string m_XQSEncryptionCustomerAlgorithm;
-
 };
 
 // +--------------------------------------------------------------------
@@ -3971,166 +3936,168 @@ private:
 class QS_SDK_API Bucket
 {
 public:
-    Bucket(const QsConfig & qsConfig, const std::string & strBucketName,
-           const std::string & strZone);
+    Bucket(const QsConfig &qsConfig, const std::string &strBucketName,
+           const std::string &strZone);
 
-    virtual ~ Bucket()
-    {
-    };
+    virtual ~Bucket(){};
 
     // Delete does Delete a bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/delete.html
-    QsError DeleteBucket(DeleteBucketInput & input,
-                         DeleteBucketOutput & output);
+    QsError DeleteBucket(DeleteBucketInput &input,
+                         DeleteBucketOutput &output);
 
     // DeleteCORS does Delete CORS information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/delete_cors.html
-    QsError DeleteBucketCORS(DeleteBucketCORSInput & input,
-                             DeleteBucketCORSOutput & output);
+    QsError DeleteBucketCORS(DeleteBucketCORSInput &input,
+                             DeleteBucketCORSOutput &output);
 
     // DeleteExternalMirror does Delete external mirror of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/delete_external_mirror.html
     QsError DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput &
-                                       input,
+                                           input,
                                        DeleteBucketExternalMirrorOutput &
-                                       output);
+                                           output);
 
     // DeletePolicy does Delete policy information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/delete_policy.html
-    QsError DeleteBucketPolicy(DeleteBucketPolicyInput & input,
-                               DeleteBucketPolicyOutput & output);
+    QsError DeleteBucketPolicy(DeleteBucketPolicyInput &input,
+                               DeleteBucketPolicyOutput &output);
 
     // DeleteMultipleObjects does Delete multiple objects from the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/delete_multiple.html
-    QsError DeleteMultipleObjects(DeleteMultipleObjectsInput & input,
-                                  DeleteMultipleObjectsOutput & output);
+    QsError DeleteMultipleObjects(DeleteMultipleObjectsInput &input,
+                                  DeleteMultipleObjectsOutput &output);
 
     // GetACL does Get ACL information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get_acl.html
-    QsError GetBucketACL(GetBucketACLInput & input,
-                         GetBucketACLOutput & output);
+    QsError GetBucketACL(GetBucketACLInput &input,
+                         GetBucketACLOutput &output);
 
     // GetCORS does Get CORS information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/get_cors.html
-    QsError GetBucketCORS(GetBucketCORSInput & input,
-                          GetBucketCORSOutput & output);
+    QsError GetBucketCORS(GetBucketCORSInput &input,
+                          GetBucketCORSOutput &output);
 
     // GetExternalMirror does Get external mirror of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/get_external_mirror.html
-    QsError GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
-                                    GetBucketExternalMirrorOutput & output);
+    QsError GetBucketExternalMirror(GetBucketExternalMirrorInput &input,
+                                    GetBucketExternalMirrorOutput &output);
 
     // GetPolicy does Get policy information of the bucket.
     // Documentation URL: https://https://docs.qingcloud.com/qingstor/api/bucket/policy/get_policy.html
-    QsError GetBucketPolicy(GetBucketPolicyInput & input,
-                            GetBucketPolicyOutput & output);
+    QsError GetBucketPolicy(GetBucketPolicyInput &input,
+                            GetBucketPolicyOutput &output);
 
     // GetStatistics does Get statistics information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get_stats.html
-    QsError GetBucketStatistics(GetBucketStatisticsInput & input,
-                                GetBucketStatisticsOutput & output);
+    QsError GetBucketStatistics(GetBucketStatisticsInput &input,
+                                GetBucketStatisticsOutput &output);
 
     // Head does Check whether the bucket exists and available.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/head.html
-    QsError HeadBucket(HeadBucketInput & input, HeadBucketOutput & output);
+    QsError HeadBucket(HeadBucketInput &input, HeadBucketOutput &output);
 
     // ListMultipartUploads does List multipart uploads in the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/list_multipart_uploads.html
-    QsError ListMultipartUploads(ListMultipartUploadsInput & input,
-                                 ListMultipartUploadsOutput & output);
+    QsError ListMultipartUploads(ListMultipartUploadsInput &input,
+                                 ListMultipartUploadsOutput &output);
 
     // ListObjects does Retrieve the object list in a bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get.html
-    QsError ListObjects(ListObjectsInput & input,
-                        ListObjectsOutput & output);
+    QsError ListObjects(ListObjectsInput &input,
+                        ListObjectsOutput &output);
 
     // Put does Create a new bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/put.html
-    QsError PutBucket(PutBucketInput & input, PutBucketOutput & output);
+    QsError PutBucket(PutBucketInput &input, PutBucketOutput &output);
 
     // PutACL does Set ACL information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/put_acl.html
-    QsError PutBucketACL(PutBucketACLInput & input,
-                         PutBucketACLOutput & output);
+    QsError PutBucketACL(PutBucketACLInput &input,
+                         PutBucketACLOutput &output);
 
     // PutCORS does Set CORS information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/put_cors.html
-    QsError PutBucketCORS(PutBucketCORSInput & input,
-                          PutBucketCORSOutput & output);
+    QsError PutBucketCORS(PutBucketCORSInput &input,
+                          PutBucketCORSOutput &output);
 
     // PutExternalMirror does Set external mirror of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/put_external_mirror.html
-    QsError PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
-                                    PutBucketExternalMirrorOutput & output);
+    QsError PutBucketExternalMirror(PutBucketExternalMirrorInput &input,
+                                    PutBucketExternalMirrorOutput &output);
 
     // PutPolicy does Set policy information of the bucket.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/put_policy.html
-    QsError PutBucketPolicy(PutBucketPolicyInput & input,
-                            PutBucketPolicyOutput & output);
+    QsError PutBucketPolicy(PutBucketPolicyInput &input,
+                            PutBucketPolicyOutput &output);
 
     // AbortMultipartUpload does Abort multipart upload.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/abort_multipart_upload.html
     QsError AbortMultipartUpload(std::string objectKey,
-                                 AbortMultipartUploadInput & input,
-                                 AbortMultipartUploadOutput & output);
+                                 AbortMultipartUploadInput &input,
+                                 AbortMultipartUploadOutput &output);
 
     // CompleteMultipartUpload does Complete multipart upload.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/complete_multipart_upload.html
     QsError CompleteMultipartUpload(std::string objectKey,
-                                    CompleteMultipartUploadInput & input,
-                                    CompleteMultipartUploadOutput & output);
+                                    CompleteMultipartUploadInput &input,
+                                    CompleteMultipartUploadOutput &output);
 
     // DeleteObject does Delete the object.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/delete.html
-    QsError DeleteObject(std::string objectKey, DeleteObjectInput & input,
-                         DeleteObjectOutput & output);
+    QsError DeleteObject(std::string objectKey, DeleteObjectInput &input,
+                         DeleteObjectOutput &output);
 
     // GetObject does Retrieve the object.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/get.html
-    QsError GetObject(std::string objectKey, GetObjectInput & input,
-                      GetObjectOutput & output);
+    QsError GetObject(std::string objectKey, GetObjectInput &input,
+                      GetObjectOutput &output);
 
     // HeadObject does Check whether the object exists and available.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/head.html
-    QsError HeadObject(std::string objectKey, HeadObjectInput & input,
-                       HeadObjectOutput & output);
+    QsError HeadObject(std::string objectKey, HeadObjectInput &input,
+                       HeadObjectOutput &output);
 
     // ImageProcess does Image process with the action on the object
     // Documentation URL: https://docs.qingcloud.com/qingstor/data_process/image_process/index.html
-    QsError ImageProcess(std::string objectKey, ImageProcessInput & input,
-                         ImageProcessOutput & output);
+    QsError ImageProcess(std::string objectKey, ImageProcessInput &input,
+                         ImageProcessOutput &output);
 
     // InitiateMultipartUpload does Initial multipart upload on the object.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/initiate_multipart_upload.html
     QsError InitiateMultipartUpload(std::string objectKey,
-                                    InitiateMultipartUploadInput & input,
-                                    InitiateMultipartUploadOutput & output);
+                                    InitiateMultipartUploadInput &input,
+                                    InitiateMultipartUploadOutput &output);
 
     // ListMultipart does List object parts.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/list_multipart.html
-    QsError ListMultipart(std::string objectKey, ListMultipartInput & input,
-                          ListMultipartOutput & output);
+    QsError ListMultipart(std::string objectKey, ListMultipartInput &input,
+                          ListMultipartOutput &output);
 
     // OptionsObject does Check whether the object accepts a origin with method and header.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/options.html
-    QsError OptionsObject(std::string objectKey, OptionsObjectInput & input,
-                          OptionsObjectOutput & output);
+    QsError OptionsObject(std::string objectKey, OptionsObjectInput &input,
+                          OptionsObjectOutput &output);
 
     // PutObject does Upload the object.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/put.html
-    QsError PutObject(std::string objectKey, PutObjectInput & input,
-                      PutObjectOutput & output);
+    QsError PutObject(std::string objectKey, PutObjectInput &input,
+                      PutObjectOutput &output);
 
     // UploadMultipart does Upload object multipart.
     // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/multipart/upload_multipart.html
     QsError UploadMultipart(std::string objectKey,
-                            UploadMultipartInput & input,
-                            UploadMultipartOutput & output);
+                            UploadMultipartInput &input,
+                            UploadMultipartOutput &output);
+
+    // PutObject does Upload the object.
+    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/put.html
+    QsError AppendObject(std::string objectKey, AppendObjectInput &input,
+                         AppendObjectOutput &output);
 
 private:
     QsConfig m_qsConfig;
     Properties m_properties;
-
 };
 
-}								// namespace QingStor
+} // namespace QingStor
