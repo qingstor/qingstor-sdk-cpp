@@ -25,13 +25,14 @@ HttpRequest::HttpRequest(HttpMethod method, URI uri)
     : bodyStream(NULL), m_uri(uri), m_method(method), headerMap()
 {
     std::string queryString = uri.GetQueryString();
-    if("" != queryString)
+    if ("" != queryString)
     {
+        m_uri.CleanupQueryString();
         SetQueryStringParameter(queryString.substr(1, queryString.length()), "");
     }
 }
 
-const std::string  HttpRequest::GetHeaderValue(const char* headerName) const
+const std::string HttpRequest::GetHeaderValue(const char *headerName) const
 {
     if (headerMap.find(StringUtils::ToLower(headerName)) != headerMap.end())
     {
@@ -43,34 +44,34 @@ const std::string  HttpRequest::GetHeaderValue(const char* headerName) const
     }
 }
 
-void HttpRequest::SetHeaderValue(const char* headerName, const std::string& headerValue)
+void HttpRequest::SetHeaderValue(const char *headerName, const std::string &headerValue)
 {
     headerMap[StringUtils::ToLower(headerName)] = StringUtils::Trim(headerValue.c_str());
 }
 
-void HttpRequest::SetHeaderValue(const std::string& headerName, const std::string& headerValue)
+void HttpRequest::SetHeaderValue(const std::string &headerName, const std::string &headerValue)
 {
     headerMap[StringUtils::ToLower(headerName.c_str())] = StringUtils::Trim(headerValue.c_str());
 }
 
-void HttpRequest::SetQueryStringParameter(const char* name, const std::string& value)
+void HttpRequest::SetQueryStringParameter(const char *name, const std::string &value)
 {
     queryMap[StringUtils::ToLower(name)] = StringUtils::Trim(value.c_str());
     m_uri.AddQueryStringParameter(name, value);
 }
 
-void HttpRequest::SetQueryStringParameter(const std::string& name, const std::string& value)
+void HttpRequest::SetQueryStringParameter(const std::string &name, const std::string &value)
 {
     queryMap[StringUtils::ToLower(name.c_str())] = StringUtils::Trim(value.c_str());
     m_uri.AddQueryStringParameter(name.c_str(), value);
 }
 
-void HttpRequest::DeleteHeader(const char* headerName)
+void HttpRequest::DeleteHeader(const char *headerName)
 {
     headerMap.erase(StringUtils::ToLower(headerName));
 }
 
-bool HttpRequest::HasHeader(const char* headerName) const
+bool HttpRequest::HasHeader(const char *headerName) const
 {
     return headerMap.find(StringUtils::ToLower(headerName)) != headerMap.end();
 }

@@ -32,8 +32,7 @@ extern QS_SDK_API const char *SEPARATOR;
 class QS_SDK_API URI
 {
 public:
-
-    URI(const std::string &endpoint, const std::string &path, const std::string &queryString = "") ;
+    URI(const std::string &endpoint, const std::string &path, const std::string &queryString = "");
 
     /**
     * Gets the raw query string including "?"
@@ -43,6 +42,11 @@ public:
         return m_queryString;
     }
 
+    inline void CleanupQueryString()
+    {
+        m_queryString = "";
+        return;
+    }
     /**
     * Gets the uri with every path portion encoded
     */

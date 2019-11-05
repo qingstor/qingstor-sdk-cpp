@@ -64,7 +64,15 @@ void URI::AddQueryStringParameter(const char *key, const std::string &value)
     {
         m_queryString.append("&");
     }
-    m_queryString.append(StringUtils::URLEncode(key) + "=" + StringUtils::URLEncode(value.c_str()));
+
+    if (value.size() == 0)
+    {
+        m_queryString.append(StringUtils::URLEncode(key));
+    }
+    else
+    {
+        m_queryString.append(StringUtils::URLEncode(key) + "=" + StringUtils::URLEncode(value.c_str()));
+    }
 }
 
 std::string URI::GetURIString() const
