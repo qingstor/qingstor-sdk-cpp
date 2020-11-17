@@ -1,0 +1,21 @@
+name: build
+
+on: [push, pull_request]
+
+jobs:
+  ubuntu-build:
+    runs-on: ubuntu-16.04
+  steps:
+    - uses: actions/checkout@v2
+    # isntall dependencies
+    - name: install curl and openssl
+      run: sudo apt-get update && sudo apt-get install -yq libcurl4-openssl-dev
+    # build project
+    - name: mkdir
+      run: mkdir build
+    - name: cmake build
+      run: cmake -Bbuild -H.
+    -name: cmake make
+      run: cmake --build build/ --target all
+
+
