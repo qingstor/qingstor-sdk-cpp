@@ -136,7 +136,7 @@ input.SetBody(objectStream);
 input.SetContentLength(streamSize);
 
 // if you want to add custom metadata header to request, please 
-// refer to 'https://docs.qingcloud.com/qingstor/api/common/metadat
+// refer to 'https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/metadata/'
 // 'uid' here is taken as an example of custom metadata.
 std::map<std::string, std::string> metadata;
 metadata["uid"] = "qingstor"; 
