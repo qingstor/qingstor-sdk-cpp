@@ -68,9 +68,9 @@ The Apache License (Version 2.0, January 2004).
 [config guide]: docs/configuration.md
 [release link]: https://github.com/yunify/qingstor-sdk-cpp/releases
 [change logs link]: https://github.com/yunify/qingstor-sdk-net/blob/master/CHANGELOGS
-[documentation link]: https://docs.qingcloud.com/qingstor/index.html
-[guide link]: https://docs.qingcloud.com/qingstor/index.html
-[api doc link]: https://docs.qingcloud.com/qingstor/api/index.html
+[documentation link]: https://docsv4.qingcloud.com/user_guide/storage/object_storage/intro/product/
+[guide link]: https://docsv4.qingcloud.com/user_guide/storage/object_storage/intro/product/
+[api doc link]: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/
 [api specs link]: https://github.com/yunify/qingstor-api-specs
 [sdk test scenarios link]: https://github.com/yunify/qingstor-sdk-test-scenarios
 [cucumber link]: https://github.com/cucumber/cucumber-cpp

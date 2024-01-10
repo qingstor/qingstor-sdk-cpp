@@ -4298,181 +4298,181 @@ public:
     };
 
     // Delete does Delete a bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/delete.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/delete/
     QsError DeleteBucket(DeleteBucketInput & input,
                          DeleteBucketOutput & output);
 
     // DeleteCORS does Delete CORS information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/delete_cors.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/cors/delete_cors/
     QsError DeleteBucketCORS(DeleteBucketCORSInput & input,
                              DeleteBucketCORSOutput & output);
 
     // DeleteExternalMirror does Delete external mirror of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/delete_external_mirror.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/external_mirror/delete_external_mirror/
     QsError DeleteBucketExternalMirror(DeleteBucketExternalMirrorInput &
                                        input,
                                        DeleteBucketExternalMirrorOutput &
                                        output);
 
     // DeleteLifecycle does Delete Lifecycle information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/delete_lifecycle.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/lifecycle/delete_lifecycle/
     QsError DeleteBucketLifecycle(DeleteBucketLifecycleInput & input,
                                   DeleteBucketLifecycleOutput & output);
 
     // DeleteNotification does Delete Notification information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/delete_notification.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/notification/delete_notification/
     QsError DeleteBucketNotification(DeleteBucketNotificationInput & input,
                                      DeleteBucketNotificationOutput &
                                      output);
 
     // DeletePolicy does Delete policy information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/delete_policy.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/policy/delete_policy/
     QsError DeleteBucketPolicy(DeleteBucketPolicyInput & input,
                                DeleteBucketPolicyOutput & output);
 
     // DeleteMultipleObjects does Delete multiple objects from the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/delete_multiple.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/delete_multiple/
     QsError DeleteMultipleObjects(DeleteMultipleObjectsInput & input,
                                   DeleteMultipleObjectsOutput & output);
 
     // GetACL does Get ACL information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get_acl.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/acl/get_acl/
     QsError GetBucketACL(GetBucketACLInput & input,
                          GetBucketACLOutput & output);
 
     // GetCORS does Get CORS information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/get_cors.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/cors/get_cors/
     QsError GetBucketCORS(GetBucketCORSInput & input,
                           GetBucketCORSOutput & output);
 
     // GetExternalMirror does Get external mirror of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/get_external_mirror.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/external_mirror/get_external_mirror/
     QsError GetBucketExternalMirror(GetBucketExternalMirrorInput & input,
                                     GetBucketExternalMirrorOutput & output);
 
     // GetLifecycle does Get Lifecycle information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/get_lifecycle.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/lifecycle/get_lifecycle/
     QsError GetBucketLifecycle(GetBucketLifecycleInput & input,
                                GetBucketLifecycleOutput & output);
 
     // GetNotification does Get Notification information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/get_notification.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/notification/get_notification/
     QsError GetBucketNotification(GetBucketNotificationInput & input,
                                   GetBucketNotificationOutput & output);
 
     // GetPolicy does Get policy information of the bucket.
-    // Documentation URL: https://https://docs.qingcloud.com/qingstor/api/bucket/policy/get_policy.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/policy/get_policy/
     QsError GetBucketPolicy(GetBucketPolicyInput & input,
                             GetBucketPolicyOutput & output);
 
     // GetStatistics does Get statistics information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get_stats.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/get_stats/
     QsError GetBucketStatistics(GetBucketStatisticsInput & input,
                                 GetBucketStatisticsOutput & output);
 
     // Head does Check whether the bucket exists and available.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/head.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/head/
     QsError HeadBucket(HeadBucketInput & input, HeadBucketOutput & output);
 
     // ListMultipartUploads does List multipart uploads in the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/list_multipart_uploads.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/list/
     QsError ListMultipartUploads(ListMultipartUploadsInput & input,
                                  ListMultipartUploadsOutput & output);
 
     // ListObjects does Retrieve the object list in a bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/get.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/get/
     QsError ListObjects(ListObjectsInput & input,
                         ListObjectsOutput & output);
 
     // Put does Create a new bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/put.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/basic_opt/put/
     QsError PutBucket(PutBucketInput & input, PutBucketOutput & output);
 
     // PutACL does Set ACL information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/put_acl.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/acl/put_acl/
     QsError PutBucketACL(PutBucketACLInput & input,
                          PutBucketACLOutput & output);
 
     // PutCORS does Set CORS information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/cors/put_cors.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/cors/put_cors/
     QsError PutBucketCORS(PutBucketCORSInput & input,
                           PutBucketCORSOutput & output);
 
     // PutExternalMirror does Set external mirror of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/external_mirror/put_external_mirror.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/external_mirror/put_external_mirror/
     QsError PutBucketExternalMirror(PutBucketExternalMirrorInput & input,
                                     PutBucketExternalMirrorOutput & output);
 
     // PutLifecycle does Set Lifecycle information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/lifecycle/put_lifecycle.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/lifecycle/put_lifecycle/
     QsError PutBucketLifecycle(PutBucketLifecycleInput & input,
                                PutBucketLifecycleOutput & output);
 
     // PutNotification does Set Notification information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/notification/put_notification.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/notification/put_notification/
     QsError PutBucketNotification(PutBucketNotificationInput & input,
                                   PutBucketNotificationOutput & output);
 
     // PutPolicy does Set policy information of the bucket.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/bucket/policy/put_policy.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/bucket/policy/put_policy/
     QsError PutBucketPolicy(PutBucketPolicyInput & input,
                             PutBucketPolicyOutput & output);
 
     // AbortMultipartUpload does Abort multipart upload.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/abort_multipart_upload.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/abort/
     QsError AbortMultipartUpload(std::string objectKey,
                                  AbortMultipartUploadInput & input,
                                  AbortMultipartUploadOutput & output);
 
     // CompleteMultipartUpload does Complete multipart upload.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/complete_multipart_upload.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/complete/
     QsError CompleteMultipartUpload(std::string objectKey,
                                     CompleteMultipartUploadInput & input,
                                     CompleteMultipartUploadOutput & output);
 
     // DeleteObject does Delete the object.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/delete.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/basic_opt/delete/
     QsError DeleteObject(std::string objectKey, DeleteObjectInput & input,
                          DeleteObjectOutput & output);
 
     // GetObject does Retrieve the object.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/get.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/basic_opt/get/
     QsError GetObject(std::string objectKey, GetObjectInput & input,
                       GetObjectOutput & output);
 
     // HeadObject does Check whether the object exists and available.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/head.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/basic_opt/head/
     QsError HeadObject(std::string objectKey, HeadObjectInput & input,
                        HeadObjectOutput & output);
 
     // ImageProcess does Image process with the action on the object
-    // Documentation URL: https://docs.qingcloud.com/qingstor/data_process/image_process/index.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/image_process/
     QsError ImageProcess(std::string objectKey, ImageProcessInput & input,
                          ImageProcessOutput & output);
 
     // InitiateMultipartUpload does Initial multipart upload on the object.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/initiate_multipart_upload.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/initiate/
     QsError InitiateMultipartUpload(std::string objectKey,
                                     InitiateMultipartUploadInput & input,
                                     InitiateMultipartUploadOutput & output);
 
     // ListMultipart does List object parts.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/list_multipart.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/list/
     QsError ListMultipart(std::string objectKey, ListMultipartInput & input,
                           ListMultipartOutput & output);
 
     // OptionsObject does Check whether the object accepts a origin with method and header.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/options.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/basic_opt/options_object/
     QsError OptionsObject(std::string objectKey, OptionsObjectInput & input,
                           OptionsObjectOutput & output);
 
     // PutObject does Upload the object.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/put.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/basic_opt/put/
     QsError PutObject(std::string objectKey, PutObjectInput & input,
                       PutObjectOutput & output);
 
     // UploadMultipart does Upload object multipart.
-    // Documentation URL: https://docs.qingcloud.com/qingstor/api/object/multipart/upload_multipart.html
+    // Documentation URL: https://docsv4.qingcloud.com/user_guide/storage/object_storage/api/object/multipart/upload/
     QsError UploadMultipart(std::string objectKey,
                             UploadMultipartInput & input,
                             UploadMultipartOutput & output);
